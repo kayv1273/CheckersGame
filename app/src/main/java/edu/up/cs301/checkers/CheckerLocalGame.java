@@ -148,6 +148,7 @@ public class CheckerLocalGame extends LocalGame {
             CheckerSelectAction select = (CheckerSelectAction) action;
             int row = select.getRow();
             int col = select.getCol();
+            /**
 
             // remove the highlights if there are any previous ones
             for (int i = 0; i < 8; i++) {
@@ -261,13 +262,16 @@ public class CheckerLocalGame extends LocalGame {
             CheckerPromotionAction.isPromotion = true;
             return true;
         }
+        **/
         // return true, indicating the it was a legal move
+        //return false;
+        }
         return false;
     }
 
     //TESTING
 
-    public int whoWon(){
+    public int whoWon() {
         String gameOver = checkIfGameOver();
         if(gameOver == null || gameOver.equals("Stalemate.")) return -1;
         if(gameOver.equals(playerNames[0]+" is the winner.")) return 0;

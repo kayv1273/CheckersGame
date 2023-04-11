@@ -203,9 +203,9 @@ public class CheckerView extends SurfaceView implements View.OnTouchListener {
      */
     public void movePiece() {
         if (pieces[row][col].getType() == 0) {
-            movePawn();
+            //movePawn();
         } else {
-            moveKing();
+            //moveKing();
         }
     }
 
@@ -282,15 +282,8 @@ public class CheckerView extends SurfaceView implements View.OnTouchListener {
         }
     }
 
-    /**
-     * Method to move a regular pawn
-     */
-
-    }
-
     //movement for kings
-    public void moveKing() {
-    }
+    //public void moveKing() {}
 
     @Override
     public boolean onTouch(View v, MotionEvent motionEvent) {

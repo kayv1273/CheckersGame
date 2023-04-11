@@ -17,8 +17,6 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <edu.up.cs301.checkers.Views.CheckerView
-            android:layout_width=""
-            android:layout_height=""
             android:id="@+id/board"
             android:layout_width="479dp"
             android:layout_height="match_parent"
