@@ -2,6 +2,7 @@ package edu.up.cs301.checkers.Pawn;
 
 import java.util.ArrayList;
 
+import edu.up.cs301.checkers.CheckerState;
 import edu.up.cs301.checkers.Views.Pieces;
 
 public class Pawn {
@@ -11,7 +12,26 @@ public class Pawn {
     private ArrayList<Integer> yCaptures;
     int row;
     int col;
-}
+
+    public Pawn(Pieces piece, CheckerState state, Pieces.Colors color) {
+        row = piece.getX();
+        col = piece.getY();
+        xMoves = new ArrayList<>();
+        yMoves = new ArrayList<>();
+        xCaptures = new ArrayList<>();
+        yCaptures = new ArrayList<>();
+
+        if (color == Pieces.Colors.RED) {
+            moveRedPawn(state);
+        }
+        else {
+            moveBlackPawn(state);
+        }
+    }
+
+    public void moveRedPawn(CheckerState state) {
+        if (row - 1 > 0)
+    }
     public void movePawn() {
         //check pawn on left most side of the board
         if (col == 0 && row > 0) {
@@ -91,4 +111,5 @@ public class Pawn {
                 pieces[row - 1][col + 1].setColor(Pieces.Colors.EMPTY);
             }
         }
+    }
 }

@@ -113,9 +113,6 @@ public class CheckerState extends GameState implements Serializable {
      * 		'?' if it is an illegal square
      */
     public Pieces getPiece(int row, int col) {
-        // if we're out of bounds or anything, return '?';
-        if (pieces == null || row < 0 || col < 0) return '?';
-        if (row >= pieces.length || col >= pieces[row].length) return '?';
 
         // return the character that is in the proper position
         return pieces[row][col];
