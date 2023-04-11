@@ -5,7 +5,7 @@ import java.io.Serializable;
 import edu.up.cs301.game.GameFramework.infoMessage.GameState;
 import edu.up.cs301.tictactoe.infoMessage.TTTState;
 
-public class CheckerState {
+public class CheckerState extends GameState implements Serializable {
     //Tag for logging
     private static final String TAG = "CheckerState";
     private static final long serialVersionUID = 7552321013488624386L;
@@ -159,17 +159,17 @@ public class CheckerState {
     }
 
     public boolean equals(Object object){
-        if(! (object instanceof TTTState)) return false;
-        TTTState tttState = (TTTState) object;
+        if(! (object instanceof CheckerState)) return false;
+        CheckerState checkerState = (CheckerState) object;
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                if(this.pieces[i][j] != tttState.pieces[i][j]){
+                if(this.pieces[i][j] != checkerState.pieces[i][j]){
                     return false;
                 }
             }
         }
 
-        if (this.playerToMove != tttState.playerToMove || this.numSetupTurns != tttState.numSetupTurns || this.currentSetupTurn != tttState.currentSetupTurn){
+        if (this.playerToMove != checkerState.playerToMove || this.numSetupTurns != checkerState.numSetupTurns || this.currentSetupTurn != checkerState.currentSetupTurn){
             return false;
         }
         return true;
