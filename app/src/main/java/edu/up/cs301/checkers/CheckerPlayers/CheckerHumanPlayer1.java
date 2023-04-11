@@ -1,7 +1,6 @@
 package edu.up.cs301.checkers.CheckerPlayers;
 
 import android.graphics.Color;
-import android.graphics.Point;
 import android.os.CountDownTimer;
 import android.view.MotionEvent;
 import android.view.View;
@@ -9,8 +8,9 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import edu.up.cs301.checkers.CheckerActionMessage.CheckerMoveAction;
+import edu.up.cs301.checkers.CheckerActionMessage.CheckerPromotionAction;
 import edu.up.cs301.checkers.CheckerActionMessage.CheckerSelectAction;
-import edu.up.cs301.checkers.CheckerState;
+import edu.up.cs301.checkers.InfoMessage.CheckerState;
 import edu.up.cs301.checkers.Views.CheckerView;
 import edu.up.cs301.checkers.Views.Pieces;
 import edu.up.cs301.game.GameFramework.GameMainActivity;
@@ -18,14 +18,11 @@ import edu.up.cs301.game.GameFramework.infoMessage.GameInfo;
 import edu.up.cs301.game.GameFramework.infoMessage.IllegalMoveInfo;
 import edu.up.cs301.game.GameFramework.infoMessage.NotYourTurnInfo;
 import edu.up.cs301.game.GameFramework.players.GameHumanPlayer;
-import edu.up.cs301.game.GameFramework.utilities.Logger;
 import edu.up.cs301.game.GameFramework.utilities.MessageBox;
 import edu.up.cs301.game.R;
-import edu.up.cs301.tictactoe.infoMessage.TTTState;
-import edu.up.cs301.tictactoe.tttActionMessage.TTTMoveAction;
-import edu.up.cs301.tictactoe.views.TTTSurfaceView;
 
 public class CheckerHumanPlayer1 extends GameHumanPlayer implements View.OnTouchListener{
+
     //Tag for logging
     private static final String TAG = "CheckerHumanPlayer";
 
@@ -208,7 +205,7 @@ public class CheckerHumanPlayer1 extends GameHumanPlayer implements View.OnTouch
                                 CheckerMoveAction move = new CheckerMoveAction(this, i, j);
                                 game.sendAction(move);
                             } else if (state.getPiece(i, j).getColors() != Pieces.Colors.BLACK && state.getWhoseMove() == 1) {
-                                if (j == 7 && currPiece.getPieceType() == Pieces.PieceType.PAWN && state.getWhoseMove() == this.playerNum) {
+                                if (j == 7 && currPiece.getType() == 1 && state.getWhoseMove() == this.playerNum) {
                                     if (!validPawnMove(i,j,currPiece)) {
                                         CheckerMoveAction move = new CheckerMoveAction(this, i, j);
                                         game.sendAction(move);
@@ -220,9 +217,7 @@ public class CheckerHumanPlayer1 extends GameHumanPlayer implements View.OnTouch
                                 CheckerMoveAction move = new CheckerMoveAction(this, i, j);
                                 game.sendAction(move);
                             }
-                            surfaceViewChessBoard.invalidate();
-                            surfaceViewWhiteCapture.invalidate();
-                            surfaceViewBlackCapture.invalidate();
+                            surfaceViewCheckerBoard.invalidate();
                         }
                     }
                 }
@@ -241,9 +236,9 @@ public class CheckerHumanPlayer1 extends GameHumanPlayer implements View.OnTouch
         return true;
     }
 
-    public void displayMovesLog(int currRow, int currCol, int tempRow, ChessState state, boolean isCapture) {
+    public void displayMovesLog(int currRow, int currCol, int tempRow, CheckerState state, boolean isCapture) {
         if (state == null) return;
-        Piece.PieceType currPiece = state.getPiece(currRow, currCol).getPieceType();
+        Pieces.PieceType currPiece = state.getPiece(currRow, currCol).getPieceType();
         String toReturn = "";
         if (justStarted) {
             movesLog.append("\n");
@@ -253,18 +248,12 @@ public class CheckerHumanPlayer1 extends GameHumanPlayer implements View.OnTouch
         if (whitesTurn) {
             toReturn += numTurns + ")";
         }
-        if (currPiece == Piece.PieceType.KING) {
+        if (currPiece.getType() == 0) {
             toReturn += "K";
-        } else if (currPiece == Piece.PieceType.QUEEN) {
+        } else if (currPiece.getType() == 1) {
             toReturn += "Q";
-        } else if (currPiece == Piece.PieceType.BISHOP) {
-            toReturn += "B";
-        } else if (currPiece == Piece.PieceType.KNIGHT) {
-            toReturn += "N";
-        } else if (currPiece == Piece.PieceType.ROOK) {
-            toReturn += "R";
         }
-        if (isCapture && currPiece == Piece.PieceType.PAWN) {
+        if (isCapture && currPiece == Pieces.PieceType.PAWN) {
             toReturn += determineRow(tempRow);
             toReturn += "x";
         } else if (isCapture) {
@@ -305,24 +294,18 @@ public class CheckerHumanPlayer1 extends GameHumanPlayer implements View.OnTouch
 
     public void undisplay() {
         queenPromo.setVisibility(View.INVISIBLE);
-        bishopPromo.setVisibility(View.INVISIBLE);
-        rookPromo.setVisibility(View.INVISIBLE);
-        knightPromo.setVisibility(View.INVISIBLE);
     }
 
     public void display() {
         queenPromo.setVisibility(View.VISIBLE);
-        bishopPromo.setVisibility(View.VISIBLE);
-        knightPromo.setVisibility(View.VISIBLE);
-        rookPromo.setVisibility(View.VISIBLE);
     }
 
-    public void makePromotion(Piece.PieceType type) {
-        Piece.ColorType currColor = state.getWhoseMove() == 0 ? Piece.ColorType.WHITE : Piece.ColorType.BLACK;
-        Piece set = new Piece(type, currColor, savedX, savedY);
-        ChessPromotionAction promo = new ChessPromotionAction(this,set,savedX,savedY);
+    public void makePromotion(Pieces.PieceType type) {
+        Pieces.ColorType currColor = state.getWhoseMove() == 0 ? Pieces.ColorType.WHITE : Piece.ColorType.BLACK;
+        Pieces set = new Piece(type, currColor, savedX, savedY);
+        CheckerPromotionAction promo = new CheckerPromotionAction(this,set,savedX,savedY);
         game.sendAction(promo);
-        ChessMoveAction move = new ChessMoveAction(this, savedX, savedY);
+        CheckerMoveAction move = new CheckerMoveAction(this, savedX, savedY);
         game.sendAction(move);
         isPromotion = false;
         undisplay();
@@ -337,7 +320,7 @@ public class CheckerHumanPlayer1 extends GameHumanPlayer implements View.OnTouch
     }
 
 
-    public boolean validPawnMove(int row, int col, Piece currPiece) {
+    public boolean validPawnMove(int row, int col, Pieces currPiece) {
         if(currPiece.getY() > col + 1){
             return false;
         }
@@ -345,16 +328,17 @@ public class CheckerHumanPlayer1 extends GameHumanPlayer implements View.OnTouch
             return false;
         }
         if (currPiece.getX() == row) {
-            if (state.getPiece(row, col).getPieceType() != Piece.PieceType.EMPTY) {
+            if (state.getPiece(row, col).getColors()  != Pieces.Colors.EMPTY) {
                 return false;
             }
         }
 
         if (currPiece.getX() == row + 1 || currPiece.getX() == row - 1) {
-            if (state.getPiece(row, col).getPieceType() == Piece.PieceType.EMPTY) {
+            if (state.getPiece(row, col).getColors() == Pieces.Colors.EMPTY) {
                 return false;
             }
         }
         return true;
     }
+
 }
