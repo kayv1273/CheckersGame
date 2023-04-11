@@ -58,6 +58,33 @@ public class Pawn {
                 yMoves.add(col - 1);
             }
         }
+
+
+        //check captures
+        if (col < 2 && row > 2) {
+            if (state.getPiece(row - 2, col + 2).getColors() == Pieces.Colors.EMPTY && state.getPiece(row - 1, col + 1).getColors() == Pieces.Colors.BLACK) {
+                xCaptures.add(row - 2);
+                yCaptures.add(col + 2);
+            }
+        }
+
+        if (col > 5 && row > 2) {
+            if (state.getPiece(row - 2, col - 2).getColors() == Pieces.Colors.EMPTY && state.getPiece(row - 1, col - 1).getColors() == Pieces.Colors.BLACK) {
+                xCaptures.add(row - 2);
+                yCaptures.add(col - 2);
+            }
+        }
+
+        if (col >= 2 && col <= 5 && row > 2) {
+            if (state.getPiece(row - 2, col - 2).getColors() == Pieces.Colors.EMPTY && state.getPiece(row - 1, col - 1).getColors() == Pieces.Colors.BLACK) {
+                xCaptures.add(row - 2);
+                yCaptures.add(col - 2);
+            }
+            if (state.getPiece(row - 2, col + 2).getColors() == Pieces.Colors.EMPTY && state.getPiece(row - 1, col + 1).getColors() == Pieces.Colors.BLACK) {
+                xCaptures.add(row - 2);
+                yCaptures.add(col + 2);
+            }
+        }
     }
 
     public void moveBlackPawn(CheckerState state) {
