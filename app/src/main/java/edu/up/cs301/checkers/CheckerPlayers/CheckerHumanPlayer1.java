@@ -4,7 +4,11 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
+import edu.up.cs301.checkers.CheckerState;
+import edu.up.cs301.checkers.Views.CheckerView;
 import edu.up.cs301.game.GameFramework.GameMainActivity;
 import edu.up.cs301.game.GameFramework.infoMessage.GameInfo;
 import edu.up.cs301.game.GameFramework.infoMessage.IllegalMoveInfo;
@@ -19,13 +23,26 @@ import edu.up.cs301.tictactoe.views.TTTSurfaceView;
 public class CheckerHumanPlayer1 extends GameHumanPlayer implements View.OnTouchListener{
 
     //Tag for logging
-    private static final String TAG = "TTTHumanPlayer1";
+    private static final String TAG = "CheckersHumanPlayer1";
 
     // the surface view
-    private TTTSurfaceView surfaceView;
+    private CheckerView surfaceView;
+    private CheckerView checkerBoard;
+    private Button resetButton;
+
+    //names
+    private TextView player1name;
+    public boolean promotion;
+    private int savedX = 0;
+    private int savedY = 0;
 
     // the ID for the layout to use
     private int layoutId;
+
+    private CheckerState state;
+    private boolean start;
+    private int x = 8;
+    private int y = 8;
 
     /**
      * constructor
@@ -35,9 +52,12 @@ public class CheckerHumanPlayer1 extends GameHumanPlayer implements View.OnTouch
      * @param layoutId
      *      the id of the layout to use
      */
-    public CheckerHumanPlayer1(String name, int layoutId) {
+    public CheckerHumanPlayer1(String name, int layoutId, CheckerState state) {
         super(name);
         this.layoutId = layoutId;
+        start = true;
+        promotion = false;
+        this.state = state;
     }
 
     /**
@@ -49,18 +69,18 @@ public class CheckerHumanPlayer1 extends GameHumanPlayer implements View.OnTouch
     @Override
     public void receiveInfo(GameInfo info) {
 
-        if (surfaceView == null) return;
+        if (checkerBoard == null) return;
 
         if (info instanceof IllegalMoveInfo || info instanceof NotYourTurnInfo) {
             // if the move was out of turn or otherwise illegal, flash the screen
-            surfaceView.flash(Color.RED, 50);
+            checkerBoard.flash(Color.RED, 50);
         }
-        else if (!(info instanceof TTTState))
+        else if (!(info instanceof CheckerState))
             // if we do not have a TTTState, ignore
             return;
         else {
-            surfaceView.setState((TTTState)info);
-            surfaceView.invalidate();
+            checkerBoard.setState((TTTState)info);
+            checkerBoard.invalidate();
             Logger.log(TAG, "receiving");
         }
     }
@@ -74,7 +94,7 @@ public class CheckerHumanPlayer1 extends GameHumanPlayer implements View.OnTouch
         activity.setContentView(layoutId);
 
         // set the surfaceView instance variable
-        surfaceView = (TTTSurfaceView)myActivity.findViewById(R.id.surfaceView);
+        surfaceView = (CheckerView)myActivity.findViewById(R.id.checkerBoard);
         Logger.log("set listener","OnTouch");
         surfaceView.setOnTouchListener(this);
     }

@@ -444,4 +444,6 @@ public class CheckerView extends SurfaceView implements View.OnTouchListener {
         }
         return false;
     }
+
+
 }
