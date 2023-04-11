@@ -1,6 +1,7 @@
 package edu.up.cs301.checkers;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import edu.up.cs301.checkers.Views.Pieces;
 import edu.up.cs301.game.GameFramework.infoMessage.GameState;
@@ -10,15 +11,28 @@ public class CheckerState extends GameState implements Serializable {
     private static final String TAG = "CheckerState";
     private static final long serialVersionUID = 7552321013488624386L;
 
-    ///////////////////////////////////////////////////
-    // ************** instance variables ************
-    ///////////////////////////////////////////////////
 
-    // the 8x8 array of numbers that represents the X's and O's on the board
+    // array that holds the pieces of the board
     private Pieces[][] pieces;
+    private int[][] board;
 
     // an int that tells whose move it is
+    // 0: player - red
+    // 1: AI - black
     private int playerToMove;
+
+    // boolean to see if game is over
+    private boolean isGameOver;
+
+    // ArrayList for all the captured pieces
+    private ArrayList<Pieces> redCapturedPieces;
+    private ArrayList<Pieces> blackCapturedPieces;
+
+    private boolean canMove;
+    public Pieces emptyPiece;
+
+    private ArrayList<Integer> newXMoves;
+    private ArrayList<Integer> newYMoves;
 
     /**
      * Constructor for objects of class TTTState
@@ -26,6 +40,16 @@ public class CheckerState extends GameState implements Serializable {
     public CheckerState() {
         // initialize the state to be a brand new game
         pieces = new Pieces[8][8];
+        board = new int[8][8];
+        redCapturedPieces = new ArrayList<>();
+        blackCapturedPieces = new ArrayList<>();
+        canMove = false;
+        isGameOver = false;
+
+        newXMoves = new ArrayList<>();
+        newYMoves = new ArrayList<>();
+
+        // Set initial positions of all the pieces
         for (int row = 0; row < 8; row++) {
             for (int col = 0; col < 8; col++) {
                 if (row == 0 || row == 2) {
@@ -74,31 +98,75 @@ public class CheckerState extends GameState implements Serializable {
                 }
             }
         }
+
+        emptyPiece = new Pieces(0, Pieces.Colors.EMPTY, 0,0);
         // make it player 0's move
         playerToMove = 0;
     }// constructor
 
     /**
-     * Copy constructor for class TTTState
+     * Copy constructor for class CheckerState
      *
      * @param original
-     * 		the TTTState object that we want to clong
+     * 		the CheckerState object that we want to clong
      */
     public CheckerState(CheckerState original)
     {
-        // create a new 3x3 array, and copy the values from
+        // create a new 8x8 array, and copy the values from
         // the original
         pieces = new Pieces[8][8];
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                pieces[i][j] = original.pieces[i][j];
+        board = new int[8][8];
+        canMove = original.canMove;
+        isGameOver = original.isGameOver;
+
+        //copy captured pieces
+        redCapturedPieces = new ArrayList<>();
+        blackCapturedPieces = new ArrayList<>();
+        for (int i = 0; i < redCapturedPieces.size(); i++) {
+            redCapturedPieces.add(original.redCapturedPieces.get(i));
+        }
+        for (int i = 0; i < blackCapturedPieces.size(); i++) {
+            blackCapturedPieces.add(original.blackCapturedPieces.get(i));
+        }
+
+        //copy pieces
+        for (int i = 0; i < pieces.length; i++) {
+            for (int j = 0; j < pieces[i].length; j++) {
+                int tempType = original.pieces[i][j].getType();
+                Pieces.Colors tempColor = original.pieces[i][j].getColors();
+                int tempX = original.pieces[i][j].getX();
+                int tempY = original.pieces[i][j].getY();
+                pieces[i][j] = new Pieces(tempType, tempColor, tempX, tempY);
             }
         }
 
+        //copy what needs to be drawn
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++){
+                board[i][j] = original.board[i][j];
+            }
+        }
+
+        //copy movements
+        newXMoves = new ArrayList<>();
+        newYMoves = new ArrayList<>();
+        for (int i = 0; i < newXMoves.size(); i++) {
+            newXMoves.add(original.newXMoves.get(i));
+        }
+        for (int i = 0; i < newYMoves.size(); i++) {
+            newYMoves.add(original.newYMoves.get(i));
+        }
+
+        //copy empty piece
+        int emptyType = original.emptyPiece.getType();
+        Pieces.Colors emptyColor = original.emptyPiece.getColors();
+        int emptyX = original.emptyPiece.getX();
+        int emptyY = original.emptyPiece.getY();
+        emptyPiece = new Pieces(emptyType, emptyColor, emptyX, emptyY);
+
         // copy the player-to-move information
         playerToMove = original.playerToMove;
-        super.numSetupTurns = original.numSetupTurns;
-        super.currentSetupTurn = original.currentSetupTurn;
+
     }
 
     /**
