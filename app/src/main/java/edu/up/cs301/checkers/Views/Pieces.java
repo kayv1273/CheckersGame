@@ -5,14 +5,11 @@ package edu.up.cs301.checkers.Views;
  * @author Ruth
  * @author Nick
  * @author Ethan
- * @version 3.21.2023
+ * @version 4.11.2023
  */
 
 public class Pieces {
 
-    public Pieces() {
-        //does nothing
-    }
     public enum Colors {
         BLACK, RED, EMPTY
     }
@@ -29,14 +26,13 @@ public class Pieces {
         this.x = x;
         this.y = y;
     }
-    public Pieces(Colors color) {
-        this.color = color;
-    }
 
-    // Deep constructor
+    // Deep copy constructor
     public Pieces(Pieces p) {
         this.type = p.type;
         this.color = p.color;
+        this.x = p.x;
+        this.y = p.y;
     }
 
     // Getter and Setter methods for type
@@ -74,18 +70,4 @@ public class Pieces {
         this.x = y;
     }
 
-    // toString method that prints the information of the piece
-    @Override
-    public String toString() {
-        if (color == Colors.RED) {
-            // if piece is red, print R
-            return "R\t";
-        } else if (color == Colors.BLACK) {
-            //if piece is black, print B
-            return "B\t";
-        }
-
-        //if piece is empty, print E
-        return "E\t";
-    }
 }
