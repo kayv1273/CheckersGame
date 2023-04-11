@@ -87,6 +87,42 @@ public class Pawn {
                 yMoves.add(col + 1);
             }
         }
+
+        // check capture from left column
+        if (row < 6 && (col == 0 || col == 1)) {
+            if (state.getPiece(row + 2, col + 2).getColors() == Pieces.Colors.EMPTY) {
+                if (state.getPiece(row + 1, col + 1).getColors() == Pieces.Colors.RED) {
+                    xMoves.add(row + 2);
+                    yMoves.add(col + 2);
+                }
+            }
+        }
+
+        if (row < 6 && (col == 6 || col == 7)) {
+            if (state.getPiece(row + 2, col - 2).getColors() == Pieces.Colors.EMPTY) {
+                if (state.getPiece(row + 1, col - 1).getColors() == Pieces.Colors.RED) {
+                    xMoves.add(row + 2);
+                    yMoves.add(col - 2);
+                }
+            }
+        }
+
+        if (row < 6 && (col > 1 && col < 6)) {
+            if (state.getPiece(row + 2, col + 2).getColors() == Pieces.Colors.EMPTY) {
+                if (state.getPiece(row + 1, col + 1).getColors() == Pieces.Colors.RED) {
+                    xMoves.add(row + 2);
+                    yMoves.add(col + 2);
+                }
+            }
+
+            if (state.getPiece(row + 2, col - 2).getColors() == Pieces.Colors.EMPTY) {
+                if (state.getPiece(row + 1, col - 1).getColors() == Pieces.Colors.RED) {
+                    xMoves.add(row + 2);
+                    yMoves.add(col - 2);
+                }
+            }
+        }
+
     }
 
     public void movePawn() {
