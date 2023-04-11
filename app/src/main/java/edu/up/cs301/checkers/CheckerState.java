@@ -197,12 +197,43 @@ public class CheckerState extends GameState implements Serializable {
      * 		piece the piece to place
      */
     public void setPiece(int row, int col, Pieces piece) {
-        // if we're out of bounds or anything, return;
-        if (pieces == null || row < 0 || col < 0) return;
-        if (row >= pieces.length || col >= pieces[row].length) return;
 
+        piece.setX(row);
+        piece.setY(col);
         // return the character that is in the proper position
         pieces[row][col] = piece;
+    }
+
+    public void setCanMove(boolean bool) {
+        canMove = bool;
+    }
+
+    public boolean getCanMove() {
+        return canMove;
+    }
+
+    public boolean getGameOver(){
+        return isGameOver;
+    }
+
+    public void setNewXMoves(ArrayList<Integer> newXMoves) {
+        this.newXMoves = newXMoves;
+    }
+
+    public ArrayList<Integer> getNewXMoves() {
+        return newXMoves;
+    }
+
+    public void setNewYMoves(ArrayList<Integer> newYMoves) {
+        this.newYMoves = newYMoves;
+    }
+
+    public ArrayList<Integer> getNewYMoves() {
+        return newYMoves;
+    }
+
+    public int getDrawing(int row, int col) {
+        return board[row][col];
     }
 
     /**
@@ -223,20 +254,19 @@ public class CheckerState extends GameState implements Serializable {
         playerToMove = id;
     }
 
-    public boolean equals(Object object){
-        if(! (object instanceof CheckerState)) return false;
-        CheckerState checkerState = (CheckerState) object;
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                if(this.pieces[i][j] != checkerState.pieces[i][j]){
-                    return false;
-                }
-            }
-        }
+    public ArrayList<Pieces> getRedCapturedPieces() {
+        return this.redCapturedPieces;
+    }
 
-        if (this.playerToMove != checkerState.playerToMove || this.numSetupTurns != checkerState.numSetupTurns || this.currentSetupTurn != checkerState.currentSetupTurn){
-            return false;
-        }
-        return true;
+    public ArrayList<Pieces> getBlackCapturedPieces() {
+        return this.blackCapturedPieces;
+    }
+
+    public void addRedCapturedPiece(Pieces piece){
+        redCapturedPieces.add(piece);
+    }
+
+    public void addBlackCapturedPiece(Pieces piece){
+        blackCapturedPieces.add(piece);
     }
 }
