@@ -30,8 +30,34 @@ public class Pawn {
     }
 
     public void moveRedPawn(CheckerState state) {
-        if (row - 1 > 0)
-    }
+
+        //check left border
+        if (col == 0 && row > 0) {
+            if (state.getPiece(row - 1, col + 1).getColors() == Pieces.Colors.EMPTY) {
+                xMoves.add(row-1);
+                yMoves.add(col+1);
+            }
+        }
+
+        //check right border
+        if (col == 7 && row > 0) {
+            if (state.getPiece(row - 1, col - 1).getColors() == Pieces.Colors.EMPTY) {
+                xMoves.add(row-1);
+                yMoves.add(col-1);
+            }
+        }
+
+        if ((col > 0 && col < 7) && row > 0) {
+            if (state.getPiece(row - 1, col + 1).getColors() == Pieces.Colors.EMPTY) {
+                xMoves.add(row-1);
+                yMoves.add(col+1);
+            }
+            if (state.getPiece(row - 1, col - 1).getColors() == Pieces.Colors.EMPTY) {
+                xMoves.add(row-1);
+                yMoves.add(col-1);
+            }
+        }
+
     public void movePawn() {
         //check pawn on left most side of the board
         if (col == 0 && row > 0) {
