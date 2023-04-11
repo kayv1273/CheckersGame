@@ -102,7 +102,7 @@ public class CheckerMainActivity {
     public LocalGame createLocalGame(GameState gameState){
         if(gameState == null)
             return new CheckerLocalGame();
-        return new CheckerLocalGam((TTTState) gameState);
+        return new CheckerLocalGam((CheckerState) gameState);
     }
 
     /**

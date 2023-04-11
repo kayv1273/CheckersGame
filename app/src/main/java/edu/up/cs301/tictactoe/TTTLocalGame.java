@@ -28,7 +28,7 @@ public class TTTLocalGame extends LocalGame {
 	/**
 	 * Constructor for the TTTLocalGame.
 	 */
-	public TTTLocalGame() {
+	public CheckerLocalGame() {
 
 		// perform superclass initialization
 		super();

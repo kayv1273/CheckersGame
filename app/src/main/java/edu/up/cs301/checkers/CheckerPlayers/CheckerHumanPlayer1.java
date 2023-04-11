@@ -94,7 +94,7 @@ public class CheckerHumanPlayer1 extends GameHumanPlayer implements View.OnTouch
         activity.setContentView(layoutId);
 
         // set the surfaceView instance variable
-        surfaceView = (CheckerView)myActivity.findViewById(R.id.checkerBoardView);
+        surfaceView = (CheckerView)myActivity.findViewById(R.id.board);
         Logger.log("set listener","OnTouch");
         surfaceView.setOnTouchListener(this);
 
