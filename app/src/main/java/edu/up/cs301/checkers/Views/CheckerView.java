@@ -1,4 +1,4 @@
-package edu.up.cs301.checkers;
+package edu.up.cs301.checkers.Views;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -12,6 +12,8 @@ import android.view.SurfaceView;
 import android.view.View;
 
 import java.util.ArrayList;
+
+import edu.up.cs301.checkers.Pieces;
 
 /**
  * @author Griselda
