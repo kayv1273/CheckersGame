@@ -4,6 +4,7 @@ import android.content.pm.ActivityInfo;
 
 import java.util.ArrayList;
 
+import edu.up.cs301.checkers.InfoMessage.CheckerState;
 import edu.up.cs301.game.GameFramework.GameMainActivity;
 import edu.up.cs301.game.GameFramework.LocalGame;
 import edu.up.cs301.game.GameFramework.gameConfiguration.GameConfig;

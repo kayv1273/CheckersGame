@@ -1,4 +1,4 @@
-package edu.up.cs301.checkers;
+package edu.up.cs301.checkers.InfoMessage;
 
 import java.io.Serializable;
 import java.util.ArrayList;
