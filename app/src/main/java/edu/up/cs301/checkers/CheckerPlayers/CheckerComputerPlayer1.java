@@ -10,7 +10,7 @@ public class CheckerComputerPlayer1 extends GameComputerPlayer {
     /*
      * Constructor for the TTTComputerPlayer1 class
      */
-    public TTTComputerPlayer1(String name) {
+    public CheckerComputerPlayer1(String name) {
         // invoke superclass constructor
         super(name); // invoke superclass constructor
     }
@@ -40,7 +40,7 @@ public class CheckerComputerPlayer1 extends GameComputerPlayer {
         // we'll get a message back that we'll ignore. If it was an illegal move,
         // we'll end up here again (and possibly again, and again). At some point,
         // we'll end up randomly pick a move that is legal.
-        Logger.log("TTTComputer", "Sending move");
+        Logger.log("CheckerComputer", "Sending move");
         game.sendAction(new TTTMoveAction(this, yVal, xVal));
 
     }
