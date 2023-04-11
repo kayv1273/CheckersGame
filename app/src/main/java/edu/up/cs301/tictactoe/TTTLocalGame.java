@@ -12,9 +12,8 @@ import edu.up.cs301.tictactoe.tttActionMessage.TTTMoveAction;
  * 
  * @author Steven R. Vegdahl
  * @author Eric Imperio
- * @version January 2020
+ * @version January 2020 Test
  */
-
 public class TTTLocalGame extends LocalGame {
 	//Tag for logging
 	private static final String TAG = "TTTLocalGame";
