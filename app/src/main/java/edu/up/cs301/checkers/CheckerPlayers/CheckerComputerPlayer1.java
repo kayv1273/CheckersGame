@@ -12,7 +12,6 @@ import edu.up.cs301.game.GameFramework.infoMessage.IllegalMoveInfo;
 import edu.up.cs301.game.GameFramework.infoMessage.NotYourTurnInfo;
 import edu.up.cs301.game.GameFramework.players.GameComputerPlayer;
 import edu.up.cs301.game.GameFramework.utilities.Logger;
-import edu.up.cs301.tictactoe.tttActionMessage.TTTMoveAction;
 
 public class CheckerComputerPlayer1 extends GameComputerPlayer {
 

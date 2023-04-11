@@ -1,58 +1,72 @@
 package edu.up.cs301.checkers.CheckerPlayers;
 
+import edu.up.cs301.checkers.CheckerActionMessage.CheckerMoveAction;
+import edu.up.cs301.checkers.InfoMessage.CheckerState;
+import edu.up.cs301.checkers.Views.Pieces;
 import edu.up.cs301.game.GameFramework.players.GameComputerPlayer;
 import edu.up.cs301.game.GameFramework.infoMessage.GameInfo;
 import edu.up.cs301.game.GameFramework.utilities.Logger;
-import edu.up.cs301.tictactoe.infoMessage.TTTState;
-import edu.up.cs301.tictactoe.tttActionMessage.TTTMoveAction;
 
 import android.graphics.Point;
 
 public class CheckerComputerPlayer2 extends GameComputerPlayer {
+    /**
+     * constructor
+     *
+     * @param name the player's name (e.g., "John")
+     */
+    public CheckerComputerPlayer2(String name) {
+        super(name);
+    }
 
+    @Override
+    protected void receiveInfo(GameInfo info) {
+
+    }
+/*
     //Tag for logging
     private static final String TAG = "TTTComputerPlayer2";
-    /**
+    *//**
      * instance variable that tells which piece am I playing ('X' or 'O').
      * This is set once the player finds out which player they are, in the
      * 'initAfterReady' method.
-     */
-    protected char piece;
+     *//*
+    protected Pieces piece;
 
-    /**
+    *//**
      * constructor for a computer player
      *
      * @param name
      * 		the player's name
-     */
+     *//*
     public CheckerComputerPlayer2(String name) {
         // invoke superclass constructor
         super(name);
     }// constructor
 
-    /**
+    *//**
      * perform any initialization that needs to be done after the player
      * knows what their game-position and opponents' names are.
-     */
+     *//*
     protected void initAfterReady() {
         // initialize our piece
         piece = "XO".charAt(playerNum);
     }// initAfterReady
 
-    /**
+    *//**
      * Called when the player receives a game-state (or other info) from the
      * game.
      *
      * @param info
      * 		the message from the game
-     */
+     *//*
     @Override
     protected void receiveInfo(GameInfo info) {
 
-        // if it's not a TTTState message, ignore it; otherwise
+        // if it's not a CheckerState message, ignore it; otherwise
         // cast it
-        if (!(info instanceof TTTState)) return;
-        TTTState myState = (TTTState)info;
+        if (!(info instanceof CheckerState)) return;
+        CheckerState myState = (CheckerState)info;
 
         // if it's not our move, ignore it
         if (myState.getWhoseMove() != this.playerNum) return;
@@ -64,7 +78,7 @@ public class CheckerComputerPlayer2 extends GameComputerPlayer {
         Point win = findWin(myState, piece);
         if (win != null) {
             Logger.log("TTTComputer", "sending action");
-            game.sendAction(new TTTMoveAction(this, win.y, win.x));
+            game.sendAction(new CheckerMoveAction(this, win.y, win.x));
             return;
         }
 
@@ -74,7 +88,7 @@ public class CheckerComputerPlayer2 extends GameComputerPlayer {
         Point loss = findWin(myState, opponentPiece);
         if (loss != null) {
             Logger.log("TTTComputer", "sending action");
-            game.sendAction(new TTTMoveAction(this, loss.y, loss.x));
+            game.sendAction(new CheckerMoveAction(this, loss.y, loss.x));
             return;
         }
 
@@ -99,7 +113,7 @@ public class CheckerComputerPlayer2 extends GameComputerPlayer {
                 if (myState.getPiece(j, i) == ' ') {
                     if (selectCount == 0) {
                         // make the move
-                        game.sendAction(new TTTMoveAction(this, j, i));
+                        game.sendAction(new CheckerMoveAction(this, j, i));
                         return;
                     }
                     selectCount--;
@@ -108,7 +122,7 @@ public class CheckerComputerPlayer2 extends GameComputerPlayer {
         }
     }// receiveInfo
 
-    /**
+    *//**
      * finds a winning move for a player
      *
      * @param state  the state of the game
@@ -116,8 +130,8 @@ public class CheckerComputerPlayer2 extends GameComputerPlayer {
      *   win
      * @return  If a winning move was found, a Point object containing
      *   the coordinates.  If no winning move was found, null.
-     */
-    private Point findWin(TTTState state, char thePiece) {
+     *//*
+    private Point findWin(CheckerState state, char thePiece) {
 
         // the winning move--initialized to null because we haven't found
         // one yet
@@ -152,7 +166,7 @@ public class CheckerComputerPlayer2 extends GameComputerPlayer {
         return found;
     }// findWin
 
-    /**
+    *//**
      * examines a particular row, column or diagonal to see if a move there
      * would cause a given player to win.  <p>
      *
@@ -173,9 +187,9 @@ public class CheckerComputerPlayer2 extends GameComputerPlayer {
      *   the next square we're examining
      * @return  If a winning move was found, a Point object containing
      *   the coordinates.  If no winning move was found, null.
-     */
+     *//*
     // helper method to find a winning move
-    private Point helpFindWin(TTTState state, char thePiece, int rowStart,
+    private Point helpFindWin(CheckerState state, char thePiece, int rowStart,
                               int colStart, int rowDelta, int colDelta) {
 
         // our starting position
@@ -221,5 +235,5 @@ public class CheckerComputerPlayer2 extends GameComputerPlayer {
             // no winner this time
             return null;
         }
-    }// helpFindWin
+    }// helpFindWin*/
 }
