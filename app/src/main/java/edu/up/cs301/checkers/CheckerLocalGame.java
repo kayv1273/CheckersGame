@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import edu.up.cs301.checkers.CheckerActionMessage.CheckerMoveAction;
 import edu.up.cs301.checkers.CheckerActionMessage.CheckerPromotionAction;
 import edu.up.cs301.checkers.CheckerActionMessage.CheckerSelectAction;
+import edu.up.cs301.checkers.CheckerPlayers.CheckerHumanPlayer1;
 import edu.up.cs301.checkers.Views.Pieces;
 import edu.up.cs301.game.GameFramework.players.GamePlayer;
 import edu.up.cs301.game.GameFramework.LocalGame;
@@ -31,7 +32,7 @@ public class CheckerLocalGame extends LocalGame {
     private CheckerPromotionAction promo;
 
     /**
-     * Constructor for the TTTLocalGame.
+     * Constructor for the CheckerLocalGame.
      */
     public CheckerLocalGame() {
 
@@ -207,7 +208,7 @@ public class CheckerLocalGame extends LocalGame {
             }
 
             //updates potential hasMoved variables
-            if(state.getPiece(tempRow, tempCol).getPieceColor() == Piece.ColorType.WHITE){
+            if(state.getPiece(tempRow, tempCol).getPieceColor() == Pieces.Colors.RED){
                 if(state.getPiece(tempRow, tempCol).getPieceType() == Piece.PieceType.KING) {
                     state.setWhiteKingHasMoved(true);
                 }
@@ -271,5 +272,15 @@ public class CheckerLocalGame extends LocalGame {
         if(gameOver == null || gameOver.equals("Stalemate.")) return -1;
         if(gameOver.equals(playerNames[0]+" is the winner.")) return 0;
         return 1;
+    }
+    public boolean checkPromotion(Pieces piece, int col, CheckerHumanPlayer1 chp){
+        if(piece.getType() != 0) {return false;}
+        if(piece.getColors() == Pieces.Colors.RED && col == 0){
+            //return new Piece(Piece.PieceType.QUEEN, Piece.ColorType.WHITE, piece.getX(), 0);
+            return true;
+        } else if(piece.getColors() == Pieces.Colors.BLACK && col == 7) {
+            return true;
+        }
+        return false;
     }
 }
