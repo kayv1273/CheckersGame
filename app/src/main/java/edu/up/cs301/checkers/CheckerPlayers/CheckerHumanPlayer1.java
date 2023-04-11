@@ -30,7 +30,6 @@ public class CheckerHumanPlayer1 extends GameHumanPlayer implements View.OnTouch
     private CheckerView surfaceView;
     public TextView movesLog;
     private CheckerView surfaceViewCheckerBoard;
-    private Button resignButton;
 
     //names
     private TextView player1name;
@@ -106,9 +105,6 @@ public class CheckerHumanPlayer1 extends GameHumanPlayer implements View.OnTouch
         //player names
         player1name = myActivity.findViewById(R.id.nameBlack);
         player2name = myActivity.findViewById(R.id.nameWhite);
-
-        //resignation
-        resignButton = myActivity.findViewById(R.id.surrenderButton);
 
 
         queenPromo = myActivity.findViewById(R.id.queenPromo);
@@ -238,7 +234,7 @@ public class CheckerHumanPlayer1 extends GameHumanPlayer implements View.OnTouch
 
     public void displayMovesLog(int currRow, int currCol, int tempRow, CheckerState state, boolean isCapture) {
         if (state == null) return;
-        Pieces.PieceType currPiece = state.getPiece(currRow, currCol).getPieceType();
+        Pieces.PieceType currPiece = state.getPiece(currRow, currCol).getType();
         String toReturn = "";
         if (justStarted) {
             movesLog.append("\n");
@@ -249,9 +245,9 @@ public class CheckerHumanPlayer1 extends GameHumanPlayer implements View.OnTouch
             toReturn += numTurns + ")";
         }
         if (currPiece.getType() == 0) {
-            toReturn += "K";
+            toReturn += "P";
         } else if (currPiece.getType() == 1) {
-            toReturn += "Q";
+            toReturn += "K";
         }
         if (isCapture && currPiece == Pieces.PieceType.PAWN) {
             toReturn += determineRow(tempRow);
@@ -300,9 +296,9 @@ public class CheckerHumanPlayer1 extends GameHumanPlayer implements View.OnTouch
         queenPromo.setVisibility(View.VISIBLE);
     }
 
-    public void makePromotion(Pieces.PieceType type) {
-        Pieces.ColorType currColor = state.getWhoseMove() == 0 ? Pieces.ColorType.WHITE : Piece.ColorType.BLACK;
-        Pieces set = new Piece(type, currColor, savedX, savedY);
+    public void makePromotion(int type) {
+        Pieces.Colors currColor = state.getWhoseMove() == 0 ? Pieces.Colors.RED : Pieces.Colors.BLACK;
+        Pieces set = new Pieces(type, currColor, savedX, savedY);
         CheckerPromotionAction promo = new CheckerPromotionAction(this,set,savedX,savedY);
         game.sendAction(promo);
         CheckerMoveAction move = new CheckerMoveAction(this, savedX, savedY);
