@@ -1,5 +1,10 @@
 package edu.up.cs301.checkers;
 
+import java.util.ArrayList;
+
+import edu.up.cs301.checkers.CheckerActionMessage.CheckerMoveAction;
+import edu.up.cs301.checkers.CheckerActionMessage.CheckerPromotionAction;
+import edu.up.cs301.checkers.CheckerActionMessage.CheckerSelectAction;
 import edu.up.cs301.checkers.Views.Pieces;
 import edu.up.cs301.game.GameFramework.players.GamePlayer;
 import edu.up.cs301.game.GameFramework.LocalGame;
@@ -9,12 +14,21 @@ public class CheckerLocalGame extends LocalGame {
     //Tag for logging
     private static final String TAG = "CheckerLocalGame";
 
-    // the marks for player 0 and player 1, respectively
-    private final static char[] mark = {'X','O'};
+    // piece that was selected by row and column
+    private int tempRow;
+    private int tempCol;
 
-    // the number of moves that have been played so far, used to
-    // determine whether the game is over
-    protected int moveCount;
+    // all of the initial movements of the piece selected
+    private ArrayList<Integer> initialMovementsX = new ArrayList<>();
+    private ArrayList<Integer> initialMovementsY = new ArrayList<>();
+
+    // all of the valid movements so the king isn't in check
+    private ArrayList<Integer> newMovementsX = new ArrayList<>();
+    private ArrayList<Integer> newMovementsY = new ArrayList<>();
+
+    private String winCondition = null;
+    private boolean isPromotion;
+    private CheckerPromotionAction promo;
 
     /**
      * Constructor for the TTTLocalGame.
@@ -26,6 +40,7 @@ public class CheckerLocalGame extends LocalGame {
 
         // create a new, unfilled-in TTTState object
         super.state = new CheckerState();
+        isPromotion = false;
     }
 
     /**
@@ -72,55 +87,17 @@ public class CheckerLocalGame extends LocalGame {
 
         // the character that will eventually contain an 'X' or 'O' if we
         // find a winner
-        char resultChar = ' ';
-
-        CheckerState state = (CheckerState) super.state;
-
-        // to all three lines in the current group
-        for (int i = 0; i < 3; i++) {
-            // get the initial character in each line
-            Pieces rowToken = state.getPiece(i,0);
-            Pieces colToken = state.getPiece(0,i);;
-            Pieces diagToken = state.getPiece(0,i);
-            // determine the direction that the diagonal moves
-            int diagDelta = 1-i;
-            // look for matches for each of the three positions in each
-            // of the current lines; set the corresponding variable to ' '
-            // if a mismatch is found
-            for (int j = 1; j < 3; j++) {
-                if (state.getPiece(i,j) != rowToken) rowToken = ' ';
-                if (state.getPiece(j,i) != colToken) colToken = ' ';
-                if (state.getPiece(j, i+(diagDelta*j)) != diagToken) diagToken = ' ';
-            }
-
-            ////////////////////////////////////////////////////////////
-            // At this point, if any of our three variables is non-blank
-            // then we have found a winner.
-            ////////////////////////////////////////////////////////////
-
-            // if we find a winner, indicate such by setting 'resultChar'
-            // to the winning mark.
-            if (rowToken != ' ') resultChar = rowToken;
-            else if (colToken != ' ') resultChar = colToken;
-            else if (diagToken != ' ') resultChar = diagToken;
+        if (winCondition == null) {
+            return null;
+        } else if (winCondition.equals("B")) {
+            return "Black Wins! ";
+        } else if (winCondition.equals("R")) {
+            return "Red Wins! ";
+        } else if (winCondition.equals("S")) {
+            return "Stalemate no one wins! ";
         }
+        return null;
 
-        // if resultChar is blank, we found no winner, so return null,
-        // unless the board is filled up. In that case, it's a cat's game.
-        if (resultChar == ' ') {
-            if  (moveCount >= 9) {
-                // no winner, but all 9 spots have been filled
-                return "It's a cat's game.";
-            }
-            else {
-                return null; // no winner, but game not over
-            }
-        }
-
-        // if we get here, then we've found a winner, so return the 0/1
-        // value that corresponds to that mark; then return a message
-        int gameWinner = resultChar == mark[0] ? 0 : 1;
-        return playerNames[gameWinner]+" is the winner.";
     }
 
     /**
@@ -162,36 +139,129 @@ public class CheckerLocalGame extends LocalGame {
      */
     @Override
     protected boolean makeMove(GameAction action) {
-
-        // get the row and column position of the player's move
-        TTTMoveAction tm = (TTTMoveAction) action;
         CheckerState state = (CheckerState) super.state;
-
-        int row = tm.getRow();
-        int col = tm.getCol();
-
-        // get the 0/1 id of our player
-        int playerId = getPlayerIdx(tm.getPlayer());
-
-        // if that space is not blank, indicate an illegal move
-        if (state.getPiece(row, col) != ' ') {
-            return false;
-        }
 
         // get the 0/1 id of the player whose move it is
         int whoseMove = state.getWhoseMove();
+        if (action instanceof CheckerSelectAction) {
+            CheckerSelectAction select = (CheckerSelectAction) action;
+            int row = select.getRow();
+            int col = select.getCol();
 
-        // place the player's piece on the selected square
-        state.setPiece(row, col, mark[playerId]);
+            // remove the highlights if there are any previous ones
+            for (int i = 0; i < 8; i++) {
+                for (int j = 0; j < 8; j++) {
+                    if (state.getDrawing(i, j) == 1) {
+                        state.removeHighlight();
+                        state.removeCircle();
+                    }
+                }
+            }
 
-        // make it the other player's turn
-        state.setWhoseMove(1 - whoseMove);
+            // remove the red highlight from being in check
+            state.removeHighlightCheck();
 
-        // bump the move count
-        moveCount++;
+            // highlight the piece they tapped
+            state.setHighlight(row, col);
 
+            // save temps for the row and col for movement later
+            tempRow = row;
+            tempCol = col;
+
+            // the selected piece
+            Pieces p = state.getPiece(row, col);
+
+            // find all movements of piece selected
+            findMovement(state, p);
+
+            // make fake movements and determine if that movement allows the
+            // players own king be in check
+            moveToNotBeInCheck(state, p.getPieceColor(), p.getPieceType());
+
+            if(newMovementsX.size() > 0) {
+                state.setCanMove(true);
+            } else {
+                state.setCanMove(false);
+            }
+
+            // display all positions in arraylist as dots on the board
+            state.setCircles(newMovementsX, newMovementsY);
+
+            // return true to skip changing turns
+            return true;
+        } else if (action instanceof CheckerMoveAction) {
+            CheckerMoveAction move = (CheckerMoveAction) action;
+            int row = move.getRow();
+            int col = move.getCol();
+
+            // if they have no selected piece movement shouldn't occur
+            if (tempRow == -1 || tempCol == -1) {
+                return false;
+            }
+
+            //very specific castling case- the selected piece and piece being moved to are the same color
+            if(state.getPiece(tempRow, tempCol).getPieceColor() == state.getPiece(row, col).getPieceColor()){
+                if(tempRow == 4 && tempCol == 7 && row == 7 && col == 7){
+
+                }
+            }
+
+            //updates potential hasMoved variables
+            if(state.getPiece(tempRow, tempCol).getPieceColor() == Piece.ColorType.WHITE){
+                if(state.getPiece(tempRow, tempCol).getPieceType() == Piece.PieceType.KING) {
+                    state.setWhiteKingHasMoved(true);
+                }
+                else if(state.getPiece(tempRow, tempCol).getPieceType() == Piece.PieceType.ROOK && tempCol == 7){
+                    state.setWhiteRook1HasMoved(true);
+                }
+                else if(state.getPiece(tempRow, tempCol).getPieceType() == Piece.PieceType.ROOK && tempCol == 0){
+                    state.setWhiteRook2HasMoved(true);
+                }
+            }
+            else if(state.getPiece(tempRow, tempCol).getPieceColor() == Piece.ColorType.BLACK){
+                if(state.getPiece(tempRow, tempCol).getPieceType() == Piece.PieceType.KING) {
+                    state.setBlackKingHasMoved(true);
+                }
+                else if(state.getPiece(tempRow, tempCol).getPieceType() == Piece.PieceType.ROOK && tempCol == 7){
+                    state.setBlackRook1HasMoved(true);
+                }
+                else if(state.getPiece(tempRow, tempCol).getPieceType() == Piece.PieceType.ROOK && tempCol == 0){
+                    state.setBlackRook2HasMoved(true);
+                }
+            }
+
+            Pieces tempP = state.getPiece(tempRow, tempCol);
+
+            // determine what team is moving (white/black) and move the piece
+            if (tempP.getPieceColor() == Piece.ColorType.WHITE) {
+                if (!setMovement(state, row, col, Piece.ColorType.WHITE)) {
+                    state.removeHighlight();
+                    state.removeCircle();
+                    return false;
+                }
+            } else if (tempP.getPieceColor() == Piece.ColorType.BLACK) {
+                if (!setMovement(state, row, col, Piece.ColorType.BLACK)) {
+                    state.removeHighlight();
+                    state.removeCircle();
+                    return false;
+                }
+            }
+            // make sure all highlights and dots are already removed
+            state.removeCircle();
+
+
+            // make it the other player's turn
+            state.setWhoseMove(1 - whoseMove);
+
+            // return true, indicating the it was a legal move
+            return true;
+        } else if (action instanceof CheckerPromotionAction){
+            promo = (CheckerPromotionAction) action;
+            CheckerPromotionAction.isPromotion = true;
+            return true;
+        }
         // return true, indicating the it was a legal move
-        return true;
+        return false;
     }
 
     //TESTING
