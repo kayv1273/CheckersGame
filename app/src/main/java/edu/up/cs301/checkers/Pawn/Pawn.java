@@ -34,29 +34,60 @@ public class Pawn {
         //check left border
         if (col == 0 && row > 0) {
             if (state.getPiece(row - 1, col + 1).getColors() == Pieces.Colors.EMPTY) {
-                xMoves.add(row-1);
-                yMoves.add(col+1);
+                xMoves.add(row - 1);
+                yMoves.add(col + 1);
             }
         }
 
         //check right border
         if (col == 7 && row > 0) {
             if (state.getPiece(row - 1, col - 1).getColors() == Pieces.Colors.EMPTY) {
-                xMoves.add(row-1);
-                yMoves.add(col-1);
+                xMoves.add(row - 1);
+                yMoves.add(col - 1);
             }
         }
 
         if ((col > 0 && col < 7) && row > 0) {
             if (state.getPiece(row - 1, col + 1).getColors() == Pieces.Colors.EMPTY) {
-                xMoves.add(row-1);
-                yMoves.add(col+1);
+                xMoves.add(row - 1);
+                yMoves.add(col + 1);
             }
             if (state.getPiece(row - 1, col - 1).getColors() == Pieces.Colors.EMPTY) {
-                xMoves.add(row-1);
-                yMoves.add(col-1);
+                xMoves.add(row - 1);
+                yMoves.add(col - 1);
             }
         }
+    }
+
+    public void moveBlackPawn(CheckerState state) {
+
+        //check left border
+        if (col == 0 && row < 7) {
+            if (state.getPiece(row + 1, col + 1).getColors() == Pieces.Colors.EMPTY) {
+                xMoves.add(row + 1);
+                yMoves.add(col + 1);
+            }
+        }
+
+        //check right border
+        if (col == 7 && row < 7) {
+            if (state.getPiece(row + 1, col - 1).getColors() == Pieces.Colors.EMPTY) {
+                xMoves.add(row + 1);
+                yMoves.add(col - 1);
+            }
+        }
+
+        if ((col > 0 && col < 7) && row < 7) {
+            if (state.getPiece(row + 1, col - 1).getColors() == Pieces.Colors.EMPTY) {
+                xMoves.add(row + 1);
+                yMoves.add(col - 1);
+            }
+            if (state.getPiece(row + 1, col + 1).getColors() == Pieces.Colors.EMPTY) {
+                xMoves.add(row + 1);
+                yMoves.add(col + 1);
+            }
+        }
+    }
 
     public void movePawn() {
         //check pawn on left most side of the board
