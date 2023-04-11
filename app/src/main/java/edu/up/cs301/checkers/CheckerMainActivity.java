@@ -18,6 +18,8 @@ import edu.up.cs301.checkers.CheckerPlayers.CheckerComputerPlayer2;
 import edu.up.cs301.checkers.CheckerPlayers.CheckerHumanPlayer1;
 
 public class CheckerMainActivity extends GameMainActivity {
+
+    // Tag for logging
     private static final String TAG = "CheckerMainActivity";
     public static final int PORT_NUMBER = 5213;
 

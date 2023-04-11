@@ -303,7 +303,7 @@ public class CheckerView extends SurfaceView implements View.OnTouchListener {
                             for (int index = 0; index < xMoves.size(); index++) {
                                 if (xMoves.get(index) == j && yMoves.get(index) == i) {
                                     pieces[j][i] = pieces[row][col];
-                                    pieces[row][col] = new Pieces(Pieces.Colors.EMPTY);
+                                    pieces[row][col] = new Pieces(0,Pieces.Colors.EMPTY, i, j);
                                     board[row][col] = 0;
                                     for (int k = 0; k < xMoves.size(); k++) {
                                         board[yMoves.get(k)][xMoves.get(k)] = 0;
