@@ -89,7 +89,7 @@ public class Pawn {
 
     public void moveBlackPawn(CheckerState state) {
 
-        //check left border
+        //check left border please
         if (col == 0 && row < 7) {
             if (state.getPiece(row + 1, col + 1).getColors() == Pieces.Colors.EMPTY) {
                 xMoves.add(row + 1);
