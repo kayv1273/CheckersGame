@@ -198,7 +198,7 @@ public class CheckerLocalGame extends LocalGame {
 
     public int whoWon(){
         String gameOver = checkIfGameOver();
-        if(gameOver == null || gameOver.equals("It's a cat's game.")) return -1;
+        if(gameOver == null || gameOver.equals("Stalemate.")) return -1;
         if(gameOver.equals(playerNames[0]+" is the winner.")) return 0;
         return 1;
     }
