@@ -14,6 +14,7 @@ import android.view.View;
 import java.util.ArrayList;
 
 import edu.up.cs301.checkers.Pieces;
+import edu.up.cs301.game.R;
 
 /**
  * @author Griselda
