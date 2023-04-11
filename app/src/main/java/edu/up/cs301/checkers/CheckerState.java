@@ -2,8 +2,8 @@ package edu.up.cs301.checkers;
 
 import java.io.Serializable;
 
+import edu.up.cs301.checkers.Views.Pieces;
 import edu.up.cs301.game.GameFramework.infoMessage.GameState;
-import edu.up.cs301.tictactoe.infoMessage.TTTState;
 
 public class CheckerState extends GameState implements Serializable {
     //Tag for logging

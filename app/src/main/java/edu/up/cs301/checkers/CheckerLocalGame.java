@@ -1,9 +1,9 @@
 package edu.up.cs301.checkers;
 
+import edu.up.cs301.checkers.Views.Pieces;
 import edu.up.cs301.game.GameFramework.players.GamePlayer;
 import edu.up.cs301.game.GameFramework.LocalGame;
 import edu.up.cs301.game.GameFramework.actionMessage.GameAction;
-import edu.up.cs301.tictactoe.infoMessage.TTTState;
 import edu.up.cs301.tictactoe.tttActionMessage.TTTMoveAction;
 public class CheckerLocalGame extends LocalGame {
     //Tag for logging
