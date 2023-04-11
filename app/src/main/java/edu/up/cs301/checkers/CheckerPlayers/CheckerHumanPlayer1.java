@@ -27,7 +27,7 @@ public class CheckerHumanPlayer1 extends GameHumanPlayer implements View.OnTouch
 
     // the surface view
     private CheckerView surfaceView;
-    private CheckerView checkerBoard;
+    private CheckerView checkerBoardView;
     private Button resetButton;
 
     //names
@@ -69,18 +69,18 @@ public class CheckerHumanPlayer1 extends GameHumanPlayer implements View.OnTouch
     @Override
     public void receiveInfo(GameInfo info) {
 
-        if (checkerBoard == null) return;
+        if (checkerBoardView == null) return;
 
         if (info instanceof IllegalMoveInfo || info instanceof NotYourTurnInfo) {
             // if the move was out of turn or otherwise illegal, flash the screen
-            checkerBoard.flash(Color.RED, 50);
+            checkerBoardView.flash(Color.RED, 50);
         }
         else if (!(info instanceof CheckerState))
             // if we do not have a TTTState, ignore
             return;
         else {
-            checkerBoard.setState((TTTState)info);
-            checkerBoard.invalidate();
+            checkerBoardView.setState((CheckerState)info);
+            checkerBoardView.invalidate();
             Logger.log(TAG, "receiving");
         }
     }
@@ -94,9 +94,17 @@ public class CheckerHumanPlayer1 extends GameHumanPlayer implements View.OnTouch
         activity.setContentView(layoutId);
 
         // set the surfaceView instance variable
-        surfaceView = (CheckerView)myActivity.findViewById(R.id.checkerBoard);
+        surfaceView = (CheckerView)myActivity.findViewById(R.id.checkerBoardView);
         Logger.log("set listener","OnTouch");
         surfaceView.setOnTouchListener(this);
+
+        //player name
+        player1name = myActivity.findViewById(R.id.name);
+
+        //reset button
+        resetButton = myActivity.findViewById(R.id.reset);
+        resetButton.setOnTouchListener(this);
+
     }
 
     /**
@@ -115,7 +123,7 @@ public class CheckerHumanPlayer1 extends GameHumanPlayer implements View.OnTouch
      * knows what their game-position and opponents' names are.
      */
     protected void initAfterReady() {
-        myActivity.setTitle("Tic-Tac-Toe: "+allPlayerNames[0]+" vs. "+allPlayerNames[1]);
+        myActivity.setTitle("Checkers: "+allPlayerNames[0]+" vs. "+allPlayerNames[1]);
     }
 
     /**

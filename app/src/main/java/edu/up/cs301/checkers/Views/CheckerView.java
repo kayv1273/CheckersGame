@@ -13,6 +13,7 @@ import android.view.View;
 
 import java.util.ArrayList;
 
+import edu.up.cs301.checkers.CheckerState;
 import edu.up.cs301.checkers.Pieces;
 import edu.up.cs301.game.R;
 
@@ -62,6 +63,8 @@ public class CheckerView extends SurfaceView implements View.OnTouchListener {
     //dimensions
     private int row = 7;
     private int col = 7;
+
+    protected CheckerState checkerState;
 
     public CheckerView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -445,5 +448,7 @@ public class CheckerView extends SurfaceView implements View.OnTouchListener {
         return false;
     }
 
-
+public void setState(CheckerState state){
+        checkerState = state;
+}
 }
