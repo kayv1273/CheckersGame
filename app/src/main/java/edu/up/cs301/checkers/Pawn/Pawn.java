@@ -47,6 +47,7 @@ public class Pawn {
             }
         }
 
+        //anywhere else on the board
         if ((col > 0 && col < 7) && row > 0) {
             if (state.getPiece(row - 1, col + 1).getColors() == Pieces.Colors.EMPTY) {
                 xMoves.add(row - 1);
@@ -55,6 +56,33 @@ public class Pawn {
             if (state.getPiece(row - 1, col - 1).getColors() == Pieces.Colors.EMPTY) {
                 xMoves.add(row - 1);
                 yMoves.add(col - 1);
+            }
+        }
+
+
+        //check captures
+        if (col < 2 && row > 2) {
+            if (state.getPiece(row - 2, col + 2).getColors() == Pieces.Colors.EMPTY && state.getPiece(row - 1, col + 1).getColors() == Pieces.Colors.BLACK) {
+                xCaptures.add(row - 2);
+                yCaptures.add(col + 2);
+            }
+        }
+
+        if (col > 5 && row > 2) {
+            if (state.getPiece(row - 2, col - 2).getColors() == Pieces.Colors.EMPTY && state.getPiece(row - 1, col - 1).getColors() == Pieces.Colors.BLACK) {
+                xCaptures.add(row - 2);
+                yCaptures.add(col - 2);
+            }
+        }
+
+        if (col >= 2 && col <= 5 && row > 2) {
+            if (state.getPiece(row - 2, col - 2).getColors() == Pieces.Colors.EMPTY && state.getPiece(row - 1, col - 1).getColors() == Pieces.Colors.BLACK) {
+                xCaptures.add(row - 2);
+                yCaptures.add(col - 2);
+            }
+            if (state.getPiece(row - 2, col + 2).getColors() == Pieces.Colors.EMPTY && state.getPiece(row - 1, col + 1).getColors() == Pieces.Colors.BLACK) {
+                xCaptures.add(row - 2);
+                yCaptures.add(col + 2);
             }
         }
     }
