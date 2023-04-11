@@ -3,6 +3,7 @@ package edu.up.cs301.checkers.CheckerPlayers;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import edu.up.cs301.checkers.CheckerActionMessage.CheckerMoveAction;
 import edu.up.cs301.checkers.CheckerActionMessage.CheckerPromotionAction;
 import edu.up.cs301.checkers.CheckerActionMessage.CheckerSelectAction;
 import edu.up.cs301.checkers.InfoMessage.CheckerState;
@@ -140,7 +141,7 @@ public class CheckerComputerPlayer1 extends GameComputerPlayer {
         // we'll end up here again (and possibly again, and again). At some point,
         // we'll end up randomly pick a move that is legal.
         Logger.log("CheckerComputer", "Sending move");
-        game.sendAction(new TTTMoveAction(this, xVal, yVal));
+        game.sendAction(new CheckerMoveAction(this, xVal, yVal));
 
     }
 
