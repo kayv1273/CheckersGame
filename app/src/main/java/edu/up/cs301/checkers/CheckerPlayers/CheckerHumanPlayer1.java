@@ -2,11 +2,14 @@ package edu.up.cs301.checkers.CheckerPlayers;
 
 import android.graphics.Color;
 import android.graphics.Point;
+import android.os.CountDownTimer;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import edu.up.cs301.checkers.CheckerActionMessage.CheckerMoveAction;
+import edu.up.cs301.checkers.CheckerActionMessage.CheckerSelectAction;
 import edu.up.cs301.checkers.CheckerState;
 import edu.up.cs301.checkers.Views.CheckerView;
 import edu.up.cs301.checkers.Views.Pieces;
@@ -16,6 +19,7 @@ import edu.up.cs301.game.GameFramework.infoMessage.IllegalMoveInfo;
 import edu.up.cs301.game.GameFramework.infoMessage.NotYourTurnInfo;
 import edu.up.cs301.game.GameFramework.players.GameHumanPlayer;
 import edu.up.cs301.game.GameFramework.utilities.Logger;
+import edu.up.cs301.game.GameFramework.utilities.MessageBox;
 import edu.up.cs301.game.R;
 import edu.up.cs301.tictactoe.infoMessage.TTTState;
 import edu.up.cs301.tictactoe.tttActionMessage.TTTMoveAction;
@@ -28,30 +32,23 @@ public class CheckerHumanPlayer1 extends GameHumanPlayer implements View.OnTouch
     // the surface view
     private CheckerView surfaceView;
     public TextView movesLog;
-    private CheckerView surfaceViewChessBoard;
+    private CheckerView surfaceViewCheckerBoard;
     private Button resignButton;
-
-    //captures surfaceview
-    private BlackCaptureSurfaceView surfaceViewBlackCapture;
-    private WhiteCaptureSurfaceView surfaceViewWhiteCapture;
 
     //names
     private TextView player1name;
     private TextView player2name;
 
     public Button queenPromo;
-    public Button bishopPromo;
-    public Button rookPromo;
-    public Button knightPromo;
     public boolean isPromotion;
-    public Pieces currPiece = new Pieces(Pieces.PieceType.QUEEN, Piece.ColorType.WHITE, 0, 0);
+    public Pieces currPiece = new Pieces(0, Pieces.Colors.RED, 0, 0);
     private int savedX = 0;
     private int savedY = 0;
 
     // the ID for the layout to use
     private int layoutId;
 
-    private ChessState state;
+    private CheckerState state;
     private int numTurns;
     private boolean justStarted;
     private int x = 8;
@@ -77,23 +74,19 @@ public class CheckerHumanPlayer1 extends GameHumanPlayer implements View.OnTouch
 
     @Override
     public void receiveInfo(GameInfo info) {
-        if (surfaceViewChessBoard == null) {
+        if (surfaceViewCheckerBoard == null) {
             return;
         }
 
         if (info instanceof IllegalMoveInfo || info instanceof NotYourTurnInfo) {
             // if the move was out of turn or otherwise illegal, flash the screen
-            surfaceViewChessBoard.flash(Color.RED, 50);
-        } else if (!(info instanceof ChessState)) {
+            surfaceViewCheckerBoard.flash(Color.RED, 50);
+        } else if (!(info instanceof CheckerState)) {
             // if we do not have a state, ignore
             return;
         } else {
-            surfaceViewChessBoard.setState((ChessState) info);
-            surfaceViewChessBoard.invalidate();
-
-            surfaceViewWhiteCapture.setState(state);
-            surfaceViewBlackCapture.setState(state);
-            surfaceViewBlackCapture.invalidate();
+            surfaceViewCheckerBoard.setState((CheckerState) info);
+            surfaceViewCheckerBoard.invalidate();
         }
     }
 
@@ -106,12 +99,12 @@ public class CheckerHumanPlayer1 extends GameHumanPlayer implements View.OnTouch
         activity.setContentView(layoutId);
 
         // set the surfaceView instance variable
-        surfaceView = (ChessBoardSurfaceView) myActivity.findViewById(R.id.chessBoard);
+        surfaceView = (CheckerView) myActivity.findViewById(R.id.board);
         surfaceView.setOnTouchListener(this);
 
         //moves log
         movesLog = myActivity.findViewById(R.id.movesLog);
-        surfaceViewChessBoard = (ChessBoardSurfaceView) myActivity.findViewById(R.id.chessBoard);
+        surfaceViewCheckerBoard = (CheckerView) myActivity.findViewById(R.id.board);
 
         //player names
         player1name = myActivity.findViewById(R.id.nameBlack);
@@ -120,20 +113,11 @@ public class CheckerHumanPlayer1 extends GameHumanPlayer implements View.OnTouch
         //resignation
         resignButton = myActivity.findViewById(R.id.surrenderButton);
 
-        //captures
-        surfaceViewWhiteCapture = (WhiteCaptureSurfaceView) myActivity.findViewById(R.id.whiteCaptures);
-        surfaceViewBlackCapture = (BlackCaptureSurfaceView) myActivity.findViewById(R.id.blackCaptures);
 
         queenPromo = myActivity.findViewById(R.id.queenPromo);
-        bishopPromo = myActivity.findViewById(R.id.bishopPromo);
-        knightPromo = myActivity.findViewById(R.id.knightPromo);
-        rookPromo = myActivity.findViewById(R.id.rookPromo);
         undisplay();
         queenPromo.setOnTouchListener(this);
-        bishopPromo.setOnTouchListener(this);
-        knightPromo.setOnTouchListener(this);
-        rookPromo.setOnTouchListener(this);
-        surfaceViewChessBoard.setOnTouchListener(this);
+        surfaceViewCheckerBoard.setOnTouchListener(this);
         resignButton.setOnTouchListener(this);
     }
 
@@ -203,37 +187,37 @@ public class CheckerHumanPlayer1 extends GameHumanPlayer implements View.OnTouch
                         if (motionEvent.getY() > 20 + (j * 115) && motionEvent.getY() < 175 + (j * 115)) {
 
                             // create the select action
-                            if (state.getPiece(i, j).getPieceColor() == Piece.ColorType.WHITE && state.getWhoseMove() == 0) {
-                                ChessSelectAction select = new ChessSelectAction(this, i, j);
+                            if (state.getPiece(i, j).getColors() == Pieces.Colors.RED && state.getWhoseMove() == 0) {
+                                CheckerSelectAction select = new CheckerSelectAction(this, i, j);
                                 currPiece = state.getPiece(i, j);
                                 game.sendAction(select);
-                            } else if (state.getPiece(i, j).getPieceColor() == Piece.ColorType.BLACK && state.getWhoseMove() == 1) {
-                                ChessSelectAction select = new ChessSelectAction(this, i, j);
+                            } else if (state.getPiece(i, j).getPieceColor() == Pieces.Colors.BLACK && state.getWhoseMove() == 1) {
+                                CheckerSelectAction select = new CheckerSelectAction(this, i, j);
                                 currPiece = state.getPiece(i, j);
                                 game.sendAction(select);
                             } else if (state.getPiece(i, j).getPieceColor() != Piece.ColorType.WHITE && state.getWhoseMove() == 0) {
                                 if (j == 0 && currPiece.getPieceType() == Piece.PieceType.PAWN && state.getWhoseMove() == this.playerNum) {
                                     if (!validPawnMove(i, j, currPiece)) {
-                                        ChessMoveAction move = new ChessMoveAction(this, i, j);
+                                        CheckerMoveAction move = new CheckerMoveAction(this, i, j);
                                         game.sendAction(move);
                                         break;
                                     }
                                     promptForPromotion(i, j);
                                     break;
                                 }
-                                ChessMoveAction move = new ChessMoveAction(this, i, j);
+                                CheckerMoveAction move = new CheckerMoveAction(this, i, j);
                                 game.sendAction(move);
-                            } else if (state.getPiece(i, j).getPieceColor() != Piece.ColorType.BLACK && state.getWhoseMove() == 1) {
-                                if (j == 7 && currPiece.getPieceType() == Piece.PieceType.PAWN && state.getWhoseMove() == this.playerNum) {
+                            } else if (state.getPiece(i, j).getColors() != Pieces.Colors.BLACK && state.getWhoseMove() == 1) {
+                                if (j == 7 && currPiece.getPieceType() == Pieces.PieceType.PAWN && state.getWhoseMove() == this.playerNum) {
                                     if (!validPawnMove(i,j,currPiece)) {
-                                        ChessMoveAction move = new ChessMoveAction(this, i, j);
+                                        CheckerMoveAction move = new CheckerMoveAction(this, i, j);
                                         game.sendAction(move);
                                         break;
                                     }
                                     promptForPromotion(i, j);
                                     break;
                                 }
-                                ChessMoveAction move = new ChessMoveAction(this, i, j);
+                                CheckerMoveAction move = new CheckerMoveAction(this, i, j);
                                 game.sendAction(move);
                             }
                             surfaceViewChessBoard.invalidate();
@@ -248,13 +232,7 @@ public class CheckerHumanPlayer1 extends GameHumanPlayer implements View.OnTouch
             }
         } else {
             if (view.getId() == queenPromo.getId()) {
-                makePromotion(Piece.PieceType.QUEEN);
-            } else if (view.getId() == bishopPromo.getId()) {
-                makePromotion(Piece.PieceType.BISHOP);
-            } else if (view.getId() == knightPromo.getId()) {
-                makePromotion(Piece.PieceType.KNIGHT);
-            } else if (view.getId() == rookPromo.getId()) {
-                makePromotion(Piece.PieceType.ROOK);
+                makePromotion(Pieces.PieceType.QUEEN);
             }
             return true;
         }
