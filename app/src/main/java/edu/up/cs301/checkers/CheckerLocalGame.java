@@ -9,7 +9,7 @@ import edu.up.cs301.checkers.CheckerActionMessage.CheckerSelectAction;
 import edu.up.cs301.checkers.CheckerPlayers.CheckerHumanPlayer1;
 import edu.up.cs301.checkers.InfoMessage.CheckerState;
 import edu.up.cs301.checkers.Pawn.Pawn;
-import edu.up.cs301.checkers.Views.Pieces;
+import edu.up.cs301.checkers.InfoMessage.Pieces;
 import edu.up.cs301.game.GameFramework.LocalGame;
 import edu.up.cs301.game.GameFramework.actionMessage.GameAction;
 import edu.up.cs301.game.GameFramework.players.GamePlayer;
@@ -74,7 +74,7 @@ public class CheckerLocalGame extends LocalGame {
     @Override
     protected String checkIfGameOver() {
 
-        //char resultChar = ' ';
+
         if (winCondition == null) {
             return null;
         } else if (winCondition.equals("B")) {
@@ -218,7 +218,7 @@ public class CheckerLocalGame extends LocalGame {
          * @return tells weather the move was valid and happened
          */
         public boolean setMovement (CheckerState state,int row, int col,
-        edu.up.cs301.checkers.Views.Pieces.Colors color){
+        Pieces.Colors color){
             // if they selected a dot/ring then move
             if (state.getDrawing(row, col) == 2 || state.getDrawing(row, col) == 4) {
 
@@ -231,9 +231,6 @@ public class CheckerLocalGame extends LocalGame {
                     }
                 }
 
-//            for (Piece p : state.getWhiteCapturedPieces()) {
-//                Log.d("Testing", p.getPieceType().toString());
-//            }
 
                 Pieces tempPiece = state.getPiece(tempRow, tempCol);
 

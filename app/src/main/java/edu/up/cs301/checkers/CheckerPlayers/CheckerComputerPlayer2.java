@@ -1,13 +1,7 @@
 package edu.up.cs301.checkers.CheckerPlayers;
 
-import edu.up.cs301.checkers.CheckerActionMessage.CheckerMoveAction;
-import edu.up.cs301.checkers.InfoMessage.CheckerState;
-import edu.up.cs301.checkers.Views.Pieces;
 import edu.up.cs301.game.GameFramework.players.GameComputerPlayer;
 import edu.up.cs301.game.GameFramework.infoMessage.GameInfo;
-import edu.up.cs301.game.GameFramework.utilities.Logger;
-
-import android.graphics.Point;
 
 public class CheckerComputerPlayer2 extends GameComputerPlayer {
     /**

@@ -7,13 +7,9 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.view.MotionEvent;
-import android.view.SurfaceView;
-import android.view.View;
-
-import java.util.ArrayList;
 
 import edu.up.cs301.checkers.InfoMessage.CheckerState;
+import edu.up.cs301.checkers.InfoMessage.Pieces;
 import edu.up.cs301.game.GameFramework.utilities.FlashSurfaceView;
 import edu.up.cs301.game.R;
 

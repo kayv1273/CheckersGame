@@ -3,7 +3,6 @@ package edu.up.cs301.checkers.InfoMessage;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import edu.up.cs301.checkers.Views.Pieces;
 import edu.up.cs301.game.GameFramework.infoMessage.GameState;
 
 public class CheckerState extends GameState implements Serializable {
@@ -50,8 +49,8 @@ public class CheckerState extends GameState implements Serializable {
         newYMoves = new ArrayList<>();
 
         // Set initial positions of all the pieces
-        for (int row = 0; row < 8; row++) {
-            for (int col = 0; col < 8; col++) {
+        for (int row = 0; row < pieces.length; row++) {
+            for (int col = 0; col < pieces[row].length; col++) {
                 if (row == 0 || row == 2) {
                     if (col % 2 == 0) {
                         pieces[row][col] = new Pieces(0, Pieces.Colors.BLACK, row, col);
@@ -96,6 +95,12 @@ public class CheckerState extends GameState implements Serializable {
                 else {
                     pieces[row][col] = new Pieces(0, Pieces.Colors.EMPTY, row, col);
                 }
+            }
+        }
+
+        for (int row = 0; row < board.length; row++){
+            for (int col = 0; col < board[row].length; col++){
+                board[row][col] = 0;
             }
         }
 

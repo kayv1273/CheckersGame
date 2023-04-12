@@ -1,6 +1,5 @@
 package edu.up.cs301.checkers.CheckerPlayers;
 
-import android.graphics.Color;
 import android.os.CountDownTimer;
 import android.view.MotionEvent;
 import android.view.View;
@@ -12,7 +11,7 @@ import edu.up.cs301.checkers.CheckerActionMessage.CheckerPromotionAction;
 import edu.up.cs301.checkers.CheckerActionMessage.CheckerSelectAction;
 import edu.up.cs301.checkers.InfoMessage.CheckerState;
 import edu.up.cs301.checkers.Views.CheckerView;
-import edu.up.cs301.checkers.Views.Pieces;
+import edu.up.cs301.checkers.InfoMessage.Pieces;
 import edu.up.cs301.game.GameFramework.GameMainActivity;
 import edu.up.cs301.game.GameFramework.infoMessage.GameInfo;
 import edu.up.cs301.game.GameFramework.infoMessage.IllegalMoveInfo;

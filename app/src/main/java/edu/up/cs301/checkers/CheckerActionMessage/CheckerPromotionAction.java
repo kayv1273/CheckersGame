@@ -1,6 +1,6 @@
 package edu.up.cs301.checkers.CheckerActionMessage;
 
-import edu.up.cs301.checkers.Views.Pieces;
+import edu.up.cs301.checkers.InfoMessage.Pieces;
 import edu.up.cs301.game.GameFramework.actionMessage.GameAction;
 import edu.up.cs301.game.GameFramework.players.GamePlayer;
 

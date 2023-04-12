@@ -3,7 +3,7 @@ package edu.up.cs301.checkers.Pawn;
 import java.util.ArrayList;
 
 import edu.up.cs301.checkers.InfoMessage.CheckerState;
-import edu.up.cs301.checkers.Views.Pieces;
+import edu.up.cs301.checkers.InfoMessage.Pieces;
 
 public class Pawn {
     private ArrayList<Integer> xMoves;

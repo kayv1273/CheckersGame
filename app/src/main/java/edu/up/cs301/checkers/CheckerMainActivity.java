@@ -1,6 +1,7 @@
 package edu.up.cs301.checkers;
 
 import android.content.pm.ActivityInfo;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -28,6 +29,7 @@ public class CheckerMainActivity extends GameMainActivity {
      */
     @Override
     public GameConfig createDefaultConfig() {
+
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         // Define the allowed player types

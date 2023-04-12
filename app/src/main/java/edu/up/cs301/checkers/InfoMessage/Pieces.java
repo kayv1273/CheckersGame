@@ -1,4 +1,4 @@
-package edu.up.cs301.checkers.Views;
+package edu.up.cs301.checkers.InfoMessage;
 /**
  * @author Griselda
  * @author Katherine
