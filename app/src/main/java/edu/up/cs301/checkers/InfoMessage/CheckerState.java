@@ -276,4 +276,56 @@ public class CheckerState extends GameState implements Serializable {
     public void addBlackCapturedPiece(Pieces piece){
         blackCapturedPieces.add(piece);
     }
+
+    public void setHighlightCheck(int row, int col) {
+        board[row][col] = 3;
+    }
+
+    public void setHighlight(int row, int col) {
+        board[row][col] = 1;
+    }
+
+    //iterate through x and y value arrays to find where to put circles on the board
+    public void setCircles(ArrayList<Integer> row, ArrayList<Integer> col) {
+        for (int i = 0; i < row.size(); i++) {
+            if (getPiece(row.get(i), col.get(i)).getColors() != Pieces.Colors.EMPTY) {
+                board[row.get(i)][col.get(i)] = 4;
+            } else {
+                board[row.get(i)][col.get(i)] = 2;
+            }
+        }
+    }
+
+    //removes all highlights from the board
+    public void removeHighlight() {
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+                if (board[i][j] == 1) {
+                    board[i][j] = 0;
+                }
+            }
+        }
+    }
+
+    //removes all circles from the board
+    public void removeCircle() {
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+                if (board[i][j] == 2 || board[i][j] == 4) {
+                    board[i][j] = 0;
+                }
+            }
+        }
+    }
+
+    //removes the check highlight from the board
+    public void removeHighlightCheck() {
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+                if (board[i][j] == 3) {
+                    board[i][j] = 0;
+                }
+            }
+        }
+    }
 }
