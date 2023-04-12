@@ -26,9 +26,6 @@ public class CheckerLocalGame extends LocalGame {
     private ArrayList<Integer> initialMovementsX = new ArrayList<>();
     private ArrayList<Integer> initialMovementsY = new ArrayList<>();
 
-    // all of the valid movements so the king isn't in check
-    private ArrayList<Integer> newMovementsX = new ArrayList<>();
-    private ArrayList<Integer> newMovementsY = new ArrayList<>();
 
     private String winCondition = null;
     private boolean isPromotion;
@@ -141,12 +138,6 @@ public class CheckerLocalGame extends LocalGame {
             findMovement(state, p);
 
 
-            if (newMovementsX.size() > 0) {
-                state.setCanMove(true);
-            } else {
-                state.setCanMove(false);
-            }
-
             // return true to skip changing turns
             return true;
         } else if (action instanceof CheckerMoveAction) {
@@ -217,8 +208,7 @@ public class CheckerLocalGame extends LocalGame {
          * @param color the color of the piece they selected previously
          * @return tells weather the move was valid and happened
          */
-        public boolean setMovement (CheckerState state,int row, int col,
-        Pieces.Colors color){
+        public boolean setMovement (CheckerState state,int row, int col, Pieces.Colors color){
             // if they selected a dot/ring then move
             if (state.getDrawing(row, col) == 2 || state.getDrawing(row, col) == 4) {
 
@@ -307,11 +297,6 @@ public class CheckerLocalGame extends LocalGame {
                 tempRow = pieces.get(i).getX();
                 tempCol = pieces.get(i).getY();
                 findMovement(state, pieces.get(i));
-                if (newMovementsX.size() > 0) {
-                    //if we are in here then they have at least one move
-                    //so it's not stalemate
-                    return null;
-                }
             }
             //there are no possible moves
             state.setGameOver(true);

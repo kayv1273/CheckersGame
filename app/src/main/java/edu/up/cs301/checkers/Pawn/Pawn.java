@@ -24,7 +24,7 @@ public class Pawn {
         if (color == Pieces.Colors.RED) {
             moveRedPawn(state);
         }
-        else {
+        else if (color == Pieces.Colors.BLACK) {
             moveBlackPawn(state);
         }
     }

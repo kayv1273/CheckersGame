@@ -110,19 +110,19 @@ public class CheckerComputerPlayer1 extends GameComputerPlayer {
         }
 
         // ArrayList holds index values of movements
-        ArrayList<Integer> index = new ArrayList<>();
+        ints = new ArrayList<>();
 
         // add all of the indexes
         for (int i = 0; i < checkerState2.getNewXMoves().size(); i++) {
-            index.add(i);
+            ints.add(i);
         }
 
         // shuffle the indexes to obtain random values
-        Collections.shuffle(index);
+        Collections.shuffle(ints);
 
         // set x and y to the new movements at the given index
-        xVal = checkerState2.getNewXMoves().get(index.get(0));
-        yVal = checkerState2.getNewYMoves().get(index.get(0));
+        xVal = checkerState2.getNewXMoves().get(ints.get(0));
+        yVal = checkerState2.getNewYMoves().get(ints.get(0));
 
         // check for promotion
         if (selection.getType() == 0) {
@@ -136,11 +136,7 @@ public class CheckerComputerPlayer1 extends GameComputerPlayer {
                 }
             }
         }
-        // Submit our move to the game object. We haven't even checked it it's
-        // our turn, or that that position is unoccupied. If it was not our turn,
-        // we'll get a message back that we'll ignore. If it was an illegal move,
-        // we'll end up here again (and possibly again, and again). At some point,
-        // we'll end up randomly pick a move that is legal.
+
         Logger.log("CheckerComputer", "Sending move");
         game.sendAction(new CheckerMoveAction(this, xVal, yVal));
 
