@@ -57,6 +57,7 @@ public class CheckerComputerPlayer1 extends GameComputerPlayer {
             return;
         }
 
+        availablePieces = new ArrayList<>();
         // pieces that can move for ai
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
