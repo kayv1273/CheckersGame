@@ -172,8 +172,8 @@ public class CheckerView extends FlashSurfaceView {
     }
 
     protected void drawPiece(Canvas canvas, Pieces piece, int row, int col) {
-        float xCoord = left + (col * size);
-        float yCoord = top + (row * size);
+        float xCoord = left + (row * size);
+        float yCoord = top + (col * size);
 
         Paint paint = new Paint();
 
@@ -181,7 +181,7 @@ public class CheckerView extends FlashSurfaceView {
             if (piece.getType() == 1) {
                 canvas.drawBitmap(redKing, xCoord, yCoord, paint);
             }
-            else {
+            else if(piece.getType() == 0){
                 canvas.drawBitmap(redPawn, xCoord, yCoord, paint);
             }
         }
@@ -189,7 +189,7 @@ public class CheckerView extends FlashSurfaceView {
             if (piece.getType() == 1) {
                 canvas.drawBitmap(blackKing, xCoord, yCoord, paint);
             }
-            else {
+            else if (piece.getType() ==0){
                 canvas.drawBitmap(blackPawn, xCoord, yCoord, paint);
             }
         }

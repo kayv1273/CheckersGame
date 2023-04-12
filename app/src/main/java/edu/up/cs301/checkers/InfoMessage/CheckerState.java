@@ -51,8 +51,8 @@ public class CheckerState extends GameState implements Serializable {
         // Set initial positions of all the pieces
         for (int row = 0; row < pieces.length; row++) {
             for (int col = 0; col < pieces[row].length; col++) {
-                if (row == 0 || row == 2) {
-                    if (col % 2 == 0) {
+                if (col == 0 || col == 2) {
+                    if (row % 2 == 0) {
                         pieces[row][col] = new Pieces(0, Pieces.Colors.BLACK, row, col);
                     }
 
@@ -62,8 +62,8 @@ public class CheckerState extends GameState implements Serializable {
                     }
                 }
                 //fill second row with black pieces
-                else if (row == 1) {
-                    if (col % 2 != 0) {
+                else if (col == 1) {
+                    if (row % 2 != 0) {
                         pieces[row][col] = new Pieces(0, Pieces.Colors.BLACK, row, col);
                     }
                     //fill rest of second row with empty pieces
@@ -72,8 +72,8 @@ public class CheckerState extends GameState implements Serializable {
                     }
                 }
                 //fill sixth and eighth row with red pieces
-                else if (row == 5 || row == 7) {
-                    if (col % 2 != 0) {
+                else if (col == 5 || col == 7) {
+                    if (row % 2 != 0) {
                         pieces[row][col] = new Pieces(0, Pieces.Colors.RED, row, col);
                     }
                     //fill rest of sixth and eighth row with empty pieces
@@ -82,8 +82,8 @@ public class CheckerState extends GameState implements Serializable {
                     }
                 }
                 //fill seventh row with red pieces
-                else if (row == 6) {
-                    if (col % 2 == 0) {
+                else if (col == 6) {
+                    if (row % 2 == 0) {
                         pieces[row][col] = new Pieces(0, Pieces.Colors.RED, row, col);
                     }
                     //fill rest of seventh row with empty pieces
