@@ -38,7 +38,7 @@ public class CheckerView extends FlashSurfaceView {
     protected Bitmap blackKing;
     protected Bitmap redKing;
 
-    protected CheckerState checkerState;
+    protected CheckerState state;
 
     public CheckerView(Context context) {
         super(context);
@@ -66,11 +66,11 @@ public class CheckerView extends FlashSurfaceView {
     }
 
     private void init() {
-        setBackgroundColor(Color.LTGRAY);
+        setBackgroundColor(backgroundColor());
     }
 
-    public void setState(CheckerState state){
-        checkerState = state;
+    public void setState(CheckerState state) {
+        this.state = state;
     }
 
     public int blackSquare() {
@@ -81,35 +81,93 @@ public class CheckerView extends FlashSurfaceView {
         return Color.WHITE;
     }
 
+    public int textPaint() {
+        return Color.WHITE;
+    }
+
+    public int highlightedSquare() {
+        return Color.YELLOW;
+    }
+
+    public int checkedSquare() {
+        return Color.RED;
+    }
+
+    public int dot() {
+        return Color.LTGRAY;
+    }
+
+    public int backgroundColor() {
+        return Color.LTGRAY;
+    }
+
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        //board initialization
-        Paint squareColor = new Paint();
+        //draw the board
+        Paint paint = new Paint();
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-
-                //alternate colors of squares to create checkerboard pattern
                 if ((i % 2 == 0 && j % 2 != 0) || (j % 2 == 0 && i % 2 != 0)) {
-                    squareColor.setColor(Color.BLACK);
+                    paint.setColor(blackSquare());
                 } else {
-                    squareColor.setColor(Color.WHITE);
+                    paint.setColor(whiteSquare());
                 }
-
-                //draw rectangle
-                canvas.drawRect(left + (right - left) * i, top + (bottom - top) * j, right +
-                        (right - left) * i, bottom + (bottom - top) * j, squareColor);
+                canvas.drawRect(left + (right - left) * i, top + (bottom - top) * j,
+                        right + (right - left) * i, bottom + (bottom - top) * j, paint);
             }
         }
 
-        if (checkerState == null) {
+        if (state == null) {
             return;
         }
 
-        for (int row = 0; row < 8; row++){
+        for (int row = 0; row < 8; row++) {
             for (int col = 0; col < 8; col++) {
-                drawPiece(canvas, checkerState.getPiece(row,col), row, col);
+                drawGraphics(canvas, state.getDrawing(row, col), row, col);
+                drawPiece(canvas, state.getPiece(row, col), row, col);
             }
+        }
+
+    }
+
+
+    protected void drawGraphics(Canvas canvas, int num, int col, int row) {
+        float leftLoc = left + size * col;
+        float topLoc = top + size * row;
+        float rightLoc = right + size * col;
+        float bottomLoc = bottom + size * row;
+
+        float centerX = left + (size / 2) + size * col;
+        float centerY = top + (size / 2) + size * row;
+        float radius = (right - left) / 5;
+
+        Paint highlightPaint = new Paint();
+        if (num == 1) {
+            highlightPaint.setColor(highlightedSquare());
+        } else if (num == 3) {
+            highlightPaint.setColor(checkedSquare());
+        }
+        Paint dotPaint = new Paint();
+        dotPaint.setColor(dot());
+        Paint backgroundPaint = new Paint();
+        Paint ringPaint = new Paint();
+        ringPaint.setColor(Color.RED);
+
+        if (num == 1) {
+            canvas.drawRect(leftLoc, topLoc, rightLoc, bottomLoc, highlightPaint);
+        } else if (num == 2) {
+            canvas.drawCircle(centerX, centerY, radius, dotPaint);
+        } else if (num == 3) {
+            canvas.drawRect(leftLoc, topLoc, rightLoc, bottomLoc, highlightPaint);
+        } else if (num == 4) {
+            canvas.drawCircle(centerX, centerY, (right - left) / 2, dotPaint);
+            if ((row % 2 == 0 && col % 2 != 0) || (col % 2 == 0 && row % 2 != 0)) {
+                backgroundPaint.setColor(Color.rgb(1, 100, 32));
+            } else {
+                backgroundPaint.setColor(Color.WHITE);
+            }
+            canvas.drawCircle(centerX, centerY, (right - left) / 3, backgroundPaint);
         }
     }
 
