@@ -552,7 +552,7 @@ public class CheckerLocalGame extends LocalGame {
             if (color == Pieces.Colors.BLACK) {
                 if (checkDanger(state, Pieces.Colors.RED, color)) {
 
-                    winCondition = checkDangermate(state);
+                    winCondition = checkDangers(state);
                     checkIfGameOver();
                 } else {
                     winCondition = checkForStalemate(state);
@@ -561,7 +561,7 @@ public class CheckerLocalGame extends LocalGame {
             } else if (color == Pieces.Colors.RED) {
                 if (checkDanger(state, Pieces.Colors.BLACK, color)) {
 
-                    winCondition = checkDangermate(state);
+                    winCondition = checkDangers(state);
                     checkIfGameOver();
                 } else {
                     winCondition = checkForStalemate(state);
@@ -616,7 +616,7 @@ public class CheckerLocalGame extends LocalGame {
         return "S";
     }
 
-    public String checkDangermate(CheckerState state) {
+    public String checkDangers(CheckerState state) {
         // if a player is not in check then then there is no checkmate yet
 
         Pieces.Colors color = null;
