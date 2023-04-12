@@ -33,7 +33,7 @@ public class CheckerHumanPlayer1 extends GameHumanPlayer implements View.OnTouch
     private TextView player1name;
     private TextView player2name;
 
-    public Button queenPromo;
+    public Button kingPromo;
     public Button resetButton;
     public Button homeButton;
     public boolean isPromotion;
@@ -109,13 +109,13 @@ public class CheckerHumanPlayer1 extends GameHumanPlayer implements View.OnTouch
         //player names
         player1name = myActivity.findViewById(R.id.nameBlack);
         player2name = myActivity.findViewById(R.id.nameWhite);
+        **/
 
+        kingPromo = myActivity.findViewById(R.id.kingPromo);
 
-        queenPromo = myActivity.findViewById(R.id.queenPromo);
-         **/
 
         undisplay();
-        queenPromo.setOnTouchListener(this);
+        kingPromo.setOnTouchListener(this);
         surfaceViewCheckerBoard.setOnTouchListener(this);
         resetButton.setOnTouchListener(this);
     }
@@ -225,7 +225,7 @@ public class CheckerHumanPlayer1 extends GameHumanPlayer implements View.OnTouch
                 }
             }
         } else {
-            if (view.getId() == queenPromo.getId()) {
+            if (view.getId() == kingPromo.getId()) {
                 makePromotion(0);
             }
             return true;
@@ -258,11 +258,11 @@ public class CheckerHumanPlayer1 extends GameHumanPlayer implements View.OnTouch
     }
 
     public void undisplay() {
-        queenPromo.setVisibility(View.INVISIBLE);
+        kingPromo.setVisibility(View.INVISIBLE);
     }
 
     public void display() {
-        queenPromo.setVisibility(View.VISIBLE);
+        kingPromo.setVisibility(View.VISIBLE);
     }
 
     public void makePromotion(int type) {
