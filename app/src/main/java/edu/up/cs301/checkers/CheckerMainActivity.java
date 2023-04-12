@@ -105,9 +105,10 @@ public class CheckerMainActivity extends GameMainActivity {
      * @return The loaded GameState
      */
     @Override
-    public GameState loadGame(String gameName){
+    public GameState loadGame(String gameName) {
         String appName = getGameString(gameName);
         super.loadGame(appName);
         return (GameState) new CheckerState((CheckerState) Saving.readFromFile(appName, this.getApplicationContext()));
     }
+
 }
