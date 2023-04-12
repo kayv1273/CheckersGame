@@ -216,6 +216,8 @@ public class CheckerState extends GameState implements Serializable {
         return isGameOver;
     }
 
+    public void setGameOver(boolean bool) { this.isGameOver = bool; }
+
     public void setNewXMoves(ArrayList<Integer> newXMoves) {
         this.newXMoves = newXMoves;
     }
