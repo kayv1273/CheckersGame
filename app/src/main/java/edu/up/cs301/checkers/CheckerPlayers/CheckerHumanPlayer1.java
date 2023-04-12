@@ -1,5 +1,6 @@
 package edu.up.cs301.checkers.CheckerPlayers;
 
+import android.graphics.Color;
 import android.os.CountDownTimer;
 import android.view.MotionEvent;
 import android.view.View;
@@ -45,7 +46,7 @@ public class CheckerHumanPlayer1 extends GameHumanPlayer implements View.OnTouch
     private int layoutId;
 
     private CheckerState state;
-    private int numTurns;
+
     private boolean justStarted;
     private int x = 8;
     private int y = 8;
@@ -58,7 +59,6 @@ public class CheckerHumanPlayer1 extends GameHumanPlayer implements View.OnTouch
     public CheckerHumanPlayer1(String name, int layoutId, CheckerState state) {
         super(name);
         this.layoutId = layoutId;
-        numTurns = 1;
         justStarted = true;
         isPromotion = false;
         this.state = state;
@@ -77,7 +77,7 @@ public class CheckerHumanPlayer1 extends GameHumanPlayer implements View.OnTouch
 
         if (info instanceof IllegalMoveInfo || info instanceof NotYourTurnInfo) {
             // if the move was out of turn or otherwise illegal, flash the screen
-            //surfaceViewCheckerBoard.flash(Color.RED, 50);
+            surfaceViewCheckerBoard.flash(Color.RED, 50);
         } else if (!(info instanceof CheckerState)) {
             // if we do not have a state, ignore
             return;
@@ -93,7 +93,7 @@ public class CheckerHumanPlayer1 extends GameHumanPlayer implements View.OnTouch
     @Override
     public void setAsGui(GameMainActivity activity) {
 
-        myActivity = activity;
+
         // Load the layout resource for the new configuration
         activity.setContentView(layoutId);
 
@@ -110,6 +110,9 @@ public class CheckerHumanPlayer1 extends GameHumanPlayer implements View.OnTouch
         player1name = myActivity.findViewById(R.id.nameBlack);
         player2name = myActivity.findViewById(R.id.nameWhite);
         **/
+
+        //reset button
+        resetButton = myActivity.findViewById(R.id.reset);
 
         kingPromo = myActivity.findViewById(R.id.kingPromo);
 
@@ -135,11 +138,7 @@ public class CheckerHumanPlayer1 extends GameHumanPlayer implements View.OnTouch
      * knows what their game-position and opponents' names are.
      */
     protected void initAfterReady() {
-        myActivity.setTitle("Checkers: " + allPlayerNames[0] + " vs. " + allPlayerNames[1]);
-        if(allPlayerNames.length == 2) {
-            player1name.setText(allPlayerNames[0]);
-            player2name.setText(allPlayerNames[1]);
-        }
+
     }
 
     /**
@@ -235,27 +234,7 @@ public class CheckerHumanPlayer1 extends GameHumanPlayer implements View.OnTouch
         return true;
     }
 
-    private char determineRow(int row) {
-        switch (row) {
-            case (0):
-                return 'a';
-            case (1):
-                return 'b';
-            case (2):
-                return 'c';
-            case (3):
-                return 'd';
-            case (4):
-                return 'e';
-            case (5):
-                return 'f';
-            case (6):
-                return 'g';
-            case (7):
-                return 'h';
-        }
-        return 'q';
-    }
+
 
     public void undisplay() {
         kingPromo.setVisibility(View.INVISIBLE);

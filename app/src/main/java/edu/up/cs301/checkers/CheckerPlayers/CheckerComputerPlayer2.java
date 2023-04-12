@@ -17,6 +17,8 @@ public class CheckerComputerPlayer2 extends GameComputerPlayer {
     protected void receiveInfo(GameInfo info) {
 
     }
+
+
 /*
     //Tag for logging
     private static final String TAG = "TTTComputerPlayer2";
