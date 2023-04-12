@@ -168,7 +168,7 @@ public class CheckerLocalGame extends LocalGame {
 
             // make fake movements and determine if that movement allows the
             // players own king be in check
-            moveToNotBeInCheck(state, p.getColors(), p.getType());
+            moveToNotBeInDanger(state, p.getColors(), p.getType());
 
             if(newMovementsX.size() > 0) {
                 state.setCanMove(true);
@@ -271,7 +271,7 @@ public class CheckerLocalGame extends LocalGame {
      * @param enemyColor the color of the other player
      * @return Determines if a king is in check
      */
-    public boolean checkForCheck(CheckerState state, Pieces.Colors teamColor, Pieces.Colors enemyColor) {
+    public boolean checkDanger(CheckerState state, Pieces.Colors teamColor, Pieces.Colors enemyColor) {
         // search through every Pieces of the enemy and generate its general movement
         // with its position on the board
         for (int row = 0; row < 8; row++) {
@@ -309,7 +309,7 @@ public class CheckerLocalGame extends LocalGame {
      * @param color the color of the player that is making a move
      * @param pieceType the PieceType of the selected Pieces
      */
-    public void moveToNotBeInCheck(CheckerState state, Pieces.Colors color, int pieceType) {
+    public void moveToNotBeInDanger(CheckerState state, Pieces.Colors color, int pieceType) {
         // make sure the arraylists are empty
         newMovementsX.clear();
         newMovementsY.clear();
@@ -328,7 +328,7 @@ public class CheckerLocalGame extends LocalGame {
             if (color == Pieces.Colors.RED) {
 
                 // determine if the movement causes the players king to be in check
-                if (!checkForCheck(copyState, color, Pieces.Colors.BLACK)) {
+                if (!checkDanger(copyState, color, Pieces.Colors.BLACK)) {
 
                     // if the player is not in check add that movement to the new
                     // arraylist so it can be saved
@@ -336,7 +336,7 @@ public class CheckerLocalGame extends LocalGame {
                     newMovementsY.add(initialMovementsY.get(i));
                 }
             } else if (color == Pieces.Colors.BLACK) {
-                if (!checkForCheck(copyState, color, Pieces.Colors.RED)) {
+                if (!checkDanger(copyState, color, Pieces.Colors.RED)) {
                     newMovementsX.add(initialMovementsX.get(i));
                     newMovementsY.add(initialMovementsY.get(i));
                 }
@@ -550,18 +550,18 @@ public class CheckerLocalGame extends LocalGame {
 
 
             if (color == Pieces.Colors.BLACK) {
-                if (checkForCheck(state, Pieces.Colors.RED, color)) {
+                if (checkDanger(state, Pieces.Colors.RED, color)) {
 
-                    winCondition = checkForCheckmate(state);
+                    winCondition = checkDangermate(state);
                     checkIfGameOver();
                 } else {
                     winCondition = checkForStalemate(state);
                     checkIfGameOver();
                 }
             } else if (color == Pieces.Colors.RED) {
-                if (checkForCheck(state, Pieces.Colors.BLACK, color)) {
+                if (checkDanger(state, Pieces.Colors.BLACK, color)) {
 
-                    winCondition = checkForCheckmate(state);
+                    winCondition = checkDangermate(state);
                     checkIfGameOver();
                 } else {
                     winCondition = checkForStalemate(state);
@@ -604,7 +604,7 @@ public class CheckerLocalGame extends LocalGame {
             tempRow = pieces.get(i).getX();
             tempCol = pieces.get(i).getY();
             findMovement(state, pieces.get(i));
-            moveToNotBeInCheck(state, color, state.getPiece(tempRow, tempCol).getType());
+            moveToNotBeInDanger(state, color, state.getPiece(tempRow, tempCol).getType());
             if(newMovementsX.size() > 0) {
                 //if we are in here then they have at least one move
                 //so it's not stalemate
@@ -616,7 +616,7 @@ public class CheckerLocalGame extends LocalGame {
         return "S";
     }
 
-    public String checkForCheckmate(CheckerState state) {
+    public String checkDangermate(CheckerState state) {
         // if a player is not in check then then there is no checkmate yet
 
         Pieces.Colors color = null;
@@ -649,7 +649,7 @@ public class CheckerLocalGame extends LocalGame {
             tempRow = pieces.get(i).getX();
             tempCol = pieces.get(i).getY();
             findMovement(state, pieces.get(i));
-            moveToNotBeInCheck(state, color, state.getPiece(tempRow, tempCol).getType());
+            moveToNotBeInDanger(state, color, state.getPiece(tempRow, tempCol).getType());
             if(newMovementsX.size() > 0) {
                 return null; // no winner yet
             }
