@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import edu.up.cs301.checkers.CheckerActionMessage.CheckerMoveAction;
 import edu.up.cs301.checkers.CheckerActionMessage.CheckerPromotionAction;
 import edu.up.cs301.checkers.CheckerActionMessage.CheckerSelectAction;
+import edu.up.cs301.checkers.CheckerPlayers.CheckerHumanPlayer1;
 import edu.up.cs301.checkers.InfoMessage.CheckerState;
 import edu.up.cs301.checkers.Views.Pieces;
 import edu.up.cs301.game.GameFramework.LocalGame;
@@ -440,9 +441,6 @@ public class CheckerLocalGame extends LocalGame {
         // make the location the piece is moving to become the selected piece
         state.setPiece(row, col, tempPiece);
 
-        // make the selected piece become empty since the piece has moved
-        state.setPiece(tempRow, tempCol, state.emptyPiece);
-    }
 
     /**
      * Move the piece that was selected to the new position
@@ -454,14 +452,14 @@ public class CheckerLocalGame extends LocalGame {
      * @param color the color of the piece they selected previously
      * @return tells weather the move was valid and happened
      */
-    public boolean setMovement(CheckerState state, int row, int col, Piece.Colors color) {
+    public boolean setMovement(CheckerState state, int row, int col, Pieces.ColorType color) {
         // if they selected a dot/ring then move
         if (state.getDrawing(row, col) == 2 || state.getDrawing(row, col) == 4) {
 
             //adds captured piece to captured pieces array t
-            if (state.getPiece(row, col).getPieceType() != Piece.PieceType.EMPTY) {
-                if(state.getPiece(row, col).getPieceColor() == Piece.Colors.BLACK) {
-                    state.addWhiteCapturedPiece(state.getPiece(row, col));
+            if (state.getPiece(row, col).getColors() != Pieces.Colors.EMPTY) {
+                if(state.getPiece(row, col).getColors() == Pieces.ColorType.BLACK) {
+                    state.addRedCapturedPiece(state.getPiece(row, col));
                 } else {
                     state.addBlackCapturedPiece(state.getPiece(row, col));
                 }
@@ -471,45 +469,17 @@ public class CheckerLocalGame extends LocalGame {
 //                Log.d("Testing", p.getPieceType().toString());
 //            }
 
-            Piece tempPiece = state.getPiece(tempRow, tempCol);
-            Piece castlingTempPiece = state.getPiece(row, col);
-
-            //very specific castling case- the selected piece is a king and moving two squares
-            if(state.getPiece(tempRow, tempCol).getPieceType() == Piece.PieceType.KING && (Math.abs(row-tempRow) == 2)){
-                // for each sub case- this takes care of moving the rook, the king then moves normally
-                if(tempRow == 4 && tempCol == 7 && row == 6 && col == 7){
-                    state.setPiece(5,7, state.getPiece(7,7));
-                    state.setPiece(7,7,state.emptyPiece);
-                }
-                else if(tempRow == 4 && tempCol == 7 && row == 2 && col == 7){
-                    state.setPiece(3,7, state.getPiece(0,7));
-                    state.setPiece(0,7,state.emptyPiece);
-                }
-                else if(tempRow == 4 && tempCol == 0 && row == 6 && col == 0){
-                    state.setPiece(5,0, state.getPiece(7,0));
-                    state.setPiece(7,0,state.emptyPiece);
-                }
-                else if(tempRow == 4 && tempCol == 0 && row == 2 && col == 0){
-                    state.setPiece(3,0, state.getPiece(0,0));
-                    state.setPiece(0,0,state.emptyPiece);
-                }
-
-            }
+            Pieces tempPiece = state.getPiece(tempRow, tempCol);
 
 
-            // change the location of the king to be at the new square if it is going to be moved
-            if (tempPiece.getPieceType() == Piece.PieceType.KING) {
-                if (tempPiece.getPieceColor() == Piece.Colors.RED) {
-                    state.setKingWhite(row, col);
-                } else if (tempPiece.getPieceColor() == Piece.Colors.BLACK) {
-                    state.setKingBlack(row, col);
-                }
-            }
+
+
+
 
             // set the new position to be the piece they originally selected
-            boolean isCapture = state.getPiece(row,col).getPieceType() != Piece.PieceType.EMPTY;
-            CheckerHumanPlayer chp = players[0] instanceof CheckerHumanPlayer ?
-                    (CheckerHumanPlayer) players[0] : (CheckerHumanPlayer) players[1];
+            boolean isCapture = state.getPiece(row,col).getColors() != Pieces.Colors.EMPTY;
+            CheckerHumanPlayer1 chp = players[0] instanceof CheckerHumanPlayer1 ?
+                    (CheckerHumanPlayer1) players[0] : (CheckerHumanPlayer1) players[1];
             if(CheckerPromotionAction.isPromotion){
                 state.setPiece(promo.getRow(),promo.getCol(),promo.getPromotionPiece());
                 CheckerPromotionAction.isPromotion = false;
@@ -664,8 +634,13 @@ public class CheckerLocalGame extends LocalGame {
         if(piece.getPieceType() != Piece.PieceType.PAWN){return false;}
         if(piece.getPieceColor() == Piece.Colors.RED && col == 0){
             //return new Piece(Piece.PieceType.QUEEN, Piece.Colors.RED, piece.getX(), 0);
+    public boolean checkPromotion(Pieces piece, int col, CheckerHumanPlayer1 chp){
+        if(piece.getType() != 0){return false;}
+        if(piece.getColors() == Pieces.Colors.RED && col == 0){
+            //return new Piece(Piece.PieceType.QUEEN, Piece.ColorType.WHITE, piece.getX(), 0);
             return true;
         }else if(piece.getPieceColor() == Piece.Colors.BLACK && col == 7){
+        }else if(piece.getColors() == Pieces.Colors.BLACK && col == 7){
             return true;
         }
         return false;
