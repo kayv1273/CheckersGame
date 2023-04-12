@@ -194,5 +194,4 @@ public class CheckerView extends FlashSurfaceView {
             }
         }
     }
-
 }
