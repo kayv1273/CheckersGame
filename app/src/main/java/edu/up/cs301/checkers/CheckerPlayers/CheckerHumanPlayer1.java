@@ -27,7 +27,6 @@ public class CheckerHumanPlayer1 extends GameHumanPlayer implements View.OnTouch
 
     // the surface view
     private CheckerView surfaceView;
-    public TextView movesLog;
     private CheckerView surfaceViewCheckerBoard;
 
     //names
@@ -65,6 +64,7 @@ public class CheckerHumanPlayer1 extends GameHumanPlayer implements View.OnTouch
         this.state = state;
     }
 
+
     public void setState(CheckerState state) {
         this.state = state;
     }
@@ -92,6 +92,8 @@ public class CheckerHumanPlayer1 extends GameHumanPlayer implements View.OnTouch
      */
     @Override
     public void setAsGui(GameMainActivity activity) {
+
+        myActivity = activity;
         // Load the layout resource for the new configuration
         activity.setContentView(layoutId);
 
@@ -118,7 +120,6 @@ public class CheckerHumanPlayer1 extends GameHumanPlayer implements View.OnTouch
         resetButton.setOnTouchListener(this);
     }
 
-
     /**
      * returns the GUI's top view
      *
@@ -126,7 +127,7 @@ public class CheckerHumanPlayer1 extends GameHumanPlayer implements View.OnTouch
      */
     @Override
     public View getTopView() {
-        return myActivity.findViewById(R.id.board);
+        return myActivity.findViewById(R.id.top_gui_layout);
     }
 
     /**
@@ -140,7 +141,6 @@ public class CheckerHumanPlayer1 extends GameHumanPlayer implements View.OnTouch
             player2name.setText(allPlayerNames[1]);
         }
     }
-
 
     /**
      * callback method when the screen it touched. We're
@@ -235,41 +235,6 @@ public class CheckerHumanPlayer1 extends GameHumanPlayer implements View.OnTouch
         return true;
     }
 
-    /**
-    public void displayMovesLog(int currRow, int currCol, int tempRow, CheckerState state, boolean isCapture) {
-        if (state == null) return;
-        Pieces.PieceType currPiece = state.getPiece(currRow, currCol).getType();
-        String toReturn = "";
-        if (justStarted) {
-            movesLog.append("\n");
-            justStarted = false;
-        }
-        boolean whitesTurn = state.getWhoseMove() == 0;
-        if (whitesTurn) {
-            toReturn += numTurns + ")";
-        }
-        if (currPiece.getType() == 0) {
-            toReturn += "P";
-        } else if (currPiece.getType() == 1) {
-            toReturn += "K";
-        }
-        if (isCapture && currPiece == Pieces.PieceType.PAWN) {
-            toReturn += determineRow(tempRow);
-            toReturn += "x";
-        } else if (isCapture) {
-            toReturn += "x";
-        }
-        toReturn += determineRow(currRow);
-        currCol = 8 - currCol;
-        toReturn += currCol + " ";
-        if (!whitesTurn) {
-            numTurns++;
-            toReturn += "\n";
-        }
-        movesLog.append(toReturn);
-
-    }
-    **/
     private char determineRow(int row) {
         switch (row) {
             case (0):
@@ -319,9 +284,8 @@ public class CheckerHumanPlayer1 extends GameHumanPlayer implements View.OnTouch
         display();
     }
 
-
     public boolean validPawnMove(int row, int col, Pieces currPiece) {
-        if(currPiece.getY() > col + 1){
+        if(currPiece.getY() > col){
             return false;
         }
         if (currPiece.getX() != row && currPiece.getX() != row - 1 && currPiece.getX() != row + 1) {

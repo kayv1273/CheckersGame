@@ -22,7 +22,7 @@ import edu.up.cs301.game.R;
  * @version 4.11.2023
  */
 
-public class CheckerView extends FlashSurfaceView{
+public class CheckerView extends FlashSurfaceView {
 
     //variables for creating board with dimensions
     private float top = 40;
