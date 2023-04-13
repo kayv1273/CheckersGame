@@ -2,6 +2,7 @@ package edu.up.cs301.checkers.InfoMessage;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 
 import edu.up.cs301.game.GameFramework.infoMessage.GameState;
 
@@ -328,4 +329,5 @@ public class CheckerState extends GameState implements Serializable {
             }
         }
     }
+
 }

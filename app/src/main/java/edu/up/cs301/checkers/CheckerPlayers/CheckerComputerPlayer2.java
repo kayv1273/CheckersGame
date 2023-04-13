@@ -1,235 +1,140 @@
 package edu.up.cs301.checkers.CheckerPlayers;
 
-import edu.up.cs301.game.GameFramework.players.GameComputerPlayer;
+import java.util.ArrayList;
+import java.util.Collections;
+
+import edu.up.cs301.checkers.CheckerActionMessage.CheckerMoveAction;
+import edu.up.cs301.checkers.CheckerActionMessage.CheckerPromotionAction;
+import edu.up.cs301.checkers.CheckerActionMessage.CheckerSelectAction;
+import edu.up.cs301.checkers.InfoMessage.CheckerState;
+import edu.up.cs301.checkers.InfoMessage.Pieces;
 import edu.up.cs301.game.GameFramework.infoMessage.GameInfo;
+import edu.up.cs301.game.GameFramework.infoMessage.IllegalMoveInfo;
+import edu.up.cs301.game.GameFramework.infoMessage.NotYourTurnInfo;
+import edu.up.cs301.game.GameFramework.players.GameComputerPlayer;
+import edu.up.cs301.game.GameFramework.utilities.Logger;
 
 public class CheckerComputerPlayer2 extends GameComputerPlayer {
-    /**
-     * constructor
-     *
-     * @param name the player's name (e.g., "John")
+
+    private Pieces selection;
+    private ArrayList<Pieces> availablePieces;
+    private ArrayList<Integer> ints;
+
+    /*
+     * Constructor for the CheckerComputerPlayer1 class
      */
     public CheckerComputerPlayer2(String name) {
-        super(name);
-    }
-
-    @Override
-    protected void receiveInfo(GameInfo info) {
-
-    }
-
-
-/*
-    //Tag for logging
-    private static final String TAG = "TTTComputerPlayer2";
-    *//**
-     * instance variable that tells which piece am I playing ('X' or 'O').
-     * This is set once the player finds out which player they are, in the
-     * 'initAfterReady' method.
-     *//*
-    protected Pieces piece;
-
-    *//**
-     * constructor for a computer player
-     *
-     * @param name
-     * 		the player's name
-     *//*
-    public CheckerComputerPlayer2(String name) {
         // invoke superclass constructor
-        super(name);
-    }// constructor
+        super(name); // invoke superclass constructor
+    }
 
-    *//**
-     * perform any initialization that needs to be done after the player
-     * knows what their game-position and opponents' names are.
-     *//*
-    protected void initAfterReady() {
-        // initialize our piece
-        piece = "XO".charAt(playerNum);
-    }// initAfterReady
-
-    *//**
+    /**
      * Called when the player receives a game-state (or other info) from the
      * game.
      *
      * @param info
      * 		the message from the game
-     *//*
+     */
     @Override
     protected void receiveInfo(GameInfo info) {
+        // if it was a "not your turn" message, just ignore it
+        if (info instanceof NotYourTurnInfo) return;
 
-        // if it's not a CheckerState message, ignore it; otherwise
-        // cast it
-        if (!(info instanceof CheckerState)) return;
-        CheckerState myState = (CheckerState)info;
+        // ignore illegel move info
+        if (info instanceof IllegalMoveInfo) return;
 
-        // if it's not our move, ignore it
-        if (myState.getWhoseMove() != this.playerNum) return;
-
-        // sleep for a second to make any observers think that we're thinking
-        sleep(1);
-
-        // if we find a win, select that move
-        Point win = findWin(myState, piece);
-        if (win != null) {
-            Logger.log("TTTComputer", "sending action");
-            game.sendAction(new CheckerMoveAction(this, win.y, win.x));
+        // ignore any other types
+        if (!(info instanceof CheckerState)) {
             return;
         }
 
-        // if we find a threat of a loss (i.e., a direct win for out opponent),
-        // select that position as a blocking move.
-        char opponentPiece = piece == 'X' ? 'O' : 'X';
-        Point loss = findWin(myState, opponentPiece);
-        if (loss != null) {
-            Logger.log("TTTComputer", "sending action");
-            game.sendAction(new CheckerMoveAction(this, loss.y, loss.x));
+        CheckerState checkerState = new CheckerState((CheckerState) info);
+
+        // check move
+        if (checkerState.getWhoseMove() == 1 && playerNum == 0) {
+            return;
+        }
+        if (checkerState.getWhoseMove() == 0 && playerNum == 1) {
             return;
         }
 
-        // otherwise, make a move that is randomly selected from the
-        // blank squares ...
-
-        // count the spaces
-        int spaceCount = 0;
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                if (myState.getPiece(j, i) == ' ') spaceCount++;
-            }
-        }
-
-        // generate a random integer in range 0 through #spaces-1
-        int selectCount = (int)(spaceCount*Math.random());
-
-        // re-find the space that corresponds to the random integer we
-        // just generated; make that move
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                if (myState.getPiece(j, i) == ' ') {
-                    if (selectCount == 0) {
-                        // make the move
-                        game.sendAction(new CheckerMoveAction(this, j, i));
-                        return;
-                    }
-                    selectCount--;
+        availablePieces = new ArrayList<>();
+        // pieces that can move for ai
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (checkerState.getDrawing(i, j) == 1) {
+                    return;
+                }
+                if (checkerState.getDrawing(i, j) == 3) {
+                    sleep(1);
+                }
+                Pieces piece = checkerState.getPiece(i, j);
+                if (playerNum == 0 && piece.getColors() == Pieces.Colors.RED) {
+                    availablePieces.add(piece);
+                }
+                else if (playerNum == 1 && piece.getColors() == Pieces.Colors.BLACK) {
+                    availablePieces.add(piece);
                 }
             }
         }
-    }// receiveInfo
 
-    *//**
-     * finds a winning move for a player
-     *
-     * @param state  the state of the game
-     * @param thePiece  the piece we're trying to place ('X' or 'O') for a
-     *   win
-     * @return  If a winning move was found, a Point object containing
-     *   the coordinates.  If no winning move was found, null.
-     *//*
-    private Point findWin(CheckerState state, char thePiece) {
+        // shuffle all the pieces in the availablePieces ArrayList
+        Collections.shuffle(availablePieces);
 
-        // the winning move--initialized to null because we haven't found
-        // one yet
-        Point found = null;
+        int maxScore = 0;
+        Pieces bestPiece = null;
 
-        // iterate through each of the positions 0, 1 and 2, examining a
-        // vertical, horizontal and diagonal on each iteration
-        //
-        for (int i = 0; i < 3; i++) {
-
-            // winning value we found, if any
-            Point temp = null;
-
-            // examine row that begins at (i, 0)
-            if ((temp = helpFindWin(state, thePiece, i, 0, 0, 1)) != null) {
-                found = temp;
-            }
-
-            // examine column that begins at (0, i)
-            if ((temp = helpFindWin(state, thePiece, 0, i, 1, 0)) != null) {
-                found = temp;
-            }
-
-            // examine diagonal that beings at (i, 0).  (When i = 1, we'll
-            // actually be redundantly examining a row.)
-            if ((temp = helpFindWin(state, thePiece, i, 0, 1-i, 1)) != null) {
-                found = temp;
+        for (Pieces piece : availablePieces) {
+            int score = getMoveScore(piece, checkerState);
+            if (score > maxScore) {
+                maxScore = score;
+                bestPiece = piece;
             }
         }
 
-        // return whatever we've found--either a winning move or null
-        return found;
-    }// findWin
+        if (bestPiece != null) {
+            // variables that hold coords of selected position
+            int xVal = bestPiece.getX();
+            int yVal = bestPiece.getY();
 
-    *//**
-     * examines a particular row, column or diagonal to see if a move there
-     * would cause a given player to win.  <p>
-     *
-     * We can examine row by specifying rowDelta=0 and colDelta=1.  We can
-     * examine a column by specifying rowDelta=1 and colDelta=0.  We can
-     * examine a diagonal by specifying rowDelta=1 and colDelta=-1 or
-     * vice versa.
-     *
-     * @param state  the state of the game
-     * @param thePiece  the piece that we would place to achieve the win
-     * @param rowStart the row-position of first square in the row/col
-     *   we're examining
-     * @param colStart the columnPosition of the first square in the row/col
-     *   we're examining
-     * @param rowDelta  the amount to change the row-position to get to the
-     *   next square we're examining
-     * @param colDelta  the amount to change the column-position to get to
-     *   the next square we're examining
-     * @return  If a winning move was found, a Point object containing
-     *   the coordinates.  If no winning move was found, null.
-     *//*
-    // helper method to find a winning move
-    private Point helpFindWin(CheckerState state, char thePiece, int rowStart,
-                              int colStart, int rowDelta, int colDelta) {
+            // call selection game action
+            game.sendAction(new CheckerSelectAction(this, xVal, yVal));
 
-        // our starting position
-        int row = rowStart;
-        int col = colStart;
+            // delay for a second to make opponent think we're thinking
+            sleep(1);
 
-        // number of pieces we've found so far on our line
-        int matchingPieceCount = 0;
-
-        // the last spot we've found that contains a blank, if any
-        Point blankSpot = null;
-
-        // determine if the three squares in question contain exactly two
-        // square of the given piece and one square of that is blank
-        //
-        for (int i = 0; i < 3; i++) {
-
-            // get the piece at the position
-            char pc = state.getPiece(row,col);
-
-            // if we match the given piece, bump the matching piece-count; otherwise,
-            // if we match a blank, set the blank-spot
-            if (pc == thePiece) {
-                matchingPieceCount++;
-            }
-            else if (pc == ' ') {
-                blankSpot = new Point(col, row);
+            // check for promotion
+            CheckerState checkerState2 = (CheckerState) game.getGameState();
+            xVal = checkerState2.getNewXMoves().get(ints.get(0));
+            yVal = checkerState2.getNewYMoves().get(ints.get(0));
+            if (bestPiece.getType() == 0) {
+                if (bestPiece.getColors() == Pieces.Colors.BLACK){
+                    if (xVal == 7) {
+                        sendPromotionAction(xVal, yVal, Pieces.Colors.BLACK);
+                    }
+                } else if (bestPiece.getColors() == Pieces.Colors.RED) {
+                    if (xVal == 0) {
+                        sendPromotionAction(xVal,yVal, Pieces.Colors.RED);
+                    }
+                }
             }
 
-            // bump row and column positions for next iteration
-            row += rowDelta;
-            col += colDelta;
+            Logger.log("CheckerComputer", "Sending move");
+            game.sendAction(new CheckerMoveAction(this, xVal, yVal));
         }
+    }
+    public int getMoveScore(Pieces piece, CheckerState checkerState) {
+        int score = 0;
 
-        // at this point, we've examined all three squares.  We have a
-        // candidate for a "win" if we matched two pieces and had one blank
-        // (i.e., pieceCount and blankSpot is non-null)
-        if (matchingPieceCount == 2 && blankSpot != null) {
-            // have a winning move
-            return blankSpot;
-        }
-        else {
-            // no winner this time
-            return null;
-        }
-    }// helpFindWin*/
+        // perform some calculations to determine the score for the given move
+        // ...
+
+        return score;
+    }
+
+    public void sendPromotionAction(int xVal, int yVal, Pieces.Colors color) {
+        game.sendAction(new CheckerPromotionAction(this, new Pieces(1, color, xVal, yVal), xVal, yVal));
+    }
+
+
 }

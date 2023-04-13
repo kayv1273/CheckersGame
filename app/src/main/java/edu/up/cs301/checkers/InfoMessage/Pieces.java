@@ -10,6 +10,10 @@ package edu.up.cs301.checkers.InfoMessage;
 
 public class Pieces {
 
+    public char getCharValue() {
+        return 0;
+    }
+
     public enum Colors {
         BLACK, RED, EMPTY
     }
