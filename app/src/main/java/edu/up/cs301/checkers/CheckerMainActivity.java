@@ -57,7 +57,7 @@ public class CheckerMainActivity extends GameMainActivity {
         });
 
         // Create a game configuration class for Chess
-        GameConfig defaultConfig = new GameConfig(playerTypes, 2,2, "Chess", PORT_NUMBER);
+        GameConfig defaultConfig = new GameConfig(playerTypes, 2,2, "Checkers", PORT_NUMBER);
 
         // Add the default players
         defaultConfig.addPlayer("Human", 0); // human player GUI

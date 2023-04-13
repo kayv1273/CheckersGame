@@ -3,7 +3,7 @@
 really need to.-->
 <resources>
     <!--The following are settings menu strings-->
-    <string name="menu_settings">Settings</string>
+    <string name="menu_settings">Checkers Rules</string>
     <string name="menu_help">Help</string>
     <string name="save_game">Save Game</string>
     <string name="load_game">Load Game</string>
@@ -31,7 +31,7 @@ really need to.-->
     <!--The following strings are for the tabs on the game_config_main screen-->
     <string name="local_tab">Local Game</string>
     <string name="remote_tab">Remote Game</string>
-    <string name="settings_tab">Game Settings</string>
+    <string name="settings_tab">Game Rules</string>
     <!--The following strings are used in the game_config_main for displaying the different types
     of players. These strings are used in MainActivity and GameConfig.-->
     <string name="Human_Player_Name">Human Player</string>
