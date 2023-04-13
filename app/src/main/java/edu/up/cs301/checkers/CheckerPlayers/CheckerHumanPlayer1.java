@@ -160,6 +160,7 @@ public class CheckerHumanPlayer1 extends GameHumanPlayer implements View.OnTouch
                 }
 
                 @Override
+                //Reloads app and opens Home Screen
                 public void onFinish() {
                     myActivity.recreate();
                 }
