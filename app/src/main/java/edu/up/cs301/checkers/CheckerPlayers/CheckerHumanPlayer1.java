@@ -151,7 +151,7 @@ public class CheckerHumanPlayer1 extends GameHumanPlayer implements View.OnTouch
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
         if (view.getId() == resetButton.getId()) {
-            MessageBox.popUpMessage("Return to Home Screen", myActivity);
+            MessageBox.popUpMessage("You are resetting the game", myActivity);
 
             CountDownTimer cdt = new CountDownTimer(3000, 10) {
                 @Override
@@ -162,11 +162,13 @@ public class CheckerHumanPlayer1 extends GameHumanPlayer implements View.OnTouch
                 @Override
                 //Reloads app and opens Home Screen
                 public void onFinish() {
-                    myActivity.recreate();
+                    //myActivity.recreate();
+                    myActivity.restartGame();
                 }
             };
             cdt.start();
         }
+
 
         // ignore if not an "down" event
         if (motionEvent.getAction() != MotionEvent.ACTION_DOWN) {
