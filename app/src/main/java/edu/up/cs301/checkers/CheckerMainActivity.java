@@ -17,6 +17,20 @@ import edu.up.cs301.checkers.CheckerPlayers.CheckerComputerPlayer1;
 import edu.up.cs301.checkers.CheckerPlayers.CheckerComputerPlayer2;
 import edu.up.cs301.checkers.CheckerPlayers.CheckerHumanPlayer;
 
+/**
+ * @author Griselda
+ * @author Katherine
+ * @author Ruth
+ * @author Nick
+ * @author Ethan
+ * @version 4.13.2023
+ */
+
+/**
+ * Known bugs: Promotion once a piece reaches the end of the board does not work. This was not able
+ * to be implemented due to a time crunch, but it will be first priority for the final release
+ * to ensure a complete and fully functional game
+ */
 public class CheckerMainActivity extends GameMainActivity {
 
     //Tag for logging

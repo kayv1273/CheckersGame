@@ -5,7 +5,7 @@ package edu.up.cs301.checkers.InfoMessage;
  * @author Ruth
  * @author Nick
  * @author Ethan
- * @version 4.11.2023
+ * @version 4.13.2023
  */
 
 public class Piece {

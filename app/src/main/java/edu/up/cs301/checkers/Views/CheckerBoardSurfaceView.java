@@ -19,7 +19,7 @@ import edu.up.cs301.game.R;
  * @author Ruth
  * @author Nick
  * @author Ethan
- * @version 4.11.2023
+ * @version 4.13.2023
  */
 
 public class CheckerBoardSurfaceView extends FlashSurfaceView {
@@ -187,11 +187,11 @@ public class CheckerBoardSurfaceView extends FlashSurfaceView {
         if (piece.getPieceColor() == Piece.ColorType.RED) {
             if (piece.getPieceType() == Piece.PieceType.PAWN) {
                 canvas.drawBitmap(whitePawnImage, xLoc, yLoc, paint);
-            } }
-        else if (piece.getPieceColor() == Piece.ColorType.BLACK) {
-                if (piece.getPieceType() == Piece.PieceType.PAWN) {
-                    canvas.drawBitmap(blackPawnImage, xLoc, yLoc, paint);
-                }
+            }
+        } else if (piece.getPieceColor() == Piece.ColorType.BLACK) {
+            if (piece.getPieceType() == Piece.PieceType.PAWN) {
+                canvas.drawBitmap(blackPawnImage, xLoc, yLoc, paint);
             }
         }
     }
+}
