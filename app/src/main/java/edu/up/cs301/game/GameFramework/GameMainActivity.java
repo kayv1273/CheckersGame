@@ -624,10 +624,6 @@ public abstract class GameMainActivity extends Activity implements
             }
         }
 
-        else if(button.getId() == R.id.reset){
-            recreate();
-        }
-
     }// onClick
 
     private String startGame() {
