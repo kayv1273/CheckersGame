@@ -624,6 +624,10 @@ public abstract class GameMainActivity extends Activity implements
             }
         }
 
+        else if(button.getId() == R.id.surrenderButton){
+            recreate();
+        }
+
     }// onClick
 
     private String startGame() {
