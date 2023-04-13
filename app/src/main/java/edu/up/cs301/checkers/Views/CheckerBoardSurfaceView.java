@@ -9,7 +9,7 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 
 import edu.up.cs301.checkers.InfoMessage.CheckerState;
-import edu.up.cs301.checkers.InfoMessage.Pieces;
+import edu.up.cs301.checkers.InfoMessage.Piece;
 import edu.up.cs301.game.GameFramework.utilities.FlashSurfaceView;
 import edu.up.cs301.game.R;
 
@@ -22,45 +22,52 @@ import edu.up.cs301.game.R;
  * @version 4.11.2023
  */
 
-public class CheckerView extends FlashSurfaceView {
+public class CheckerBoardSurfaceView extends FlashSurfaceView {
 
-    //variables for creating board with dimensions
+    //variables for creating board
     private float top = 40;
     private float left = 40;
-    private float size = 115;
+    private float size = 120;
     private float bottom = top + size;
     private float right = left + size;
 
-
-    //variables for piece images
-    protected Bitmap blackPawn;
-    protected Bitmap redPawn;
-    protected Bitmap blackKing;
-    protected Bitmap redKing;
-
     protected CheckerState state;
 
-    public CheckerView(Context context) {
+    //images for chess pieces
+    protected Bitmap whitePawnImage;
+    protected Bitmap whiteKnightImage;
+    protected Bitmap whiteBishopImage;
+    protected Bitmap whiteRookImage;
+    protected Bitmap whiteKingImage;
+    protected Bitmap whiteQueenImage;
+    protected Bitmap blackPawnImage;
+    protected Bitmap blackKnightImage;
+    protected Bitmap blackBishopImage;
+    protected Bitmap blackKingImage;
+    protected Bitmap blackQueenImage;
+    protected Bitmap blackRookImage;
+
+    public CheckerBoardSurfaceView(Context context) {
         super(context);
         init();
     }
 
-    public CheckerView(Context context, AttributeSet attrs) {
+    public CheckerBoardSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        whitePawnImage = BitmapFactory.decodeResource(getResources(), R.drawable.rp);
 
+        whiteKingImage = BitmapFactory.decodeResource(getResources(), R.drawable.rk);
 
-        //decode resources of piece images
-        blackPawn = BitmapFactory.decodeResource(getResources(), R.drawable.bp);
-        blackKing = BitmapFactory.decodeResource(getResources(), R.drawable.bk);
-        redPawn = BitmapFactory.decodeResource(getResources(), R.drawable.rp);
-        redKing = BitmapFactory.decodeResource(getResources(), R.drawable.rk);
+        blackPawnImage = BitmapFactory.decodeResource(getResources(), R.drawable.bp);
+        blackKingImage = BitmapFactory.decodeResource(getResources(), R.drawable.bk);
 
-        //scale the images of the pieces
-        blackPawn = Bitmap.createScaledBitmap(blackPawn, 115, 115, false);
-        blackKing = Bitmap.createScaledBitmap(blackKing, 115, 115, false);
-        redPawn = Bitmap.createScaledBitmap(redPawn, 115, 115, false);
-        redKing = Bitmap.createScaledBitmap(redKing, 115, 115, false);
+        whitePawnImage = Bitmap.createScaledBitmap(whitePawnImage, 120, 120, false);
 
+        whiteKingImage = Bitmap.createScaledBitmap(whiteKingImage, 120, 120, false);
+
+        blackPawnImage = Bitmap.createScaledBitmap(blackPawnImage, 120, 120, false);
+
+        blackKingImage = Bitmap.createScaledBitmap(blackKingImage, 120, 120, false);
 
         init();
     }
@@ -129,6 +136,7 @@ public class CheckerView extends FlashSurfaceView {
             }
         }
 
+
     }
 
 
@@ -171,27 +179,19 @@ public class CheckerView extends FlashSurfaceView {
         }
     }
 
-    protected void drawPiece(Canvas canvas, Pieces piece, int row, int col) {
-        float xCoord = left + (row * size);
-        float yCoord = top + (col * size);
+    protected void drawPiece(Canvas canvas, Piece piece, int col, int row) {
+        float xLoc = left + (col * size);
+        float yLoc = top + (row * size);
 
         Paint paint = new Paint();
-
-        if(piece.getColors() == Pieces.Colors.RED) {
-            if (piece.getType() == 1) {
-                canvas.drawBitmap(redKing, xCoord, yCoord, paint);
-            }
-            else if(piece.getType() == 0){
-                canvas.drawBitmap(redPawn, xCoord, yCoord, paint);
-            }
-        }
-        else if (piece.getColors() == Pieces.Colors.BLACK) {
-            if (piece.getType() == 1) {
-                canvas.drawBitmap(blackKing, xCoord, yCoord, paint);
-            }
-            else if (piece.getType() ==0){
-                canvas.drawBitmap(blackPawn, xCoord, yCoord, paint);
+        if (piece.getPieceColor() == Piece.ColorType.RED) {
+            if (piece.getPieceType() == Piece.PieceType.PAWN) {
+                canvas.drawBitmap(whitePawnImage, xLoc, yLoc, paint);
+            } }
+        else if (piece.getPieceColor() == Piece.ColorType.BLACK) {
+                if (piece.getPieceType() == Piece.PieceType.PAWN) {
+                    canvas.drawBitmap(blackPawnImage, xLoc, yLoc, paint);
+                }
             }
         }
     }
-}

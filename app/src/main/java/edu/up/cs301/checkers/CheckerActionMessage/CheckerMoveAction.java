@@ -5,6 +5,7 @@ import edu.up.cs301.game.GameFramework.players.GamePlayer;
 
 public class CheckerMoveAction extends GameAction {
 
+
     // instance variables: the selected row and column
     private int row;
     private int col;

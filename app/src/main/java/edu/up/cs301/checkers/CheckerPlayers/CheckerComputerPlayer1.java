@@ -7,7 +7,7 @@ import edu.up.cs301.checkers.CheckerActionMessage.CheckerMoveAction;
 import edu.up.cs301.checkers.CheckerActionMessage.CheckerPromotionAction;
 import edu.up.cs301.checkers.CheckerActionMessage.CheckerSelectAction;
 import edu.up.cs301.checkers.InfoMessage.CheckerState;
-import edu.up.cs301.checkers.InfoMessage.Pieces;
+import edu.up.cs301.checkers.InfoMessage.Piece;
 import edu.up.cs301.game.GameFramework.infoMessage.GameInfo;
 import edu.up.cs301.game.GameFramework.infoMessage.IllegalMoveInfo;
 import edu.up.cs301.game.GameFramework.infoMessage.NotYourTurnInfo;
@@ -16,11 +16,11 @@ import edu.up.cs301.game.GameFramework.utilities.Logger;
 
 public class CheckerComputerPlayer1 extends GameComputerPlayer {
 
-    private Pieces selection;
-    private ArrayList<Pieces> availablePieces;
+    private Piece selection;
+    private ArrayList<Piece> availablePieces;
     private ArrayList<Integer> ints;
 
-    /*
+    /**
      * Constructor for the CheckerComputerPlayer1 class
      */
     public CheckerComputerPlayer1(String name) {
@@ -32,117 +32,100 @@ public class CheckerComputerPlayer1 extends GameComputerPlayer {
      * Called when the player receives a game-state (or other info) from the
      * game.
      *
-     * @param info
-     * 		the message from the game
+     * @param info the message from the game
      */
     @Override
     protected void receiveInfo(GameInfo info) {
-
         // if it was a "not your turn" message, just ignore it
         if (info instanceof NotYourTurnInfo) return;
-        // ignore illegel move info
+        //Ignore illegal move info too
         if (info instanceof IllegalMoveInfo) return;
-        // ignore any other types
-        if (!(info instanceof CheckerState)) {
+        //just in case there is any other types of info, ignore it
+        if(!(info instanceof CheckerState)){
             return;
         }
 
-        CheckerState checkerState = new CheckerState((CheckerState) info);
-
-        // check move
-        if (checkerState.getWhoseMove() == 1 && playerNum == 0) {
+        CheckerState chessState = new CheckerState((CheckerState) info);
+        //if(chessState.isPromoting){return;}
+        if (chessState.getWhoseMove() == 1 && playerNum == 0) {
             return;
         }
-        if (checkerState.getWhoseMove() == 0 && playerNum == 1) {
+        if (chessState.getWhoseMove() == 0 && playerNum == 1) {
             return;
         }
 
+        // all of the pieces that can move on the computers side
         availablePieces = new ArrayList<>();
-        // pieces that can move for ai
         for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                if (checkerState.getDrawing(i, j) == 1) {
+            for (int k = 0; k < 8; k++) {
+                if (chessState.getDrawing(i, k) == 1) {
                     return;
                 }
-                if (checkerState.getDrawing(i, j) == 3) {
+                if (chessState.getDrawing(i, k) == 3) {
                     sleep(1);
                 }
-                Pieces piece = checkerState.getPiece(i, j);
-                if (playerNum == 0 && piece.getColors() == Pieces.Colors.RED) {
-                    availablePieces.add(piece);
-                }
-                else if (playerNum == 1 && piece.getColors() == Pieces.Colors.BLACK) {
-                    availablePieces.add(piece);
+                Piece p = chessState.getPiece(i, k);
+                if (playerNum == 0 && p.getPieceColor() == Piece.ColorType.RED) {
+                    availablePieces.add(p);
+                } else if (playerNum == 1 && p.getPieceColor() == Piece.ColorType.BLACK) {
+                    availablePieces.add(p);
                 }
             }
         }
-
-        // shuffle all the pieces in the availablePieces ArrayList
+        // randomly shuffle the pieces in the array
         Collections.shuffle(availablePieces);
         selection = availablePieces.get(0);
-
-        // variables that hold coords of selected position
+        // create variables to hold the x and y of the position selected
         int xVal = selection.getX();
         int yVal = selection.getY();
-
-        // call selection game action
-        game.sendAction(new CheckerSelectAction(this,xVal,yVal));
-
-        // check if piece can move
-        CheckerState checkerState2 = (CheckerState) game.getGameState();
+        // call the selection game action
+        game.sendAction(new CheckerSelectAction(this, xVal, yVal));
+        // check if the piece is one that can move
+        CheckerState chessState2 = (CheckerState) game.getGameState();
         for (int i = 1; i < availablePieces.size(); i++) {
-            if (!checkerState2.getCanMove()) {
+            if (!chessState2.getCanMove()) {
                 selection = availablePieces.get(i);
                 xVal = selection.getX();
                 yVal = selection.getY();
                 game.sendAction(new CheckerSelectAction(this, xVal, yVal));
-            }
-            else {
+            } else {
                 break;
             }
         }
-        // delay for a second to make opponent think we're thinking
         sleep(1);
 
-        //check if game is over
-        if (checkerState2.getGameOver()) {
+        if(chessState2.getGameOver()) {
             return;
         }
-
-        // ArrayList holds index values of movements
-        ints = new ArrayList<>();
-
-        // add all of the indexes
-        for (int i = 0; i < checkerState2.getNewXMoves().size(); i++) {
-            ints.add(i);
+        // an arraylist that holds the index values of the two movement arraylists (x and y)
+        ArrayList<Integer> index = new ArrayList<>();
+        // add all of the indexes into the ints value
+        for (int i = 0; i < chessState2.getNewMovementsX().size(); i++) {
+            index.add(i);
         }
-
-        // shuffle the indexes to obtain random values
-        Collections.shuffle(ints);
-
-        // set x and y to the new movements at the given index
-        xVal = checkerState2.getNewXMoves().get(ints.get(0));
-        yVal = checkerState2.getNewYMoves().get(ints.get(0));
-
-        // check for promotion
-        if (selection.getType() == 0) {
-            if (selection.getColors() == Pieces.Colors.BLACK){
-                if (xVal == 7) {
-                    sendPromotionAction(xVal, yVal, Pieces.Colors.BLACK);
+        // shuffle the indexes so a random x and y value can be taken
+        Collections.shuffle(index);
+        // set the x and y values to the new movements array at the index
+        xVal = chessState2.getNewMovementsX().get(index.get(0));
+        yVal = chessState2.getNewMovementsY().get(index.get(0));
+        // if the piece is a pawn look for promotion
+        if (selection.getPieceType() == Piece.PieceType.PAWN) {
+            if (selection.getPieceColor() == Piece.ColorType.BLACK) {
+                if (yVal == 7) {
+                    sendPromotionAction(xVal, yVal, Piece.ColorType.BLACK);
                 }
-            } else if (selection.getColors() == Pieces.Colors.RED) {
-                if (xVal == 0) {
-                    sendPromotionAction(xVal,yVal, Pieces.Colors.RED);
+            } else if (selection.getPieceColor() == Piece.ColorType.RED) {
+                if (yVal == 0) {
+                    sendPromotionAction(xVal, yVal, Piece.ColorType.RED);
                 }
             }
         }
-
-        Logger.log("CheckerComputer", "Sending move");
+        // send the new move action
         game.sendAction(new CheckerMoveAction(this, xVal, yVal));
-
     }
 
-    public void sendPromotionAction(int xVal, int yVal, Pieces.Colors color) {
-        game.sendAction(new CheckerPromotionAction(this, new Pieces(1, color, xVal, yVal), xVal, yVal));
+    public void sendPromotionAction(int xVal, int yVal, Piece.ColorType type) {
+        game.sendAction(new CheckerPromotionAction(this,
+                new Piece(Piece.PieceType.KING, type, xVal, yVal), xVal, yVal));
     }
 }
