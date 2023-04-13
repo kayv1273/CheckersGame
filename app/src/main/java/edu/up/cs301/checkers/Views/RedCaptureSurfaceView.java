@@ -58,7 +58,7 @@ public class RedCaptureSurfaceView extends FlashSurfaceView {
 
 
         xLoc = yLoc = 5;
-        for (Piece p : chessState.getWhiteCapturedPieces()) {
+        for (Piece p : chessState.getRedCapturedPieces()) {
 //            Log.d("Testing", p.getPieceType().toString());
             if (p.getPieceType() == Piece.PieceType.PAWN) {
                 canvas.drawBitmap(blackPawnImage, xLoc, yLoc, paint);

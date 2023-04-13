@@ -27,7 +27,6 @@ public class CheckerLocalGame extends LocalGame {
     private ArrayList<Integer> initialMovementsX = new ArrayList<>();
     private ArrayList<Integer> initialMovementsY = new ArrayList<>();
 
-    // all of the valid movements so the king isn't in check
     private ArrayList<Integer> newMovementsX = new ArrayList<>();
     private ArrayList<Integer> newMovementsY = new ArrayList<>();
 
@@ -75,24 +74,13 @@ public class CheckerLocalGame extends LocalGame {
     @Override
     protected String checkIfGameOver() {
 
-        // CHESS
-        // determine if a player is put into check, if the player is in
-        // check then go through every piece that player has on the board
-        // and generate all of its possible locations. If the arraylist
-        // for its locations comes back empty then continue. As soon as
-        // one arraylist comes back with at least one position then we
-        // can return that the game is not over. If all pieces have been
-        // searched through then we know the game is over due to a checkmate.
-        // -----
-        // more updates can be made once stalemate is implemented
-
         //char resultChar = ' ';
         if (winCondition == null) {
             return null;
         } else if (winCondition.equals("B")) {
             return "Black wins! ";
-        } else if (winCondition.equals("W")) {
-            return "White Wins! ";
+        } else if (winCondition.equals("R")) {
+            return "Red Wins! ";
         } else if (winCondition.equals("S")) {
             return "Stalemate no one wins! ";
         }
@@ -118,7 +106,7 @@ public class CheckerLocalGame extends LocalGame {
      * present point in the game.
      *
      * @param playerIdx the player's player-number (ID)
-     * @return true iff the player is allowed to move
+     * @return true if the player is allowed to move
      */
     @Override
     protected boolean canMove(int playerIdx) {
@@ -152,8 +140,6 @@ public class CheckerLocalGame extends LocalGame {
                 }
             }
 
-            // remove the red highlight from being in check
-            state.removeHighlightCheck();
 
             // highlight the piece they tapped
             state.setHighlight(row, col);
@@ -168,9 +154,8 @@ public class CheckerLocalGame extends LocalGame {
             // find all movements of piece selected
             findMovement(state, p);
 
-            // make fake movements and determine if that movement allows the
-            // players own king be in check
-            moveToNotBeInCheck(state, p.getPieceColor(), p.getPieceType());
+            // make fake movements
+            moveToNotBeInDanger(state, p.getPieceColor(), p.getPieceType());
 
             if(newMovementsX.size() > 0) {
                 state.setCanMove(true);
@@ -193,27 +178,11 @@ public class CheckerLocalGame extends LocalGame {
                 return false;
             }
 
-            //very specific castling case- the selected piece and piece being moved to are the same color
-            if(state.getPiece(tempRow, tempCol).getPieceColor() == state.getPiece(row, col).getPieceColor()){
-                if(tempRow == 4 && tempCol == 7 && row == 7 && col == 7){
-                }
-            }
 
-            //updates potential hasMoved variables
-            if(state.getPiece(tempRow, tempCol).getPieceColor() == Piece.ColorType.RED){
-                if(state.getPiece(tempRow, tempCol).getPieceType() == Piece.PieceType.KING) {
-                    state.setWhiteKingHasMoved(true);
-                }
-            }
-            else if(state.getPiece(tempRow, tempCol).getPieceColor() == Piece.ColorType.BLACK){
-                if(state.getPiece(tempRow, tempCol).getPieceType() == Piece.PieceType.KING) {
-                    state.setBlackKingHasMoved(true);
-                }
-            }
 
             Piece tempP = state.getPiece(tempRow, tempCol);
 
-            // determine what team is moving (white/black) and move the piece
+            // determine what team is moving (red/black) and move the piece
             if (tempP.getPieceColor() == Piece.ColorType.RED) {
                 if (!setMovement(state, row, col, Piece.ColorType.RED)) {
 
@@ -286,29 +255,27 @@ public class CheckerLocalGame extends LocalGame {
     }
 
     /**
-     * Determines if the current players king is in check with a certain
-     * piece movement
+     * Determines if the current players piece is in danger
      *
      * @param state      the copied state displaying a movement
      * @param teamColor  the color the player that is making a movement
      * @param enemyColor the color of the other player
      * @return Determines if a king is in check
      */
-    public boolean checkForCheck(CheckerState state, Piece.ColorType teamColor, Piece.ColorType enemyColor) {
-
-
+    public boolean checkForDanger(CheckerState state, Piece.ColorType teamColor, Piece.ColorType enemyColor) {
+        
         return false;
     }
 
     /**
      * Looks through all movements of the piece selected and determines
-     * if that movement causes the players king to be in check
+     * if that movement causes the players piece to be in danger
      *
      * @param state the current state of the game
      * @param color the color of the player that is making a move
      * @param pieceType the PieceType of the selected piece
      */
-    public void moveToNotBeInCheck(CheckerState state, Piece.ColorType color, Piece.PieceType pieceType) {
+    public void moveToNotBeInDanger(CheckerState state, Piece.ColorType color, Piece.PieceType pieceType) {
         // make sure the arraylists are empty
         newMovementsX.clear();
         newMovementsY.clear();
@@ -322,12 +289,12 @@ public class CheckerLocalGame extends LocalGame {
             // make one of the initial movements on the copied state
             makeTempMovement(copyState, initialMovementsX.get(i), initialMovementsY.get(i));
 
-            // determine if the player is white or black so that can be passed
+            // determine if the player is red or black so that can be passed
             // in as a parameter
             if (color == Piece.ColorType.RED) {
 
-                // determine if the movement causes the players king to be in check
-                if (!checkForCheck(copyState, color, Piece.ColorType.BLACK)) {
+                // determine if the movement causes the players piece to be in danger
+                if (!checkForDanger(copyState, color, Piece.ColorType.BLACK)) {
 
                     // if the player is not in check add that movement to the new
                     // arraylist so it can be saved
@@ -335,7 +302,7 @@ public class CheckerLocalGame extends LocalGame {
                     newMovementsY.add(initialMovementsY.get(i));
                 }
             } else if (color == Piece.ColorType.BLACK) {
-                if (!checkForCheck(copyState, color, Piece.ColorType.RED)) {
+                if (!checkForDanger(copyState, color, Piece.ColorType.RED)) {
                     newMovementsX.add(initialMovementsX.get(i));
                     newMovementsY.add(initialMovementsY.get(i));
                 }
@@ -359,16 +326,7 @@ public class CheckerLocalGame extends LocalGame {
         // create the temp piece with the selected position (tempRow, tempCol)
         Piece tempPiece = state.getPiece(tempRow, tempCol);
 
-        // if they are moving a king determine who's king (white/black) and
-        // update the position of the king so when it checks for if the king
-        // is in check it knows the new position
-        if (tempPiece.getPieceType() == Piece.PieceType.KING) {
-            if (tempPiece.getPieceColor() == Piece.ColorType.RED) {
-                state.setKingWhite(row, col);
-            } else if (tempPiece.getPieceColor() == Piece.ColorType.BLACK) {
-                state.setKingBlack(row, col);
-            }
-        }
+
         // make the location the piece is moving to become the selected piece
         state.setPiece(row, col, tempPiece);
 
@@ -390,54 +348,18 @@ public class CheckerLocalGame extends LocalGame {
         // if they selected a dot/ring then move
         if (state.getDrawing(row, col) == 2 || state.getDrawing(row, col) == 4) {
 
-            //adds captured piece to captured pieces array t
+            //adds captured piece to captured pieces array
             if (state.getPiece(row, col).getPieceType() != Piece.PieceType.EMPTY) {
                 if(state.getPiece(row, col).getPieceColor() == Piece.ColorType.BLACK) {
-                    state.addWhiteCapturedPiece(state.getPiece(row, col));
+                    state.addRedCapturedPiece(state.getPiece(row, col));
                 } else {
                     state.addBlackCapturedPiece(state.getPiece(row, col));
                 }
             }
-
-//            for (Piece p : state.getWhiteCapturedPieces()) {
-//                Log.d("Testing", p.getPieceType().toString());
-//            }
-
+            
             Piece tempPiece = state.getPiece(tempRow, tempCol);
-            Piece castlingTempPiece = state.getPiece(row, col);
 
-            //very specific castling case- the selected piece is a king and moving two squares
-            if(state.getPiece(tempRow, tempCol).getPieceType() == Piece.PieceType.KING && (Math.abs(row-tempRow) == 2)){
-                // for each sub case- this takes care of moving the rook, the king then moves normally
-                if(tempRow == 4 && tempCol == 7 && row == 6 && col == 7){
-                    state.setPiece(5,7, state.getPiece(7,7));
-                    state.setPiece(7,7,state.emptyPiece);
-                }
-                else if(tempRow == 4 && tempCol == 7 && row == 2 && col == 7){
-                    state.setPiece(3,7, state.getPiece(0,7));
-                    state.setPiece(0,7,state.emptyPiece);
-                }
-                else if(tempRow == 4 && tempCol == 0 && row == 6 && col == 0){
-                    state.setPiece(5,0, state.getPiece(7,0));
-                    state.setPiece(7,0,state.emptyPiece);
-                }
-                else if(tempRow == 4 && tempCol == 0 && row == 2 && col == 0){
-                    state.setPiece(3,0, state.getPiece(0,0));
-                    state.setPiece(0,0,state.emptyPiece);
-                }
-
-            }
-
-
-            // change the location of the king to be at the new square if it is going to be moved
-            if (tempPiece.getPieceType() == Piece.PieceType.KING) {
-                if (tempPiece.getPieceColor() == Piece.ColorType.RED) {
-                    state.setKingWhite(row, col);
-                } else if (tempPiece.getPieceColor() == Piece.ColorType.BLACK) {
-                    state.setKingBlack(row, col);
-                }
-            }
-
+            
             // set the new position to be the piece they originally selected
             boolean isCapture = state.getPiece(row,col).getPieceType() != Piece.PieceType.EMPTY;
             CheckerHumanPlayer chp = players[0] instanceof CheckerHumanPlayer ?
@@ -498,12 +420,11 @@ public class CheckerLocalGame extends LocalGame {
 
             // remove all the circles after moving
             state.removeCircle();
-            state.setKingInCheck(false);
+
 
             if (color == Piece.ColorType.BLACK) {
-                if (checkForCheck(state, Piece.ColorType.RED, color)) {
-                    state.setHighlightCheck(state.getKingWhite().getX(), state.getKingWhite().getY());
-                    state.setKingInCheck(true);
+                if (checkForDanger(state, Piece.ColorType.RED, color)) {
+
 
                     checkIfGameOver();
                 } else {
@@ -511,9 +432,8 @@ public class CheckerLocalGame extends LocalGame {
                     checkIfGameOver();
                 }
             } else if (color == Piece.ColorType.RED) {
-                if (checkForCheck(state, Piece.ColorType.BLACK, color)) {
-                    state.setHighlightCheck(state.getKingBlack().getX(), state.getKingBlack().getY());
-                    state.setKingInCheck(true);
+                if (checkForDanger(state, Piece.ColorType.BLACK, color)) {
+
 
                     checkIfGameOver();
                 } else {
@@ -530,12 +450,12 @@ public class CheckerLocalGame extends LocalGame {
 
     public String checkForStalemate(CheckerState state) {
         Piece.ColorType color = null;
-        // find what color has moved to put the other player in checkmate
+
         if(state.getWhoseMove() == 0) {
-            // if it is now whites turn that means to look for if black is in stalemate
+            // if it is now red turn that means to look for if black is in stalemate
             color = Piece.ColorType.BLACK;
         } else {
-            // if it is now blacks turn that means to look for if white is in stalemate
+            // if it is now blacks turn that means to look for if red is in stalemate
             color = Piece.ColorType.RED;
         }
 
@@ -557,7 +477,7 @@ public class CheckerLocalGame extends LocalGame {
             tempRow = pieces.get(i).getX();
             tempCol = pieces.get(i).getY();
             findMovement(state, pieces.get(i));
-            moveToNotBeInCheck(state, color, state.getPiece(tempRow, tempCol).getPieceType());
+            moveToNotBeInDanger(state, color, state.getPiece(tempRow, tempCol).getPieceType());
             if(newMovementsX.size() > 0) {
                 //if we are in here then they have at least one move
                 //so it's not stalemate
