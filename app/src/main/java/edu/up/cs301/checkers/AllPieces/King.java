@@ -6,6 +6,8 @@ import edu.up.cs301.checkers.InfoMessage.CheckerState;
 import edu.up.cs301.checkers.InfoMessage.Piece;
 
 public class King {
+
+    // instance variables to store possible moves and captures
     private ArrayList<Integer> xMovement;
     private ArrayList<Integer> yMovement;
 
@@ -13,11 +15,14 @@ public class King {
     private ArrayList<Integer> yMovementAttack;
     Piece.PieceType EMPTY = Piece.PieceType.EMPTY;
 
+
+    // x and y coords of a given piece
     private int x;
     private int y;
 
     private Piece.ColorType colorInverse;
 
+    // constructor for a king piece
     public King(Piece piece, CheckerState state, Piece.ColorType color) {
         x = piece.getX();
         y = piece.getY();
@@ -28,6 +33,7 @@ public class King {
         kingMovement(state, color);
     }
 
+    // gets all possible moves for a given king piece
     public void kingMovement(CheckerState state, Piece.ColorType color) {
         if(x > 0) {
             if(state.getPiece(x - 1, y).getPieceColor() != color) {
@@ -94,49 +100,6 @@ public class King {
             yMovementAttack.add(y + 1);
         }
 
-
-        //Castling movements
-        if(!state.getKingInCheck()) {
-            if (color == Piece.ColorType.RED) {
-                if (state.getPiece(5, 7).getPieceType() == EMPTY &&
-                        state.getPiece(6, 7).getPieceType() == EMPTY) {
-                    if (!state.getWhiteKingHasMoved() && !state.getWhiteRook1HasMoved()) {
-
-                        xMovement.add(6);
-                        yMovement.add(7);
-                    }
-                }
-                if (state.getPiece(1, 7).getPieceType() == EMPTY &&
-                        state.getPiece(2, 7).getPieceType() == EMPTY &&
-                        state.getPiece(3, 7).getPieceType() == EMPTY) {
-                    if (!state.getWhiteKingHasMoved() && !state.getWhiteRook2HasMoved()) {
-
-                        xMovement.add(2);
-                        yMovement.add(7);
-                    }
-                }
-            }
-            if (color == Piece.ColorType.BLACK) {
-                if (state.getPiece(1, 0).getPieceType() == EMPTY &&
-                        state.getPiece(2, 0).getPieceType() == EMPTY &&
-                        state.getPiece(3, 0).getPieceType() == EMPTY) {
-                    if (!state.getBlackKingHasMoved() && !state.getBlackRook1HasMoved()) {
-
-                        xMovement.add(2);
-                        yMovement.add(0);
-
-                    }
-                }
-                if (state.getPiece(5, 0).getPieceType() == EMPTY &&
-                        state.getPiece(6, 0).getPieceType() == EMPTY) {
-                    if (!state.getBlackKingHasMoved() && !state.getBlackRook2HasMoved()) {
-
-                        xMovement.add(6);
-                        yMovement.add(0);
-                    }
-                }
-            }
-        }
     }
 
     public ArrayList<Integer> getX() {

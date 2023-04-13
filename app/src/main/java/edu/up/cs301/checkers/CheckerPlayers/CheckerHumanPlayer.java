@@ -42,10 +42,6 @@ public class CheckerHumanPlayer extends GameHumanPlayer implements View.OnTouchL
     private TextView player1name;
     private TextView player2name;
 
-    public Button queenPromo;
-    public Button bishopPromo;
-    public Button rookPromo;
-    public Button knightPromo;
     public boolean isPromotion;
     public Piece currPiece = new Piece(Piece.PieceType.KING, Piece.ColorType.RED, 0, 0);
     private int savedX = 0;
@@ -128,15 +124,7 @@ public class CheckerHumanPlayer extends GameHumanPlayer implements View.OnTouchL
         surfaceViewWhiteCapture = (RedCaptureSurfaceView) myActivity.findViewById(R.id.whiteCaptures);
         surfaceViewBlackCapture = (BlackCaptureSurfaceView) myActivity.findViewById(R.id.blackCaptures);
 
-        queenPromo = myActivity.findViewById(R.id.queenPromo);
-        bishopPromo = myActivity.findViewById(R.id.bishopPromo);
-        knightPromo = myActivity.findViewById(R.id.knightPromo);
-        rookPromo = myActivity.findViewById(R.id.rookPromo);
-        undisplay();
-        queenPromo.setOnTouchListener(this);
-        bishopPromo.setOnTouchListener(this);
-        knightPromo.setOnTouchListener(this);
-        rookPromo.setOnTouchListener(this);
+
         surfaceViewCheckerBoard.setOnTouchListener(this);
         resignButton.setOnTouchListener(this);
     }
@@ -249,11 +237,7 @@ public class CheckerHumanPlayer extends GameHumanPlayer implements View.OnTouchL
                     break;
                 }
             }
-        } else {
-            if (view.getId() == queenPromo.getId()) {
-                makePromotion(Piece.PieceType.KING);
-                return true;
-            }
+
         }
         // register that we have handled the event
         return true;
@@ -315,19 +299,9 @@ public class CheckerHumanPlayer extends GameHumanPlayer implements View.OnTouchL
         return 'q';
     }
 
-    public void undisplay() {
-        queenPromo.setVisibility(View.INVISIBLE);
-        bishopPromo.setVisibility(View.INVISIBLE);
-        rookPromo.setVisibility(View.INVISIBLE);
-        knightPromo.setVisibility(View.INVISIBLE);
-    }
 
-    public void display() {
-        queenPromo.setVisibility(View.VISIBLE);
-        bishopPromo.setVisibility(View.VISIBLE);
-        knightPromo.setVisibility(View.VISIBLE);
-        rookPromo.setVisibility(View.VISIBLE);
-    }
+
+
 
     public void makePromotion(Piece.PieceType type) {
         Piece.ColorType currColor = state.getWhoseMove() == 0 ? Piece.ColorType.RED : Piece.ColorType.BLACK;
@@ -337,7 +311,7 @@ public class CheckerHumanPlayer extends GameHumanPlayer implements View.OnTouchL
         CheckerMoveAction move = new CheckerMoveAction(this, savedX, savedY);
         game.sendAction(move);
         isPromotion = false;
-        undisplay();
+
     }
 
     public void promptForPromotion(int i, int j) {
@@ -345,7 +319,7 @@ public class CheckerHumanPlayer extends GameHumanPlayer implements View.OnTouchL
         savedX = i;
         savedY = j;
         MessageBox.popUpMessage("Pick a promotion piece", myActivity);
-        display();
+
     }
 
 

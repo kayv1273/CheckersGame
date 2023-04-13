@@ -6,6 +6,8 @@ import edu.up.cs301.checkers.InfoMessage.CheckerState;
 import edu.up.cs301.checkers.InfoMessage.Piece;
 
 public class Pawn {
+
+    // instace variables to store all possible moves and captures
     private ArrayList<Integer> xMovement;
     private ArrayList<Integer> yMovement;
 
@@ -62,7 +64,7 @@ public class Pawn {
     }
 
     public void pawnMovementBlack(CheckerState state) {
-        //check left border please
+        //check left border
         if (row == 0 && col < 7) {
             if (state.getPiece(row + 1, col + 1).getPieceColor() == Piece.ColorType.EMPTY) {
                 xMovement.add(row + 1);
