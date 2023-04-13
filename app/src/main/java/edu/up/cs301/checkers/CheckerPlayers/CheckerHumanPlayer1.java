@@ -152,6 +152,7 @@ public class CheckerHumanPlayer1 extends GameHumanPlayer implements View.OnTouch
     public boolean onTouch(View view, MotionEvent motionEvent) {
         if (view.getId() == resetButton.getId()) {
             MessageBox.popUpMessage("Return to Home Screen", myActivity);
+
             CountDownTimer cdt = new CountDownTimer(3000, 10) {
                 @Override
                 public void onTick(long millisUntilFinished) {
@@ -160,7 +161,7 @@ public class CheckerHumanPlayer1 extends GameHumanPlayer implements View.OnTouch
 
                 @Override
                 public void onFinish() {
-                    myActivity.finishAffinity();
+                    myActivity.recreate();
                 }
             };
             cdt.start();
