@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import edu.up.cs301.game.GameFramework.infoMessage.GameState;
 
+//info
 public class CheckerState extends GameState implements Serializable {
     //Tag for logging
     private static final String TAG = "CheckerState";
