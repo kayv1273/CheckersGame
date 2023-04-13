@@ -118,7 +118,7 @@ public class CheckerHumanPlayer extends GameHumanPlayer implements View.OnTouchL
         player2name = myActivity.findViewById(R.id.nameWhite);
 
         //resignation
-        resignButton = myActivity.findViewById(R.id.surrenderButton);
+        resignButton = myActivity.findViewById(R.id.homeButton);
 
         //captures
         surfaceViewWhiteCapture = (RedCaptureSurfaceView) myActivity.findViewById(R.id.whiteCaptures);
@@ -163,7 +163,7 @@ public class CheckerHumanPlayer extends GameHumanPlayer implements View.OnTouchL
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
         if (view.getId() == resignButton.getId()) {
-            MessageBox.popUpMessage("Game Over!\n You have resigned", myActivity);
+            MessageBox.popUpMessage("You are exiting the game:\n Returning to Home Screen", myActivity);
             CountDownTimer cdt = new CountDownTimer(3000, 10) {
                 @Override
                 public void onTick(long millisUntilFinished) {
@@ -172,7 +172,7 @@ public class CheckerHumanPlayer extends GameHumanPlayer implements View.OnTouchL
 
                 @Override
                 public void onFinish() {
-                    myActivity.finishAffinity();
+                    myActivity.recreate();
                 }
             };
             cdt.start();

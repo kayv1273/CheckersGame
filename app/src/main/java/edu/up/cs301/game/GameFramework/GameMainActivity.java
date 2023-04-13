@@ -624,7 +624,7 @@ public abstract class GameMainActivity extends Activity implements
             }
         }
 
-        else if(button.getId() == R.id.surrenderButton){
+        else if(button.getId() == R.id.homeButton){
             recreate();
         }
 
