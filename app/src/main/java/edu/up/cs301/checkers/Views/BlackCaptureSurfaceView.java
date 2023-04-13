@@ -12,6 +12,14 @@ import edu.up.cs301.checkers.InfoMessage.CheckerState;
 import edu.up.cs301.checkers.InfoMessage.Piece;
 import edu.up.cs301.game.GameFramework.utilities.FlashSurfaceView;
 import edu.up.cs301.game.R;
+/**
+ * @author Griselda
+ * @author Katherine
+ * @author Ruth
+ * @author Nick
+ * @author Ethan
+ * @version 4.13.2023
+ */
 
 public class BlackCaptureSurfaceView extends FlashSurfaceView {
     protected Bitmap redPawnImage;

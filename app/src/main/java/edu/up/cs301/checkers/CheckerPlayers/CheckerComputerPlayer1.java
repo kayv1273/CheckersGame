@@ -14,6 +14,16 @@ import edu.up.cs301.game.GameFramework.infoMessage.NotYourTurnInfo;
 import edu.up.cs301.game.GameFramework.players.GameComputerPlayer;
 import edu.up.cs301.game.GameFramework.utilities.Logger;
 
+/**
+ * @author Griselda
+ * @author Katherine
+ * @author Ruth
+ * @author Nick
+ * @author Ethan
+ * @version 4.13.2023
+ */
+
+
 public class CheckerComputerPlayer1 extends GameComputerPlayer {
 
     private Piece selection;

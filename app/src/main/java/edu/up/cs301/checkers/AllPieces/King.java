@@ -4,6 +4,15 @@ import java.util.ArrayList;
 
 import edu.up.cs301.checkers.InfoMessage.CheckerState;
 import edu.up.cs301.checkers.InfoMessage.Piece;
+/**
+ * @author Griselda
+ * @author Katherine
+ * @author Ruth
+ * @author Nick
+ * @author Ethan
+ * @version 4.13.2023
+ */
+
 
 public class King {
 

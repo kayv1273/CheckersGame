@@ -4,6 +4,15 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import edu.up.cs301.game.GameFramework.infoMessage.GameState;
+/**
+ * @author Griselda
+ * @author Katherine
+ * @author Ruth
+ * @author Nick
+ * @author Ethan
+ * @version 4.13.2023
+ */
+
 
 //info
 public class CheckerState extends GameState implements Serializable {

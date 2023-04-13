@@ -23,6 +23,15 @@ import edu.up.cs301.game.GameFramework.players.GameHumanPlayer;
 import edu.up.cs301.game.GameFramework.utilities.MessageBox;
 import edu.up.cs301.game.R;
 
+/**
+ * @author Griselda
+ * @author Katherine
+ * @author Ruth
+ * @author Nick
+ * @author Ethan
+ * @version 4.13.2023
+ */
+
 public class CheckerHumanPlayer extends GameHumanPlayer implements View.OnTouchListener{
 
     //Tag for logging
