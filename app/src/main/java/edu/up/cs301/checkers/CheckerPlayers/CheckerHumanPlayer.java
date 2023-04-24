@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 import edu.up.cs301.checkers.CheckerActionMessage.CheckerMoveAction;
 import edu.up.cs301.checkers.CheckerActionMessage.CheckerPromotionAction;
 import edu.up.cs301.checkers.CheckerActionMessage.CheckerSelectAction;
@@ -104,6 +106,7 @@ public class CheckerHumanPlayer extends GameHumanPlayer implements View.OnTouchL
 
             surfaceViewBlackCapture.invalidate();
         }
+
     }
 
     /**
@@ -200,7 +203,13 @@ public class CheckerHumanPlayer extends GameHumanPlayer implements View.OnTouchL
                 if (!isPromotion) {
                     if (motionEvent.getX() > 20 + (i * 115) && motionEvent.getX() < 175 + (i * 115)) {
                         if (motionEvent.getY() > 20 + (j * 115) && motionEvent.getY() < 175 + (j * 115)) {
-                            // create the select action
+
+                            // If the piece is on the back row, promote it to a king
+                            if (j == 0 && state.getPiece(i, j).getPieceColor() == Piece.ColorType.RED) {
+                                state.setPiece(i, j, new Piece(Piece.PieceType.KING, Piece.ColorType.RED, i, j));
+                            }
+
+                                // create the select action
                             if (state.getPiece(i, j).getPieceColor() == Piece.ColorType.RED && state.getWhoseMove() == 0) {
                                 CheckerSelectAction select = new CheckerSelectAction(this, i, j);
                                 currPiece = state.getPiece(i, j);
@@ -233,11 +242,13 @@ public class CheckerHumanPlayer extends GameHumanPlayer implements View.OnTouchL
                                 game.sendAction(move);
                             }
                             surfaceViewCheckerBoard.invalidate();
-                            //surfaceViewWhiteCapture.invalidate();
-                            //surfaceViewBlackCapture.invalidate();
+                            // surfaceViewWhiteCapture.invalidate();
+                            // surfaceViewBlackCapture.invalidate();
                         }
-                    } if (isPromotion) {
+                    }
+                    if (isPromotion) {
                         sendPromotionAction(i, j, Piece.ColorType.RED);
+                        surfaceViewCheckerBoard.invalidate();
                     }
                 }
             }
@@ -320,6 +331,16 @@ public class CheckerHumanPlayer extends GameHumanPlayer implements View.OnTouchL
 
     }
     **/
+
+    public void checkBoardPromotion(CheckerState state) {
+        for (int i = 0; i < 8; i++) {
+            if (state.getPiece(i,0).getColorType() == Piece.ColorType.RED) {
+                  sendPromotionAction(i,0, Piece.ColorType.RED);
+                  surfaceViewCheckerBoard.invalidate();
+            }
+        }
+    }
+
     public boolean validPawnMove(int row, int col, Piece currPiece) {
         if(currPiece.getY() > col + 1){
             return false;

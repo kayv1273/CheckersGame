@@ -425,7 +425,7 @@ public class CheckerLocalGame extends LocalGame {
 
 
             }
-            chp.displayMovesLog(row,col,tempRow,state,isCapture);
+            //chp.displayMovesLog(row,col,tempRow,state,isCapture);
             // change the piece at the selection to be an empty piece
             state.setPiece(tempRow, tempCol, state.emptyPiece);
 
