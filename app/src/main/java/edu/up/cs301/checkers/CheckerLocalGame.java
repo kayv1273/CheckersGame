@@ -270,6 +270,15 @@ public class CheckerLocalGame extends LocalGame {
                 YcaptCoords.add(king.getXAttack().get(j));
             }
         }
+        // Change Red Pawn into a king
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                // If the piece is on the back row, promote it to a king
+                if (j == 0 && state.getPiece(i, j).getPieceColor() == Piece.ColorType.RED) {
+                    state.setPiece(i, j, new Piece(Piece.PieceType.KING, Piece.ColorType.RED, i, j));
+                }
+            }
+        }
     }
 
     /**
