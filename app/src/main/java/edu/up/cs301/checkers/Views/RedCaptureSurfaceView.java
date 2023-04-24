@@ -27,7 +27,7 @@ public class RedCaptureSurfaceView extends FlashSurfaceView {
 
     private Paint paint;
 
-    protected CheckerState chessState;
+    protected CheckerState checkerState;
 
     public RedCaptureSurfaceView(Context context) {
         super(context);
@@ -52,13 +52,13 @@ public class RedCaptureSurfaceView extends FlashSurfaceView {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        if(chessState == null) return;
+        if(checkerState == null) return;
 
         //canvas.drawRect(10,10,30,30, paint);
 
 
         xLoc = yLoc = 5;
-        for (Piece p : chessState.getRedCapturedPieces()) {
+        for (Piece p : checkerState.getRedCapturedPieces()) {
 //            Log.d("Testing", p.getPieceType().toString());
             if (p.getPieceType() == Piece.PieceType.PAWN) {
                 canvas.drawBitmap(blackPawnImage, xLoc, yLoc, paint);
@@ -79,7 +79,7 @@ public class RedCaptureSurfaceView extends FlashSurfaceView {
     }
 
     public void setState(CheckerState state) {
-        chessState = state;
+        checkerState = state;
     }
 
     public void increment(){

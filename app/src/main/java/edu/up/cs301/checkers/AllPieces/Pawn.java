@@ -25,7 +25,7 @@ public class Pawn {
         xMovementAttack = new ArrayList<>();
         yMovementAttack = new ArrayList<>();
         if(color == Piece.ColorType.RED) {
-            pawnMovementWhite(state);
+            pawnMovementRed(state);
             pawnCaptureRed(state);
         } else if (color == Piece.ColorType.BLACK) {
             pawnMovementBlack(state);
@@ -33,7 +33,7 @@ public class Pawn {
         }
     }
 
-    public void pawnMovementWhite(CheckerState state) {
+    public void pawnMovementRed(CheckerState state) {
         //check left border
         if (row == 0 && col > 0) {
             if (state.getPiece(row + 1, col - 1).getPieceColor() == Piece.ColorType.EMPTY) {
