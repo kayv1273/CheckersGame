@@ -195,13 +195,11 @@ public class CheckerHumanPlayer extends GameHumanPlayer implements View.OnTouchL
         // loop through all of the locations on the board and compare
         // the location pressed to the pixels on the screen to find
         // the exact location of the click according to the b oard
-
-        if (!isPromotion) {
-            for (int i = 0; i < 8; i++) {
-                for (int j = 0; j < 8; j++) {
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (!isPromotion) {
                     if (motionEvent.getX() > 20 + (i * 115) && motionEvent.getX() < 175 + (i * 115)) {
                         if (motionEvent.getY() > 20 + (j * 115) && motionEvent.getY() < 175 + (j * 115)) {
-
                             // create the select action
                             if (state.getPiece(i, j).getPieceColor() == Piece.ColorType.RED && state.getWhoseMove() == 0) {
                                 CheckerSelectAction select = new CheckerSelectAction(this, i, j);
@@ -218,7 +216,6 @@ public class CheckerHumanPlayer extends GameHumanPlayer implements View.OnTouchL
                                         game.sendAction(move);
                                         break;
                                     }
-                                    promptForPromotion(i, j);
                                     break;
                                 }
                                 CheckerMoveAction move = new CheckerMoveAction(this, i, j);
@@ -230,23 +227,20 @@ public class CheckerHumanPlayer extends GameHumanPlayer implements View.OnTouchL
                                         game.sendAction(move);
                                         break;
                                     }
-                                    promptForPromotion(i, j);
                                     break;
                                 }
                                 CheckerMoveAction move = new CheckerMoveAction(this, i, j);
                                 game.sendAction(move);
                             }
                             surfaceViewCheckerBoard.invalidate();
-                            surfaceViewWhiteCapture.invalidate();
-                            surfaceViewBlackCapture.invalidate();
+                            //surfaceViewWhiteCapture.invalidate();
+                            //surfaceViewBlackCapture.invalidate();
                         }
+                    } if (isPromotion) {
+                        sendPromotionAction(i, j, Piece.ColorType.RED);
                     }
                 }
-                if (isPromotion) {
-                    break;
-                }
             }
-
         }
         // register that we have handled the event
         return true;
@@ -310,8 +304,11 @@ public class CheckerHumanPlayer extends GameHumanPlayer implements View.OnTouchL
 
 
 
-
-
+    public void sendPromotionAction(int xVal, int yVal, Piece.ColorType type) {
+        game.sendAction(new CheckerPromotionAction(this,
+                new Piece(Piece.PieceType.KING, type, xVal, yVal), xVal, yVal));
+    }
+    /**
     public void makePromotion(Piece.PieceType type) {
         Piece.ColorType currColor = state.getWhoseMove() == 0 ? Piece.ColorType.RED : Piece.ColorType.BLACK;
         Piece set = new Piece(type, currColor, savedX, savedY);
@@ -322,16 +319,7 @@ public class CheckerHumanPlayer extends GameHumanPlayer implements View.OnTouchL
         isPromotion = false;
 
     }
-
-    public void promptForPromotion(int i, int j) {
-        isPromotion = true;
-        savedX = i;
-        savedY = j;
-        MessageBox.popUpMessage("Pick a promotion piece", myActivity);
-
-    }
-
-
+    **/
     public boolean validPawnMove(int row, int col, Piece currPiece) {
         if(currPiece.getY() > col + 1){
             return false;

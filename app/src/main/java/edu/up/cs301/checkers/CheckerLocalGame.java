@@ -442,8 +442,6 @@ public class CheckerLocalGame extends LocalGame {
 
             if (color == Piece.ColorType.BLACK) {
                 if (checkForDanger(state, Piece.ColorType.RED, color)) {
-
-
                     checkIfGameOver();
                 } else {
                     winCondition = checkForStalemate(state);
@@ -451,8 +449,6 @@ public class CheckerLocalGame extends LocalGame {
                 }
             } else if (color == Piece.ColorType.RED) {
                 if (checkForDanger(state, Piece.ColorType.BLACK, color)) {
-
-
                     checkIfGameOver();
                 } else {
                     winCondition = checkForStalemate(state);

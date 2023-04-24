@@ -34,7 +34,11 @@ public class King {
         xMovementAttack = new ArrayList<>();
         yMovementAttack = new ArrayList<>();
         kingMovement(state);
-        kingCapture(state);
+        if(color == Piece.ColorType.RED) {
+            kingCaptureRed(state);
+        } else if (color == Piece.ColorType.BLACK) {
+            kingCaptureBlack(state);
+        }
     }
 
     public void kingMovement(CheckerState state) {
@@ -87,7 +91,7 @@ public class King {
         }
     }
 
-    public void kingCapture(CheckerState state) {
+    public void kingCaptureRed(CheckerState state) {
         //check left border
         if (row == 0 || row == 1) {
             if (col > 1 && state.getPiece(row + 1, col - 1).getPieceColor() == Piece.ColorType.BLACK
@@ -95,7 +99,7 @@ public class King {
                 xMovementAttack.add(row + 2);
                 yMovementAttack.add(col - 2);
             }
-            if (col < 6 && state.getPiece(row + 1, col + 1).getPieceColor() == Piece.ColorType.RED
+            if (col < 6 && state.getPiece(row + 1, col + 1).getPieceColor() == Piece.ColorType.BLACK
                     && state.getPiece(row + 2, col + 2).getPieceColor() == Piece.ColorType.EMPTY) {
                 xMovementAttack.add(row + 2);
                 yMovementAttack.add(col + 2);
@@ -109,7 +113,7 @@ public class King {
                 xMovementAttack.add(row - 2);
                 yMovementAttack.add(col - 2);
             }
-            if (col < 6 && state.getPiece(row - 1, col + 1).getPieceColor() == Piece.ColorType.RED
+            if (col < 6 && state.getPiece(row - 1, col + 1).getPieceColor() == Piece.ColorType.BLACK
                     && state.getPiece(row - 2, col + 2).getPieceColor() == Piece.ColorType.EMPTY) {
                 xMovementAttack.add(row - 2);
                 yMovementAttack.add(col + 2);
@@ -125,6 +129,64 @@ public class King {
                     yMovementAttack.add(col - 2);
                 }
                 if (state.getPiece(row - 1, col - 1).getPieceColor() == Piece.ColorType.BLACK
+                        && (state.getPiece(row - 2, col - 2).getPieceColor() == Piece.ColorType.EMPTY)) {
+                    xMovementAttack.add(row - 2);
+                    yMovementAttack.add(col - 2);
+                }
+            }
+            if (col < 6) {
+                if (state.getPiece(row + 1, col + 1).getPieceColor() == Piece.ColorType.BLACK
+                        && (state.getPiece(row + 2, col + 2).getPieceColor() == Piece.ColorType.EMPTY)) {
+                    xMovementAttack.add(row + 2);
+                    yMovementAttack.add(col + 2);
+                }
+                if (state.getPiece(row - 1, col + 1).getPieceColor() == Piece.ColorType.BLACK
+                        && (state.getPiece(row - 2, col + 2).getPieceColor() == Piece.ColorType.EMPTY)) {
+                    xMovementAttack.add(row - 2);
+                    yMovementAttack.add(col + 2);
+                }
+            }
+        }
+    }
+
+    public void kingCaptureBlack(CheckerState state) {
+        //check left border
+        if (row == 0 || row == 1) {
+            if (col > 1 && state.getPiece(row + 1, col - 1).getPieceColor() == Piece.ColorType.RED
+                    && state.getPiece(row + 2, col - 2).getPieceColor() == Piece.ColorType.EMPTY) {
+                xMovementAttack.add(row + 2);
+                yMovementAttack.add(col - 2);
+            }
+            if (col < 6 && state.getPiece(row + 1, col + 1).getPieceColor() == Piece.ColorType.RED
+                    && state.getPiece(row + 2, col + 2).getPieceColor() == Piece.ColorType.EMPTY) {
+                xMovementAttack.add(row + 2);
+                yMovementAttack.add(col + 2);
+            }
+        }
+
+        //check right border
+        if (row == 7 || row == 6) {
+            if (col > 1 && state.getPiece(row - 1, col - 1).getPieceColor() == Piece.ColorType.RED
+                    && state.getPiece(row - 2, col - 2).getPieceColor() == Piece.ColorType.EMPTY) {
+                xMovementAttack.add(row - 2);
+                yMovementAttack.add(col - 2);
+            }
+            if (col < 6 && state.getPiece(row - 1, col + 1).getPieceColor() == Piece.ColorType.RED
+                    && state.getPiece(row - 2, col + 2).getPieceColor() == Piece.ColorType.EMPTY) {
+                xMovementAttack.add(row - 2);
+                yMovementAttack.add(col + 2);
+            }
+        }
+
+        //anywhere else on the board
+        if ((row > 1 && row < 6) && col > 1) {
+            if (col > 1) {
+                if (state.getPiece(row + 1, col - 1).getPieceColor() == Piece.ColorType.RED
+                        && (state.getPiece(row + 2, col - 2).getPieceColor() == Piece.ColorType.EMPTY)) {
+                    xMovementAttack.add(row + 2);
+                    yMovementAttack.add(col - 2);
+                }
+                if (state.getPiece(row - 1, col - 1).getPieceColor() == Piece.ColorType.RED
                         && (state.getPiece(row - 2, col - 2).getPieceColor() == Piece.ColorType.EMPTY)) {
                     xMovementAttack.add(row - 2);
                     yMovementAttack.add(col - 2);
