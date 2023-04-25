@@ -49,7 +49,7 @@ public class CheckerComputerPlayer1 extends GameComputerPlayer {
 
         CheckerState checkerState = new CheckerState((CheckerState) info);
 
-        // check move
+        // check whose move
         if (checkerState.getWhoseMove() == 1 && playerNum == 0) {
             return;
         }
@@ -57,6 +57,7 @@ public class CheckerComputerPlayer1 extends GameComputerPlayer {
             return;
         }
 
+        // arraylist that stores all the available pieces
         availablePieces = new ArrayList<>();
         // pieces that can move for ai
         for (int i = 0; i < 8; i++) {
@@ -104,7 +105,7 @@ public class CheckerComputerPlayer1 extends GameComputerPlayer {
         // delay for a second to make opponent think we're thinking
         sleep(1);
 
-        //check if game is over
+        // check if game is over
         if (checkerState2.getGameOver()) {
             return;
         }
