@@ -31,6 +31,7 @@ public class CheckerLocalGame extends LocalGame {
     // piece that was selected by row and column
     private int tempRow;
     private int tempCol;
+    private int piecesRemain = 12;
 
     // all of the initial movements of the piece selected
     private ArrayList<Integer> initialMovementsX = new ArrayList<>();
@@ -402,24 +403,28 @@ public class CheckerLocalGame extends LocalGame {
                 // Red capturing right diagonal
                 if (xdistance == -2 && ydistance == 2) {
                     Piece piece = state.getPiece((tempRow + 1), (tempCol - 1));
+                    if (piece.getPieceColor() == Piece.ColorType.RED) piecesRemain--;
                     piece.setPieceType(Piece.PieceType.EMPTY);
                     piece.setColorType(Piece.ColorType.EMPTY);
                 }
                 // Red capturing left diagonal
                 if (xdistance == 2 && ydistance == 2) {
                     Piece piece = state.getPiece((tempRow - 1), (tempCol - 1));
+                    if (piece.getPieceColor() == Piece.ColorType.RED) piecesRemain--;
                     piece.setPieceType(Piece.PieceType.EMPTY);
                     piece.setColorType(Piece.ColorType.EMPTY);
                 }
                 // Black capturing right diagonal
                 if (xdistance == -2 && ydistance == -2) {
                     Piece piece = state.getPiece((tempRow + 1), (tempCol + 1));
+                    if (piece.getPieceColor() == Piece.ColorType.RED) piecesRemain--;
                     piece.setPieceType(Piece.PieceType.EMPTY);
                     piece.setColorType(Piece.ColorType.EMPTY);
                 }
                 // Black capturing left diagonal
                 if (xdistance == 2 && ydistance == -2) {
                     Piece piece = state.getPiece((tempRow - 1), (tempCol + 1));
+                    if (piece.getPieceColor() == Piece.ColorType.RED) piecesRemain--;
                     piece.setPieceType(Piece.PieceType.EMPTY);
                     piece.setColorType(Piece.ColorType.EMPTY);
                 }

@@ -82,6 +82,9 @@ public class CheckerComputerPlayer1 extends GameComputerPlayer {
                 }
             }
         }
+        if (availablePieces.isEmpty()) {
+            //win statement and pop up screen someone fix this please
+        }
         // randomly shuffle the pieces in the array
         Collections.shuffle(availablePieces);
         selection = availablePieces.get(0);

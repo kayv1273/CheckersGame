@@ -106,6 +106,16 @@ public class CheckerComputerPlayer2 extends GameComputerPlayer {
                 break;
             }
         }
+
+        for (int i = 0; i < checkerState2.getNewMovementsX().size(); i++) {
+            if ((xVal - checkerState2.getNewMovementsX().get(i) == 2 || xVal - checkerState2.getNewMovementsX().get(i) == -2) &&
+            (yVal - checkerState2.getNewMovementsY().get(i) == 2 || yVal - checkerState2.getNewMovementsY().get(i) == -2)) {
+                xVal = checkerState2.getNewMovementsX().get(i);
+                yVal = checkerState2.getNewMovementsY().get(i);
+                break;
+            }
+        }
+
         // if the piece is a pawn look for promotion
         if (selection.getPieceType() == Piece.PieceType.PAWN) {
             if (selection.getPieceColor() == Piece.ColorType.BLACK) {
