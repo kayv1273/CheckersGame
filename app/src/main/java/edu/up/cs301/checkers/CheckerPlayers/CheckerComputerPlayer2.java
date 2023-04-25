@@ -96,7 +96,6 @@ public class CheckerComputerPlayer2 extends GameComputerPlayer {
             index.add(i);
         }
         // shuffle the indexes so a random x and y value can be taken
-        Collections.shuffle(index);
         // set the x and y values to the new movements array at the index
         for(int i = 0; i < index.size(); i++) {
             xVal = checkerState2.getNewMovementsX().get(index.get(i));
@@ -106,11 +105,12 @@ public class CheckerComputerPlayer2 extends GameComputerPlayer {
             }
         }
 
+
         for (int i = 0; i < checkerState2.getNewMovementsX().size(); i++) {
             if ((xVal - checkerState2.getNewMovementsX().get(i) == 2 || xVal - checkerState2.getNewMovementsX().get(i) == -2) &&
             (yVal - checkerState2.getNewMovementsY().get(i) == 2 || yVal - checkerState2.getNewMovementsY().get(i) == -2)) {
-                xVal = checkerState2.getNewMovementsX().get(i);
-                yVal = checkerState2.getNewMovementsY().get(i);
+                xVal = checkerState2.getNewMovementsX().get(index.get(i));
+                yVal = checkerState2.getNewMovementsY().get(index.get(i));
                 break;
             }
         }
@@ -118,14 +118,14 @@ public class CheckerComputerPlayer2 extends GameComputerPlayer {
         // if the piece is a pawn look for promotion
         if (selection.getPieceType() == Piece.PieceType.PAWN) {
             if (selection.getPieceColor() == Piece.ColorType.BLACK) {
-                if (xVal == 7) {
+                if (yVal == 7) {
                     game.sendAction(new CheckerPromotionAction(this,
                             new Piece(Piece.PieceType.KING,
                                     Piece.ColorType.BLACK, xVal, yVal), xVal, yVal));
 
                 }
             } else if (selection.getPieceColor() == Piece.ColorType.RED) {
-                if (xVal == 0) {
+                if (yVal == 0) {
                     game.sendAction(new CheckerPromotionAction(this,
                             new Piece(Piece.PieceType.KING,
                                     Piece.ColorType.RED, xVal, yVal), xVal, yVal));
