@@ -37,3 +37,4 @@ public class CheckerSelectAction extends GameAction {
      */
     public int getCol() { return col; }
 }
+

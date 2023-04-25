@@ -1,22 +1,23 @@
 package edu.up.cs301.checkers.CheckerActionMessage;
 
-import edu.up.cs301.checkers.InfoMessage.Pieces;
+import edu.up.cs301.checkers.InfoMessage.Piece;
 import edu.up.cs301.game.GameFramework.actionMessage.GameAction;
 import edu.up.cs301.game.GameFramework.players.GamePlayer;
 
 public class CheckerPromotionAction extends GameAction {
+
 
     /**
      * constructor for GameAction
      *
      * @param player the player who created the action
      */
-    private Pieces promotionPiece;
+    private Piece promotionPiece;
     private int row;
     private int col;
     public static boolean isPromotion;
 
-    public CheckerPromotionAction(GamePlayer player, Pieces promotionPiece, int row, int col) {
+    public CheckerPromotionAction(GamePlayer player, Piece promotionPiece, int row, int col) {
         super(player);
         this.promotionPiece = promotionPiece;
         this.row = row;
@@ -26,5 +27,5 @@ public class CheckerPromotionAction extends GameAction {
 
     public int getRow(){return this.row;}
     public int getCol(){return this.col;}
-    public Pieces getPromotionPiece(){return this.promotionPiece;}
+    public Piece getPromotionPiece(){return this.promotionPiece;}
 }
