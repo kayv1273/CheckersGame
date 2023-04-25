@@ -251,7 +251,7 @@ public class CheckerHumanPlayer extends GameHumanPlayer implements View.OnTouchL
         return true;
     }
 
-
+/**
     public void displayMovesLog ( int currRow, int currCol, int tempRow, CheckerState state,
                                   boolean isCapture){
         if (state == null) return;
@@ -307,7 +307,7 @@ public class CheckerHumanPlayer extends GameHumanPlayer implements View.OnTouchL
         return 'q';
     }
 
-
+**/
 
     public void sendPromotionAction(int xVal, int yVal, Piece.ColorType type) {
         game.sendAction(new CheckerPromotionAction(this,
