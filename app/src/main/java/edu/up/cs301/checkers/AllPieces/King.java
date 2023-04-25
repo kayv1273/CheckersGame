@@ -121,7 +121,7 @@ public class King {
         }
 
         //anywhere else on the board
-        if ((row > 1 && row < 6) && col > 1) {
+        if (row > 1 && row < 6) {
             if (col > 1) {
                 if (state.getPiece(row + 1, col - 1).getPieceColor() == Piece.ColorType.BLACK
                         && (state.getPiece(row + 2, col - 2).getPieceColor() == Piece.ColorType.EMPTY)) {
@@ -179,7 +179,7 @@ public class King {
         }
 
         //anywhere else on the board
-        if ((row > 1 && row < 6) && col > 1) {
+        if (row > 1 && row < 6) {
             if (col > 1) {
                 if (state.getPiece(row + 1, col - 1).getPieceColor() == Piece.ColorType.RED
                         && (state.getPiece(row + 2, col - 2).getPieceColor() == Piece.ColorType.EMPTY)) {
