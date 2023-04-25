@@ -130,6 +130,8 @@ public class CheckerComputerPlayer1 extends GameComputerPlayer {
                 }
             }
         }
+
+
         // send the new move action
         game.sendAction(new CheckerMoveAction(this, xVal, yVal));
     }

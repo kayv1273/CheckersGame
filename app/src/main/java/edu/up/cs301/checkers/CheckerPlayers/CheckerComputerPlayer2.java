@@ -65,8 +65,7 @@ public class CheckerComputerPlayer2 extends GameComputerPlayer {
                 }
             }
         }
-        // randomly shuffle the pieces in the array
-        Collections.shuffle(availablePieces);
+
         selection = availablePieces.get(0);
         // create variables to hold the x and y of the position selected
         int xVal = selection.getX();
@@ -109,14 +108,14 @@ public class CheckerComputerPlayer2 extends GameComputerPlayer {
         // if the piece is a pawn look for promotion
         if (selection.getPieceType() == Piece.PieceType.PAWN) {
             if (selection.getPieceColor() == Piece.ColorType.BLACK) {
-                if (yVal == 7) {
+                if (xVal == 7) {
                     game.sendAction(new CheckerPromotionAction(this,
                             new Piece(Piece.PieceType.KING,
                                     Piece.ColorType.BLACK, xVal, yVal), xVal, yVal));
 
                 }
             } else if (selection.getPieceColor() == Piece.ColorType.RED) {
-                if (yVal == 0) {
+                if (xVal == 0) {
                     game.sendAction(new CheckerPromotionAction(this,
                             new Piece(Piece.PieceType.KING,
                                     Piece.ColorType.RED, xVal, yVal), xVal, yVal));
