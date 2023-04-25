@@ -201,8 +201,8 @@ public class CheckerHumanPlayer extends GameHumanPlayer implements View.OnTouchL
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 if (!isPromotion) {
-                    if (motionEvent.getX() > 20 + (i * 115) && motionEvent.getX() < 175 + (i * 115)) {
-                        if (motionEvent.getY() > 20 + (j * 115) && motionEvent.getY() < 175 + (j * 115)) {
+                    if (motionEvent.getX() > 20 + (i * 120) && motionEvent.getX() < 175 + (i * 120)) {
+                        if (motionEvent.getY() > 20 + (j * 120) && motionEvent.getY() < 175 + (j * 120)) {
                                 // create the select action
                             if (state.getPiece(i, j).getPieceColor() == Piece.ColorType.RED && state.getWhoseMove() == 0) {
                                 CheckerSelectAction select = new CheckerSelectAction(this, i, j);
