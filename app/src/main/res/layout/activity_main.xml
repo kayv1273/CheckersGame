@@ -114,56 +114,6 @@
                 android:orientation="horizontal">
 
 
-                <Button
-
-                    android:id="@+id/rookPromo"
-
-                    android:layout_width="wrap_content"
-
-                    android:layout_height="wrap_content"
-
-                    android:layout_weight="0"
-
-                    android:text="Rook" />
-
-
-                <Button
-
-                    android:id="@+id/knightPromo"
-
-                    android:layout_width="wrap_content"
-
-                    android:layout_height="wrap_content"
-
-                    android:layout_weight="0"
-
-                    android:text="Knight" />
-
-
-                <Button
-
-                    android:id="@+id/bishopPromo"
-
-                    android:layout_width="wrap_content"
-
-                    android:layout_height="wrap_content"
-
-                    android:layout_weight="0"
-
-                    android:text="Bishop" />
-
-
-                <Button
-
-                    android:id="@+id/queenPromo"
-
-                    android:layout_width="wrap_content"
-
-                    android:layout_height="wrap_content"
-
-                    android:layout_weight="0"
-
-                    android:text="Queen" />
 
             </LinearLayout>
 
