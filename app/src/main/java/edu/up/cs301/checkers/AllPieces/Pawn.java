@@ -7,16 +7,22 @@ import edu.up.cs301.checkers.InfoMessage.Piece;
 
 public class Pawn {
 
-    // instace variables to store all possible moves and captures
+    // instance variables to store all possible moves and captures
     private ArrayList<Integer> xMovement;
     private ArrayList<Integer> yMovement;
 
     private ArrayList<Integer> xMovementAttack;
     private ArrayList<Integer> yMovementAttack;
-
     private int row;
     private int col;
 
+    /**
+     * Constructor for Pawn
+     *
+     * @param piece the current piece
+     * @param state the CheckerState
+     * @param color the color of the piece
+     */
     public Pawn(Piece piece, CheckerState state, Piece.ColorType color) {
         row = piece.getX();
         col = piece.getY();
@@ -33,6 +39,11 @@ public class Pawn {
         }
     }
 
+    /**
+     * checks for all possible moves for a red pawn
+     *
+     * @param state the CheckerState
+     */
     public void pawnMovementRed(CheckerState state) {
         //check left border
         if (row == 0 && col > 0) {
@@ -50,7 +61,7 @@ public class Pawn {
             }
         }
 
-        //anywhere else on the board
+        //check rest of the board
         if ((row > 0 && row < 7) && col > 0) {
             if (state.getPiece(row + 1, col - 1).getPieceColor() == Piece.ColorType.EMPTY) {
                 xMovement.add(row + 1);
@@ -63,6 +74,11 @@ public class Pawn {
         }
     }
 
+    /**
+     * checks for all possible moves for a black pawn
+     *
+     * @param state the CheckerState
+     */
     public void pawnMovementBlack(CheckerState state) {
         //check left border
         if (row == 0 && col < 7) {
@@ -80,6 +96,7 @@ public class Pawn {
             }
         }
 
+        //check rest of the board
         if ((row > 0 && row < 7) && col < 7) {
             if (state.getPiece(row - 1, col + 1).getPieceColor() == Piece.ColorType.EMPTY) {
                 xMovement.add(row - 1);
@@ -92,6 +109,11 @@ public class Pawn {
         }
     }
 
+    /**
+     * checks for all possible captures for a red pawn
+     *
+     * @param state the CheckerState
+     */
     public void pawnCaptureRed(CheckerState state) {
         //check left border
         if ((row == 0 || row == 1) && col > 1) {
@@ -111,7 +133,7 @@ public class Pawn {
             }
         }
 
-        //anywhere else on the board
+        //check rest of the board
         if ((row > 1 && row < 6) && col > 1) {
             if (state.getPiece(row + 1, col - 1).getPieceColor() == Piece.ColorType.BLACK &&
                     (state.getPiece(row + 2, col - 2).getPieceColor() == Piece.ColorType.EMPTY)) {
@@ -126,6 +148,11 @@ public class Pawn {
         }
     }
 
+    /**
+     * checks for all possible captures for a black pawn
+     *
+     * @param state the CheckerState
+     */
     public void pawnCaptureBlack(CheckerState state) {
         //check left border
         if ((row == 0 || row == 1) && col < 6) {
@@ -145,7 +172,7 @@ public class Pawn {
             }
         }
 
-        //anywhere else on the board
+        //check rest of the board
         if ((row > 1 && row < 6) && col < 6) {
             if (state.getPiece(row + 1, col + 1).getPieceColor() == Piece.ColorType.RED &&
                     (state.getPiece(row + 2, col + 2).getPieceColor() == Piece.ColorType.EMPTY)) {
@@ -160,18 +187,39 @@ public class Pawn {
         }
     }
 
+
+    /**
+     * get the x-coords of the piece's possible moves
+     *
+     * @return the x-coords of pieces' possible moves
+     */
     public ArrayList<Integer> getX() {
         return xMovement;
     }
 
+    /**
+     * get the y-coords of the piece's possible moves
+     *
+     * @return the y-coords of pieces' possible moves
+     */
     public ArrayList<Integer> getY() {
         return yMovement;
     }
 
+    /**
+     * get the x-coords of the piece's possible captures
+     *
+     * @return the x-coords of pieces' possible captures
+     */
     public ArrayList<Integer> getXAttack() {
         return xMovementAttack;
     }
 
+    /**
+     * get the x-coords of the piece's possible captures
+     *
+     * @return the x-coords of pieces' possible captures
+     */
     public ArrayList<Integer> getYAttack() {
         return yMovementAttack;
     }
