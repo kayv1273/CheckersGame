@@ -190,11 +190,13 @@ public class King {
     public void kingCaptureBlack(CheckerState state) {
         //check left border
         if (row == 0 || row == 1) {
+            //up right of piece
             if (col > 1 && state.getPiece(row + 1, col - 1).getPieceColor() == Piece.ColorType.RED
                     && state.getPiece(row + 2, col - 2).getPieceColor() == Piece.ColorType.EMPTY) {
                 xMovementAttack.add(row + 2);
                 yMovementAttack.add(col - 2);
             }
+            //down right of piece
             if (col < 6 && state.getPiece(row + 1, col + 1).getPieceColor() == Piece.ColorType.RED
                     && state.getPiece(row + 2, col + 2).getPieceColor() == Piece.ColorType.EMPTY) {
                 xMovementAttack.add(row + 2);
@@ -204,11 +206,13 @@ public class King {
 
         //check right border
         if (row == 7 || row == 6) {
+            //up left of piece
             if (col > 1 && state.getPiece(row - 1, col - 1).getPieceColor() == Piece.ColorType.RED
                     && state.getPiece(row - 2, col - 2).getPieceColor() == Piece.ColorType.EMPTY) {
                 xMovementAttack.add(row - 2);
                 yMovementAttack.add(col - 2);
             }
+            //down left of piece
             if (col < 6 && state.getPiece(row - 1, col + 1).getPieceColor() == Piece.ColorType.RED
                     && state.getPiece(row - 2, col + 2).getPieceColor() == Piece.ColorType.EMPTY) {
                 xMovementAttack.add(row - 2);
@@ -219,11 +223,13 @@ public class King {
         //check rest of the board
         if (row > 1 && row < 6) {
             if (col > 1) {
+                //up right of piece
                 if (state.getPiece(row + 1, col - 1).getPieceColor() == Piece.ColorType.RED
                         && (state.getPiece(row + 2, col - 2).getPieceColor() == Piece.ColorType.EMPTY)) {
                     xMovementAttack.add(row + 2);
                     yMovementAttack.add(col - 2);
                 }
+                //up left of piece
                 if (state.getPiece(row - 1, col - 1).getPieceColor() == Piece.ColorType.RED
                         && (state.getPiece(row - 2, col - 2).getPieceColor() == Piece.ColorType.EMPTY)) {
                     xMovementAttack.add(row - 2);
@@ -231,11 +237,13 @@ public class King {
                 }
             }
             if (col < 6) {
+                //bottom left of piece
                 if (state.getPiece(row + 1, col + 1).getPieceColor() == Piece.ColorType.RED
                         && (state.getPiece(row + 2, col + 2).getPieceColor() == Piece.ColorType.EMPTY)) {
                     xMovementAttack.add(row + 2);
                     yMovementAttack.add(col + 2);
                 }
+                //bottom left of piece
                 if (state.getPiece(row - 1, col + 1).getPieceColor() == Piece.ColorType.RED
                         && (state.getPiece(row - 2, col + 2).getPieceColor() == Piece.ColorType.EMPTY)) {
                     xMovementAttack.add(row - 2);
