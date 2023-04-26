@@ -39,6 +39,8 @@ public class CheckerLocalGame extends LocalGame {
 
     private ArrayList<Integer> newMovementsX = new ArrayList<>();
     private ArrayList<Integer> newMovementsY = new ArrayList<>();
+    private ArrayList<Integer> XcaptCoords = new ArrayList<Integer>();
+    private ArrayList<Integer> YcaptCoords = new ArrayList<Integer>();
 
     private String winCondition = null;
     private boolean isPromotion;
@@ -186,26 +188,22 @@ public class CheckerLocalGame extends LocalGame {
             if (tempRow == -1 || tempCol == -1) {
                 return false;
             }
-
-
             Piece tempP = state.getPiece(tempRow, tempCol);
+            // determine what team is moving (red/black) and move the piece
+            if (tempP.getPieceColor() == Piece.ColorType.RED) {
+                if (!setMovement(state, row, col, Piece.ColorType.RED)) {
 
-                // determine what team is moving (red/black) and move the piece
-                if (tempP.getPieceColor() == Piece.ColorType.RED) {
-                    if (!setMovement(state, row, col, Piece.ColorType.RED)) {
-                        state.removeHighlight();
-                        state.removeCircle();
-                        return false;
-                    }
-
-                } else if (tempP.getPieceColor() == Piece.ColorType.BLACK) {
-                    if (!setMovement(state, row, col, Piece.ColorType.BLACK)) {
-                        state.removeHighlight();
-                        state.removeCircle();
-                        return false;
-                    }
+                    state.removeHighlight();
+                    state.removeCircle();
+                    return false;
                 }
-
+            } else if (tempP.getPieceColor() == Piece.ColorType.BLACK) {
+                if (!setMovement(state, row, col, Piece.ColorType.BLACK)) {
+                    state.removeHighlight();
+                    state.removeCircle();
+                    return false;
+                }
+            }
             // make sure all highlights and dots are already removed
             state.removeCircle();
 
@@ -230,10 +228,6 @@ public class CheckerLocalGame extends LocalGame {
      * @param state the current state of the game
      * @param p     the piece that is currently selected
      */
-
-    ArrayList<Integer> XcaptCoords = new ArrayList<Integer>();
-    ArrayList<Integer> YcaptCoords = new ArrayList<Integer>();
-
     public void findMovement(CheckerState state, Piece p) {
         // make sure the arraylists are empty before they are filled
         initialMovementsX.clear();
@@ -291,7 +285,6 @@ public class CheckerLocalGame extends LocalGame {
      * @return Determines if a king is in check
      */
     public boolean checkForDanger(CheckerState state, Piece.ColorType teamColor, Piece.ColorType enemyColor) {
-        
         return false;
     }
 
@@ -310,20 +303,15 @@ public class CheckerLocalGame extends LocalGame {
 
         // iterate through all of the initial movements of the selected piece
         for (int i = 0; i < initialMovementsX.size(); i++) {
-
             // create a copied state so the current state is not affected yet
             CheckerState copyState = new CheckerState(state);
-
             // make one of the initial movements on the copied state
             makeTempMovement(copyState, initialMovementsX.get(i), initialMovementsY.get(i));
-
             // determine if the player is red or black so that can be passed
             // in as a parameter
             if (color == Piece.ColorType.RED) {
-
                 // determine if the movement causes the players piece to be in danger
                 if (!checkForDanger(copyState, color, Piece.ColorType.BLACK)) {
-
                     // if the player is not in check add that movement to the new
                     // arraylist so it can be saved
                     newMovementsX.add(initialMovementsX.get(i));
@@ -341,8 +329,6 @@ public class CheckerLocalGame extends LocalGame {
 
     }
 
-
-
     /**
      * Creates a fake movement on the copied state
      *
@@ -353,7 +339,6 @@ public class CheckerLocalGame extends LocalGame {
     public void makeTempMovement(CheckerState state, int row, int col) {
         // create the temp piece with the selected position (tempRow, tempCol)
         Piece tempPiece = state.getPiece(tempRow, tempCol);
-
 
         // make the location the piece is moving to become the selected piece
         state.setPiece(row, col, tempPiece);
@@ -428,23 +413,19 @@ public class CheckerLocalGame extends LocalGame {
                     piece.setPieceType(Piece.PieceType.EMPTY);
                     piece.setColorType(Piece.ColorType.EMPTY);
                 }
-
-                /**
-                 if (XcaptCoords.contains(row + 2) && YcaptCoords.contains(col - 2)) {
-                 Piece piece = state.getPiece((row + 1), (col - 1));
-                 piece.setPieceType(Piece.PieceType.EMPTY);
-                 piece.setColorType(Piece.ColorType.EMPTY);
-                 }
-                 **/
-
-
             }
-            //chp.displayMovesLog(row,col,tempRow,state,isCapture);
             // change the piece at the selection to be an empty piece
             state.setPiece(tempRow, tempCol, state.emptyPiece);
 
             // remove all highlights
             state.removeHighlight();
+
+            for (int i = 0; i < state.getNewMovementsX().size(); i++) {
+                if ((tempRow - state.getNewMovementsX().get(i) == 2 || tempRow - state.getNewMovementsX().get(i) == -2) &&
+                        (tempCol - state.getNewMovementsY().get(i) == 2 || tempCol - state.getNewMovementsY().get(i) == -2)) {
+                    setMovement(state,tempRow,tempCol,Piece.ColorType.RED);
+                }
+            }
 
             // reset temp values so only selections may occur
             tempRow = -1;
@@ -452,7 +433,6 @@ public class CheckerLocalGame extends LocalGame {
 
             // remove all the circles after moving
             state.removeCircle();
-
 
             if (color == Piece.ColorType.BLACK) {
                 if (checkForDanger(state, Piece.ColorType.RED, color)) {

@@ -16,6 +16,7 @@ import edu.up.cs301.game.GameFramework.infoMessage.GameInfo;
 public class CheckerComputerPlayer2 extends GameComputerPlayer {
     private Piece selection;
     private ArrayList<Piece> availablePieces;
+    ArrayList<Piece> capturePieces;
     private ArrayList<Integer> ints;
 
     /**
@@ -49,6 +50,7 @@ public class CheckerComputerPlayer2 extends GameComputerPlayer {
 
         // all of the pieces that can move on the computers side
         availablePieces = new ArrayList<>();
+        capturePieces = new ArrayList<Piece>();
         for (int i = 0; i < 8; i++) {
             for (int k = 0; k < 8; k++) {
                 if (checkerState.getDrawing(i, k) == 1) {
@@ -60,13 +62,22 @@ public class CheckerComputerPlayer2 extends GameComputerPlayer {
                 Piece p = checkerState.getPiece(i, k);
                 if (playerNum == 0 && p.getPieceColor() == Piece.ColorType.RED) {
                     availablePieces.add(p);
+                    if (canTake(checkerState,i,k)) {
+                        capturePieces.add(p);
+                    }
                 } else if (playerNum == 1 && p.getPieceColor() == Piece.ColorType.BLACK) {
                     availablePieces.add(p);
+                    if (canTake(checkerState,i,k)) {
+                        capturePieces.add(p);
+                    }
                 }
             }
         }
-
-        selection = availablePieces.get(0);
+        //if (!capturePieces.isEmpty()) {
+            //selection = capturePieces.get(0);
+        //} else {
+            selection = availablePieces.get(0);
+        //}
         // create variables to hold the x and y of the position selected
         int xVal = selection.getX();
         int yVal = selection.getY();
@@ -104,17 +115,13 @@ public class CheckerComputerPlayer2 extends GameComputerPlayer {
                 break;
             }
         }
-
-
-        for (int i = 0; i < checkerState2.getNewMovementsX().size(); i++) {
-            if ((xVal - checkerState2.getNewMovementsX().get(i) == 2 || xVal - checkerState2.getNewMovementsX().get(i) == -2) &&
-            (yVal - checkerState2.getNewMovementsY().get(i) == 2 || yVal - checkerState2.getNewMovementsY().get(i) == -2)) {
-                xVal = checkerState2.getNewMovementsX().get(index.get(i));
-                yVal = checkerState2.getNewMovementsY().get(index.get(i));
+        for (Piece piece : availablePieces) {
+            if (canTake(checkerState2,piece.getX(),piece.getY())) {
+                takePiece(checkerState2,xVal,yVal,index);
                 break;
             }
         }
-
+        //takePiece(checkerState2,xVal,yVal,index);
         // if the piece is a pawn look for promotion
         if (selection.getPieceType() == Piece.PieceType.PAWN) {
             if (selection.getPieceColor() == Piece.ColorType.BLACK) {
@@ -136,4 +143,28 @@ public class CheckerComputerPlayer2 extends GameComputerPlayer {
         // send the new move action
         game.sendAction(new CheckerMoveAction(this, xVal, yVal));
     }
+
+    public void takePiece(CheckerState checkerState2, int x, int y, ArrayList<Integer> index) {
+        for (int i = 0; i < checkerState2.getNewMovementsX().size(); i++) {
+            if ((x - checkerState2.getNewMovementsX().get(i) == 2 || x - checkerState2.getNewMovementsX().get(i) == -2) &&
+                    (y - checkerState2.getNewMovementsY().get(i) == 2 || y - checkerState2.getNewMovementsY().get(i) == -2)) {
+                x = checkerState2.getNewMovementsX().get(index.get(i));
+                y = checkerState2.getNewMovementsY().get(index.get(i));
+                break;
+            }
+        }
+    }
+
+    public boolean canTake(CheckerState checkerState2, int x, int y) {
+        boolean take = false;
+        for (int i = 0; i < checkerState2.getNewMovementsX().size(); i++) {
+            if ((x - checkerState2.getNewMovementsX().get(i) == 2 || x - checkerState2.getNewMovementsX().get(i) == -2) &&
+                    (y - checkerState2.getNewMovementsY().get(i) == 2 || y - checkerState2.getNewMovementsY().get(i) == -2)) {
+                take = true;
+                break;
+            }
+        }
+        return take;
+    }
+
 }
