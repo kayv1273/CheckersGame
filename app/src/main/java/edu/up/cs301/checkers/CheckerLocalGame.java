@@ -188,24 +188,24 @@ public class CheckerLocalGame extends LocalGame {
             }
 
 
-
             Piece tempP = state.getPiece(tempRow, tempCol);
 
-            // determine what team is moving (red/black) and move the piece
-            if (tempP.getPieceColor() == Piece.ColorType.RED) {
-                if (!setMovement(state, row, col, Piece.ColorType.RED)) {
+                // determine what team is moving (red/black) and move the piece
+                if (tempP.getPieceColor() == Piece.ColorType.RED) {
+                    if (!setMovement(state, row, col, Piece.ColorType.RED)) {
+                        state.removeHighlight();
+                        state.removeCircle();
+                        return false;
+                    }
 
-                    state.removeHighlight();
-                    state.removeCircle();
-                    return false;
+                } else if (tempP.getPieceColor() == Piece.ColorType.BLACK) {
+                    if (!setMovement(state, row, col, Piece.ColorType.BLACK)) {
+                        state.removeHighlight();
+                        state.removeCircle();
+                        return false;
+                    }
                 }
-            } else if (tempP.getPieceColor() == Piece.ColorType.BLACK) {
-                if (!setMovement(state, row, col, Piece.ColorType.BLACK)) {
-                    state.removeHighlight();
-                    state.removeCircle();
-                    return false;
-                }
-            }
+
             // make sure all highlights and dots are already removed
             state.removeCircle();
 
