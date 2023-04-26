@@ -34,18 +34,10 @@ public class CheckerBoardSurfaceView extends FlashSurfaceView {
     protected CheckerState state;
 
     //images for chess pieces
-    protected Bitmap whitePawnImage;
-    protected Bitmap whiteKnightImage;
-    protected Bitmap whiteBishopImage;
-    protected Bitmap whiteRookImage;
-    protected Bitmap whiteKingImage;
-    protected Bitmap whiteQueenImage;
+    protected Bitmap redPawnImage;
+    protected Bitmap redKingImage;
     protected Bitmap blackPawnImage;
-    protected Bitmap blackKnightImage;
-    protected Bitmap blackBishopImage;
     protected Bitmap blackKingImage;
-    protected Bitmap blackQueenImage;
-    protected Bitmap blackRookImage;
 
     public CheckerBoardSurfaceView(Context context) {
         super(context);
@@ -54,16 +46,17 @@ public class CheckerBoardSurfaceView extends FlashSurfaceView {
 
     public CheckerBoardSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        whitePawnImage = BitmapFactory.decodeResource(getResources(), R.drawable.rp);
+        redPawnImage = BitmapFactory.decodeResource(getResources(), R.drawable.rp);
 
-        whiteKingImage = BitmapFactory.decodeResource(getResources(), R.drawable.rk);
+        redKingImage = BitmapFactory.decodeResource(getResources(), R.drawable.rk);
 
         blackPawnImage = BitmapFactory.decodeResource(getResources(), R.drawable.bp);
+
         blackKingImage = BitmapFactory.decodeResource(getResources(), R.drawable.bk);
 
-        whitePawnImage = Bitmap.createScaledBitmap(whitePawnImage, 120, 120, false);
+        redPawnImage = Bitmap.createScaledBitmap(redPawnImage, 120, 120, false);
 
-        whiteKingImage = Bitmap.createScaledBitmap(whiteKingImage, 120, 120, false);
+        redKingImage = Bitmap.createScaledBitmap(redKingImage, 120, 120, false);
 
         blackPawnImage = Bitmap.createScaledBitmap(blackPawnImage, 120, 120, false);
 
@@ -125,9 +118,7 @@ public class CheckerBoardSurfaceView extends FlashSurfaceView {
             }
         }
 
-        if (state == null) {
-            return;
-        }
+        if (state == null) return;
 
         for (int row = 0; row < 8; row++) {
             for (int col = 0; col < 8; col++) {
@@ -135,8 +126,6 @@ public class CheckerBoardSurfaceView extends FlashSurfaceView {
                 drawPiece(canvas, state.getPiece(row, col), row, col);
             }
         }
-
-
     }
 
 
@@ -186,11 +175,15 @@ public class CheckerBoardSurfaceView extends FlashSurfaceView {
         Paint paint = new Paint();
         if (piece.getPieceColor() == Piece.ColorType.RED) {
             if (piece.getPieceType() == Piece.PieceType.PAWN) {
-                canvas.drawBitmap(whitePawnImage, xLoc, yLoc, paint);
+                canvas.drawBitmap(redPawnImage, xLoc, yLoc, paint);
+            } else if (piece.getPieceType() == Piece.PieceType.KING) {
+                canvas.drawBitmap(redKingImage, xLoc, yLoc, paint);
             }
         } else if (piece.getPieceColor() == Piece.ColorType.BLACK) {
             if (piece.getPieceType() == Piece.PieceType.PAWN) {
                 canvas.drawBitmap(blackPawnImage, xLoc, yLoc, paint);
+            } else if (piece.getPieceType() == Piece.PieceType.KING) {
+                canvas.drawBitmap(blackKingImage, xLoc, yLoc, paint);
             }
         }
     }

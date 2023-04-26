@@ -31,6 +31,7 @@ public class CheckerLocalGame extends LocalGame {
     // piece that was selected by row and column
     private int tempRow;
     private int tempCol;
+    private int piecesRemain = 12;
 
     // all of the initial movements of the piece selected
     private ArrayList<Integer> initialMovementsX = new ArrayList<>();
@@ -60,11 +61,11 @@ public class CheckerLocalGame extends LocalGame {
     /**
      * Constructor for the CheckerLocalGame with loaded chessState
      *
-     * @param chessState
+     * @param checkerState
      */
-    public CheckerLocalGame(CheckerState chessState) {
+    public CheckerLocalGame(CheckerState checkerState) {
         super();
-        super.state = new CheckerState(chessState);
+        super.state = new CheckerState(checkerState);
     }
 
     /**
@@ -148,7 +149,6 @@ public class CheckerLocalGame extends LocalGame {
                     }
                 }
             }
-
 
             // highlight the piece they tapped
             state.setHighlight(row, col);
@@ -243,10 +243,12 @@ public class CheckerLocalGame extends LocalGame {
         // of that piece and add them to the initialMovement arraylists.
         if (p.getPieceType() == Piece.PieceType.PAWN) {
             Pawn pawn = new Pawn(p, state, p.getPieceColor());
+            // Get all possible movements for pawn
             for (int i = 0; i < pawn.getX().size(); i++) {
                 initialMovementsX.add(pawn.getX().get(i));
                 initialMovementsY.add(pawn.getY().get(i));
             }
+            // Get all possible captures for pawn
             for (int j = 0; j < pawn.getXAttack().size(); j++) {
                 initialMovementsX.add(pawn.getXAttack().get(j));
                 initialMovementsY.add(pawn.getYAttack().get(j));
@@ -256,9 +258,26 @@ public class CheckerLocalGame extends LocalGame {
 
         } else if (p.getPieceType() == Piece.PieceType.KING) {
             King king = new King(p, state, p.getPieceColor());
+            // Get all possible movements for king
             for (int i = 0; i < king.getX().size(); i++) {
                 initialMovementsX.add(king.getX().get(i));
                 initialMovementsY.add(king.getY().get(i));
+            }
+            // Get al possible captures for king
+            for (int j = 0; j < king.getXAttack().size(); j++) {
+                initialMovementsX.add(king.getXAttack().get(j));
+                initialMovementsY.add(king.getYAttack().get(j));
+                XcaptCoords.add(king.getXAttack().get(j));
+                YcaptCoords.add(king.getXAttack().get(j));
+            }
+        }
+        // Change Red Pawn into a king
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                // If the piece is on the back row, promote it to a king
+                if (j == 0 && state.getPiece(i, j).getPieceColor() == Piece.ColorType.RED) {
+                    state.setPiece(i, j, new Piece(Piece.PieceType.KING, Piece.ColorType.RED, i, j));
+                }
             }
         }
     }
@@ -367,41 +386,45 @@ public class CheckerLocalGame extends LocalGame {
             }
             
             Piece tempPiece = state.getPiece(tempRow, tempCol);
-
             
             // set the new position to be the piece they originally selected
             boolean isCapture = state.getPiece(row,col).getPieceType() != Piece.PieceType.EMPTY;
             CheckerHumanPlayer chp = players[0] instanceof CheckerHumanPlayer ?
                     (CheckerHumanPlayer) players[0] : (CheckerHumanPlayer) players[1];
-            if(CheckerPromotionAction.isPromotion){
+            if (CheckerPromotionAction.isPromotion) {
                 state.setPiece(promo.getRow(),promo.getCol(),promo.getPromotionPiece());
                 CheckerPromotionAction.isPromotion = false;
-            }else {
+            } else {
                 state.setPiece(row, col, state.getPiece(tempRow, tempCol));
+
                 // Get distance between selected piece and new place
                 int xdistance = (tempRow - row);
                 int ydistance = (tempCol - col);
                 // Red capturing right diagonal
                 if (xdistance == -2 && ydistance == 2) {
                     Piece piece = state.getPiece((tempRow + 1), (tempCol - 1));
+                    if (piece.getPieceColor() == Piece.ColorType.RED) piecesRemain--;
                     piece.setPieceType(Piece.PieceType.EMPTY);
                     piece.setColorType(Piece.ColorType.EMPTY);
                 }
                 // Red capturing left diagonal
                 if (xdistance == 2 && ydistance == 2) {
                     Piece piece = state.getPiece((tempRow - 1), (tempCol - 1));
+                    if (piece.getPieceColor() == Piece.ColorType.RED) piecesRemain--;
                     piece.setPieceType(Piece.PieceType.EMPTY);
                     piece.setColorType(Piece.ColorType.EMPTY);
                 }
                 // Black capturing right diagonal
                 if (xdistance == -2 && ydistance == -2) {
                     Piece piece = state.getPiece((tempRow + 1), (tempCol + 1));
+                    if (piece.getPieceColor() == Piece.ColorType.RED) piecesRemain--;
                     piece.setPieceType(Piece.PieceType.EMPTY);
                     piece.setColorType(Piece.ColorType.EMPTY);
                 }
                 // Black capturing left diagonal
                 if (xdistance == 2 && ydistance == -2) {
                     Piece piece = state.getPiece((tempRow - 1), (tempCol + 1));
+                    if (piece.getPieceColor() == Piece.ColorType.RED) piecesRemain--;
                     piece.setPieceType(Piece.PieceType.EMPTY);
                     piece.setColorType(Piece.ColorType.EMPTY);
                 }
@@ -416,7 +439,7 @@ public class CheckerLocalGame extends LocalGame {
 
 
             }
-            chp.displayMovesLog(row,col,tempRow,state,isCapture);
+            //chp.displayMovesLog(row,col,tempRow,state,isCapture);
             // change the piece at the selection to be an empty piece
             state.setPiece(tempRow, tempCol, state.emptyPiece);
 
@@ -433,8 +456,6 @@ public class CheckerLocalGame extends LocalGame {
 
             if (color == Piece.ColorType.BLACK) {
                 if (checkForDanger(state, Piece.ColorType.RED, color)) {
-
-
                     checkIfGameOver();
                 } else {
                     winCondition = checkForStalemate(state);
@@ -442,8 +463,6 @@ public class CheckerLocalGame extends LocalGame {
                 }
             } else if (color == Piece.ColorType.RED) {
                 if (checkForDanger(state, Piece.ColorType.BLACK, color)) {
-
-
                     checkIfGameOver();
                 } else {
                     winCondition = checkForStalemate(state);
@@ -509,13 +528,9 @@ public class CheckerLocalGame extends LocalGame {
     }
 
     public boolean checkPromotion(Piece piece, int col,CheckerHumanPlayer chp){
-        if(piece.getPieceType() != Piece.PieceType.PAWN){return false;}
-        if(piece.getPieceColor() == Piece.ColorType.RED && col == 0){
-            //return new Piece(Piece.PieceType.QUEEN, Piece.ColorType.RED, piece.getX(), 0);
-            return true;
-        }else if(piece.getPieceColor() == Piece.ColorType.BLACK && col == 7){
-            return true;
-        }
+        if (piece.getPieceType() != Piece.PieceType.PAWN) return false;
+        if (piece.getPieceColor() == Piece.ColorType.RED && col == 0) return true;
+        else if(piece.getPieceColor() == Piece.ColorType.BLACK && col == 7) return true;
         return false;
     }
 }

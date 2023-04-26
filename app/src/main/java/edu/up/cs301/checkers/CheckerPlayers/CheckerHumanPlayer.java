@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 import edu.up.cs301.checkers.CheckerActionMessage.CheckerMoveAction;
 import edu.up.cs301.checkers.CheckerActionMessage.CheckerPromotionAction;
 import edu.up.cs301.checkers.CheckerActionMessage.CheckerSelectAction;
@@ -104,6 +106,7 @@ public class CheckerHumanPlayer extends GameHumanPlayer implements View.OnTouchL
 
             surfaceViewBlackCapture.invalidate();
         }
+
     }
 
     /**
@@ -127,7 +130,7 @@ public class CheckerHumanPlayer extends GameHumanPlayer implements View.OnTouchL
         player2name = myActivity.findViewById(R.id.nameWhite);
 
         //resignation
-        resignButton = myActivity.findViewById(R.id.surrenderButton);
+        resignButton = myActivity.findViewById(R.id.homeButton);
 
         //captures
         surfaceViewWhiteCapture = (RedCaptureSurfaceView) myActivity.findViewById(R.id.whiteCaptures);
@@ -172,7 +175,7 @@ public class CheckerHumanPlayer extends GameHumanPlayer implements View.OnTouchL
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
         if (view.getId() == resignButton.getId()) {
-            MessageBox.popUpMessage("Game Over!\n You have resigned", myActivity);
+            MessageBox.popUpMessage("You are exiting the game:\n Returning to Home Screen", myActivity);
             CountDownTimer cdt = new CountDownTimer(3000, 10) {
                 @Override
                 public void onTick(long millisUntilFinished) {
@@ -181,7 +184,7 @@ public class CheckerHumanPlayer extends GameHumanPlayer implements View.OnTouchL
 
                 @Override
                 public void onFinish() {
-                    myActivity.finishAffinity();
+                    myActivity.recreate();
                 }
             };
             cdt.start();
@@ -195,14 +198,12 @@ public class CheckerHumanPlayer extends GameHumanPlayer implements View.OnTouchL
         // loop through all of the locations on the board and compare
         // the location pressed to the pixels on the screen to find
         // the exact location of the click according to the b oard
-
-        if (!isPromotion) {
-            for (int i = 0; i < 8; i++) {
-                for (int j = 0; j < 8; j++) {
-                    if (motionEvent.getX() > 20 + (i * 115) && motionEvent.getX() < 175 + (i * 115)) {
-                        if (motionEvent.getY() > 20 + (j * 115) && motionEvent.getY() < 175 + (j * 115)) {
-
-                            // create the select action
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (!isPromotion) {
+                    if (motionEvent.getX() > 20 + (i * 120) && motionEvent.getX() < 175 + (i * 120)) {
+                        if (motionEvent.getY() > 20 + (j * 120) && motionEvent.getY() < 175 + (j * 120)) {
+                                // create the select action
                             if (state.getPiece(i, j).getPieceColor() == Piece.ColorType.RED && state.getWhoseMove() == 0) {
                                 CheckerSelectAction select = new CheckerSelectAction(this, i, j);
                                 currPiece = state.getPiece(i, j);
@@ -218,7 +219,6 @@ public class CheckerHumanPlayer extends GameHumanPlayer implements View.OnTouchL
                                         game.sendAction(move);
                                         break;
                                     }
-                                    promptForPromotion(i, j);
                                     break;
                                 }
                                 CheckerMoveAction move = new CheckerMoveAction(this, i, j);
@@ -230,29 +230,28 @@ public class CheckerHumanPlayer extends GameHumanPlayer implements View.OnTouchL
                                         game.sendAction(move);
                                         break;
                                     }
-                                    promptForPromotion(i, j);
                                     break;
                                 }
                                 CheckerMoveAction move = new CheckerMoveAction(this, i, j);
                                 game.sendAction(move);
                             }
                             surfaceViewCheckerBoard.invalidate();
-                            surfaceViewWhiteCapture.invalidate();
-                            surfaceViewBlackCapture.invalidate();
+                            // surfaceViewWhiteCapture.invalidate();
+                            // surfaceViewBlackCapture.invalidate();
                         }
                     }
-                }
-                if (isPromotion) {
-                    break;
+                    if (isPromotion) {
+                        sendPromotionAction(i, j, Piece.ColorType.RED);
+                        surfaceViewCheckerBoard.invalidate();
+                    }
                 }
             }
-
         }
         // register that we have handled the event
         return true;
     }
 
-
+/**
     public void displayMovesLog ( int currRow, int currCol, int tempRow, CheckerState state,
                                   boolean isCapture){
         if (state == null) return;
@@ -308,10 +307,13 @@ public class CheckerHumanPlayer extends GameHumanPlayer implements View.OnTouchL
         return 'q';
     }
 
+**/
 
-
-
-
+    public void sendPromotionAction(int xVal, int yVal, Piece.ColorType type) {
+        game.sendAction(new CheckerPromotionAction(this,
+                new Piece(Piece.PieceType.KING, type, xVal, yVal), xVal, yVal));
+    }
+    /**
     public void makePromotion(Piece.PieceType type) {
         Piece.ColorType currColor = state.getWhoseMove() == 0 ? Piece.ColorType.RED : Piece.ColorType.BLACK;
         Piece set = new Piece(type, currColor, savedX, savedY);
@@ -322,15 +324,16 @@ public class CheckerHumanPlayer extends GameHumanPlayer implements View.OnTouchL
         isPromotion = false;
 
     }
+    **/
 
-    public void promptForPromotion(int i, int j) {
-        isPromotion = true;
-        savedX = i;
-        savedY = j;
-        MessageBox.popUpMessage("Pick a promotion piece", myActivity);
-
+    public void checkBoardPromotion(CheckerState state) {
+        for (int i = 0; i < 8; i++) {
+            if (state.getPiece(i,0).getColorType() == Piece.ColorType.RED) {
+                  sendPromotionAction(i,0, Piece.ColorType.RED);
+                  surfaceViewCheckerBoard.invalidate();
+            }
+        }
     }
-
 
     public boolean validPawnMove(int row, int col, Piece currPiece) {
         if(currPiece.getY() > col + 1){

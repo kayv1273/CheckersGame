@@ -25,7 +25,7 @@ public class Pawn {
         xMovementAttack = new ArrayList<>();
         yMovementAttack = new ArrayList<>();
         if(color == Piece.ColorType.RED) {
-            pawnMovementWhite(state);
+            pawnMovementRed(state);
             pawnCaptureRed(state);
         } else if (color == Piece.ColorType.BLACK) {
             pawnMovementBlack(state);
@@ -33,7 +33,7 @@ public class Pawn {
         }
     }
 
-    public void pawnMovementWhite(CheckerState state) {
+    public void pawnMovementRed(CheckerState state) {
         //check left border
         if (row == 0 && col > 0) {
             if (state.getPiece(row + 1, col - 1).getPieceColor() == Piece.ColorType.EMPTY) {
@@ -95,7 +95,8 @@ public class Pawn {
     public void pawnCaptureRed(CheckerState state) {
         //check left border
         if ((row == 0 || row == 1) && col > 1) {
-            if (state.getPiece(row + 1, col - 1).getPieceColor() == Piece.ColorType.BLACK && state.getPiece(row + 2, col - 2).getPieceColor() == Piece.ColorType.EMPTY) {
+            if (state.getPiece(row + 1, col - 1).getPieceColor() == Piece.ColorType.BLACK &&
+                    state.getPiece(row + 2, col - 2).getPieceColor() == Piece.ColorType.EMPTY) {
                 xMovementAttack.add(row + 2);
                 yMovementAttack.add(col - 2);
             }
@@ -103,7 +104,8 @@ public class Pawn {
 
         //check right border
         if ((row == 7 || row == 6) && col > 1) {
-            if (state.getPiece(row - 1, col - 1).getPieceColor() == Piece.ColorType.BLACK && state.getPiece(row - 2, col - 2).getPieceColor() == Piece.ColorType.EMPTY) {
+            if (state.getPiece(row - 1, col - 1).getPieceColor() == Piece.ColorType.BLACK &&
+                    state.getPiece(row - 2, col - 2).getPieceColor() == Piece.ColorType.EMPTY) {
                 xMovementAttack.add(row - 2);
                 yMovementAttack.add(col - 2);
             }
@@ -111,11 +113,13 @@ public class Pawn {
 
         //anywhere else on the board
         if ((row > 1 && row < 6) && col > 1) {
-            if (state.getPiece(row + 1, col - 1).getPieceColor() == Piece.ColorType.BLACK && (state.getPiece(row + 2, col - 2).getPieceColor() == Piece.ColorType.EMPTY)) {
+            if (state.getPiece(row + 1, col - 1).getPieceColor() == Piece.ColorType.BLACK &&
+                    (state.getPiece(row + 2, col - 2).getPieceColor() == Piece.ColorType.EMPTY)) {
                 xMovementAttack.add(row + 2);
                 yMovementAttack.add(col - 2);
             }
-            if (state.getPiece(row - 1, col - 1).getPieceColor() == Piece.ColorType.BLACK && (state.getPiece(row - 2, col - 2).getPieceColor() == Piece.ColorType.EMPTY)) {
+            if (state.getPiece(row - 1, col - 1).getPieceColor() == Piece.ColorType.BLACK &&
+                    (state.getPiece(row - 2, col - 2).getPieceColor() == Piece.ColorType.EMPTY)) {
                 xMovementAttack.add(row - 2);
                 yMovementAttack.add(col - 2);
             }
@@ -125,7 +129,8 @@ public class Pawn {
     public void pawnCaptureBlack(CheckerState state) {
         //check left border
         if ((row == 0 || row == 1) && col < 6) {
-            if (state.getPiece(row + 1, col + 1).getPieceColor() == Piece.ColorType.RED && state.getPiece(row + 2, col + 2).getPieceColor() == Piece.ColorType.EMPTY) {
+            if (state.getPiece(row + 1, col + 1).getPieceColor() == Piece.ColorType.RED &&
+                    state.getPiece(row + 2, col + 2).getPieceColor() == Piece.ColorType.EMPTY) {
                 xMovementAttack.add(row + 2);
                 yMovementAttack.add(col + 2);
             }
@@ -133,7 +138,8 @@ public class Pawn {
 
         //check right border
         if ((row == 7 || row == 6) && col < 6) {
-            if (state.getPiece(row - 1, col + 1).getPieceColor() == Piece.ColorType.RED && state.getPiece(row - 2, col + 2).getPieceColor() == Piece.ColorType.EMPTY) {
+            if (state.getPiece(row - 1, col + 1).getPieceColor() == Piece.ColorType.RED &&
+                    state.getPiece(row - 2, col + 2).getPieceColor() == Piece.ColorType.EMPTY) {
                 xMovementAttack.add(row - 2);
                 yMovementAttack.add(col + 2);
             }
@@ -141,11 +147,13 @@ public class Pawn {
 
         //anywhere else on the board
         if ((row > 1 && row < 6) && col < 6) {
-            if (state.getPiece(row + 1, col + 1).getPieceColor() == Piece.ColorType.RED && (state.getPiece(row + 2, col + 2).getPieceColor() == Piece.ColorType.EMPTY)) {
+            if (state.getPiece(row + 1, col + 1).getPieceColor() == Piece.ColorType.RED &&
+                    (state.getPiece(row + 2, col + 2).getPieceColor() == Piece.ColorType.EMPTY)) {
                 xMovementAttack.add(row + 2);
                 yMovementAttack.add(col + 2);
             }
-            if (state.getPiece(row - 1, col + 1).getPieceColor() == Piece.ColorType.RED && (state.getPiece(row - 2, col + 2).getPieceColor() == Piece.ColorType.EMPTY)) {
+            if (state.getPiece(row - 1, col + 1).getPieceColor() == Piece.ColorType.RED && (
+                    state.getPiece(row - 2, col + 2).getPieceColor() == Piece.ColorType.EMPTY)) {
                 xMovementAttack.add(row - 2);
                 yMovementAttack.add(col + 2);
             }

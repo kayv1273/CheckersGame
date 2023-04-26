@@ -38,12 +38,12 @@ public class CheckerComputerPlayer2 extends GameComputerPlayer {
         if (info instanceof NotYourTurnInfo) return;
         //Ignore illegal move info too
         if (info instanceof IllegalMoveInfo) return;
-        CheckerState chessState = new CheckerState((CheckerState) info);
-        //if(chessState.isPromoting){return;}
-        if (chessState.getWhoseMove() == 1 && playerNum == 0) {
+        CheckerState checkerState = new CheckerState((CheckerState) info);
+        //if(checkerState.isPromoting){return;}
+        if (checkerState.getWhoseMove() == 1 && playerNum == 0) {
             return;
         }
-        if (chessState.getWhoseMove() == 0 && playerNum == 1) {
+        if (checkerState.getWhoseMove() == 0 && playerNum == 1) {
             return;
         }
 
@@ -51,13 +51,13 @@ public class CheckerComputerPlayer2 extends GameComputerPlayer {
         availablePieces = new ArrayList<>();
         for (int i = 0; i < 8; i++) {
             for (int k = 0; k < 8; k++) {
-                if (chessState.getDrawing(i, k) == 1) {
+                if (checkerState.getDrawing(i, k) == 1) {
                     return;
                 }
-                if (chessState.getDrawing(i, k) == 3) {
+                if (checkerState.getDrawing(i, k) == 3) {
                     sleep(1);
                 }
-                Piece p = chessState.getPiece(i, k);
+                Piece p = checkerState.getPiece(i, k);
                 if (playerNum == 0 && p.getPieceColor() == Piece.ColorType.RED) {
                     availablePieces.add(p);
                 } else if (playerNum == 1 && p.getPieceColor() == Piece.ColorType.BLACK) {
@@ -65,8 +65,7 @@ public class CheckerComputerPlayer2 extends GameComputerPlayer {
                 }
             }
         }
-        // randomly shuffle the pieces in the array
-        Collections.shuffle(availablePieces);
+
         selection = availablePieces.get(0);
         // create variables to hold the x and y of the position selected
         int xVal = selection.getX();
@@ -74,9 +73,9 @@ public class CheckerComputerPlayer2 extends GameComputerPlayer {
         // call the selection game action
         game.sendAction(new CheckerSelectAction(this, xVal, yVal));
         // check if the piece is one that can move
-        CheckerState chessState2 = (CheckerState) game.getGameState();
+        CheckerState checkerState2 = (CheckerState) game.getGameState();
         for (int i = 1; i < availablePieces.size(); i++) {
-            if (!chessState2.getCanMove()) {
+            if (!checkerState2.getCanMove()) {
                 selection = availablePieces.get(i);
                 xVal = selection.getX();
                 yVal = selection.getY();
@@ -87,25 +86,35 @@ public class CheckerComputerPlayer2 extends GameComputerPlayer {
         }
         sleep(1);
 
-        if(chessState2.getGameOver()) {
+        if(checkerState2.getGameOver()) {
             return;
         }
         // an arraylist that holds the index values of the two movement arraylists (x and y)
         ArrayList<Integer> index = new ArrayList<>();
         // add all of the indexes into the ints value
-        for (int i = 0; i < chessState2.getNewMovementsX().size(); i++) {
+        for (int i = 0; i < checkerState2.getNewMovementsX().size(); i++) {
             index.add(i);
         }
         // shuffle the indexes so a random x and y value can be taken
-        Collections.shuffle(index);
         // set the x and y values to the new movements array at the index
         for(int i = 0; i < index.size(); i++) {
-            xVal = chessState2.getNewMovementsX().get(index.get(i));
-            yVal = chessState2.getNewMovementsY().get(index.get(i));
-            if (chessState2.getPiece(xVal, yVal).getPieceColor() != Piece.ColorType.EMPTY) {
+            xVal = checkerState2.getNewMovementsX().get(index.get(i));
+            yVal = checkerState2.getNewMovementsY().get(index.get(i));
+            if (checkerState2.getPiece(xVal, yVal).getPieceColor() != Piece.ColorType.EMPTY) {
                 break;
             }
         }
+
+
+        for (int i = 0; i < checkerState2.getNewMovementsX().size(); i++) {
+            if ((xVal - checkerState2.getNewMovementsX().get(i) == 2 || xVal - checkerState2.getNewMovementsX().get(i) == -2) &&
+            (yVal - checkerState2.getNewMovementsY().get(i) == 2 || yVal - checkerState2.getNewMovementsY().get(i) == -2)) {
+                xVal = checkerState2.getNewMovementsX().get(index.get(i));
+                yVal = checkerState2.getNewMovementsY().get(index.get(i));
+                break;
+            }
+        }
+
         // if the piece is a pawn look for promotion
         if (selection.getPieceType() == Piece.PieceType.PAWN) {
             if (selection.getPieceColor() == Piece.ColorType.BLACK) {
