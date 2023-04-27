@@ -21,7 +21,7 @@ import edu.up.cs301.game.GameFramework.players.GamePlayer;
  * @author Ruth
  * @author Nick
  * @author Ethan
- * @version 4.13.2023
+ * @version 4.26.2023
  */
 
 public class CheckerLocalGame extends LocalGame {
@@ -75,7 +75,7 @@ public class CheckerLocalGame extends LocalGame {
      * number of players.  For example you may need to init your
      * game state or part of it.  Loading data could also happen here.
      *
-     * @param players
+     * @param players all the players
      */
 
     @Override
@@ -83,6 +83,10 @@ public class CheckerLocalGame extends LocalGame {
         super.start(players);
     }
 
+    /**
+     * Check if the game is over
+     * @return message of win
+     */
     @Override
     protected String checkIfGameOver() {
 
@@ -192,7 +196,6 @@ public class CheckerLocalGame extends LocalGame {
             // determine what team is moving (red/black) and move the piece
             if (tempP.getPieceColor() == Piece.ColorType.RED) {
                 if (!setMovement(state, row, col, Piece.ColorType.RED)) {
-
                     state.removeHighlight();
                     state.removeCircle();
                     return false;
@@ -282,7 +285,7 @@ public class CheckerLocalGame extends LocalGame {
      * @param state      the copied state displaying a movement
      * @param teamColor  the color the player that is making a movement
      * @param enemyColor the color of the other player
-     * @return Determines if a king is in check
+     * @return
      */
     public boolean checkForDanger(CheckerState state, Piece.ColorType teamColor, Piece.ColorType enemyColor) {
         return false;
@@ -456,6 +459,11 @@ public class CheckerLocalGame extends LocalGame {
         }
     }
 
+    /**
+     * Check if the game reaches a stalemate
+     * @param state
+     * @return S for stalemate, otherwise null
+     */
     public String checkForStalemate(CheckerState state) {
         Piece.ColorType color = null;
 
@@ -499,7 +507,7 @@ public class CheckerLocalGame extends LocalGame {
 
 
 
-    // unit testing
+    /*// unit testing
     public int whoWon(){
         String gameOver = checkIfGameOver();
         if(gameOver == null || gameOver.equals("It's a cat's game.")) return -1;
@@ -512,5 +520,5 @@ public class CheckerLocalGame extends LocalGame {
         if (piece.getPieceColor() == Piece.ColorType.RED && col == 0) return true;
         else if(piece.getPieceColor() == Piece.ColorType.BLACK && col == 7) return true;
         return false;
-    }
+    }*/
 }

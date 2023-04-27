@@ -87,11 +87,7 @@ public class CheckerComputerPlayer1 extends GameComputerPlayer {
                 }
             }
         }
-        if (availablePieces.isEmpty()) {
-            /**win statement and pop up screen someone fix this please
-             * */
 
-        }
         // randomly shuffle the pieces in the array
         Collections.shuffle(availablePieces);
         selection = availablePieces.get(0);
@@ -151,6 +147,25 @@ public class CheckerComputerPlayer1 extends GameComputerPlayer {
 
         // send the new move action
         game.sendAction(new CheckerMoveAction(this, xVal, yVal));
+
+        // logic for if the AI wins
+        // assume true
+        boolean gameOver = true;
+        for(int i = 0; i < 8; i++) {
+            for(int j = 0; j < 8; j++) {
+                if (checkerState2.getPiece(i,j).getPieceColor() == Piece.ColorType.RED) {
+                    // if any black pieces remain, the game is not over
+                    gameOver = false;
+                }
+            }
+        }
+
+        if(gameOver) {
+            // pop up message for human wins
+
+            //line used to debug and ensure proper functionality
+            System.out.println("test");
+        }
     }
 
     /**
