@@ -197,7 +197,7 @@ public class CheckerHumanPlayer extends GameHumanPlayer implements View.OnTouchL
 
         // loop through all of the locations on the board and compare
         // the location pressed to the pixels on the screen to find
-        // the exact location of the click according to the b oard
+        // the exact location of the click according to the board
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 if (!isPromotion) {
