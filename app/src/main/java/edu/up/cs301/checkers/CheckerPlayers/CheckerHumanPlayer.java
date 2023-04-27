@@ -251,90 +251,10 @@ public class CheckerHumanPlayer extends GameHumanPlayer implements View.OnTouchL
         return true;
     }
 
-/**
-    public void displayMovesLog ( int currRow, int currCol, int tempRow, CheckerState state,
-                                  boolean isCapture){
-        if (state == null) return;
-        Piece.PieceType currPiece = state.getPiece(currRow, currCol).getPieceType();
-        String toReturn = "";
-        if (justStarted) {
-            movesLog.append("\n");
-            justStarted = false;
-        }
-        boolean whitesTurn = state.getWhoseMove() == 0;
-        if (whitesTurn) {
-            toReturn += numTurns + ")";
-        }
-        if (currPiece == Piece.PieceType.KING) {
-            toReturn += "K";
-            if (isCapture && currPiece == Piece.PieceType.PAWN) {
-                toReturn += determineRow(tempRow);
-                toReturn += "x";
-            } else if (isCapture) {
-                toReturn += "x";
-            }
-            toReturn += determineRow(currRow);
-            currCol = 8 - currCol;
-            toReturn += currCol + " ";
-            if (!whitesTurn) {
-                numTurns++;
-                toReturn += "\n";
-            }
-            movesLog.append(toReturn);
-
-        }
-    }
-
-    private char determineRow(int row) {
-        switch (row) {
-            case (0):
-                return 'a';
-            case (1):
-                return 'b';
-            case (2):
-                return 'c';
-            case (3):
-                return 'd';
-            case (4):
-                return 'e';
-            case (5):
-                return 'f';
-            case (6):
-                return 'g';
-            case (7):
-                return 'h';
-        }
-        return 'q';
-    }
-
-**/
-
     public void sendPromotionAction(int xVal, int yVal, Piece.ColorType type) {
         game.sendAction(new CheckerPromotionAction(this,
                 new Piece(Piece.PieceType.KING, type, xVal, yVal), xVal, yVal));
     }
-    /**
-    public void makePromotion(Piece.PieceType type) {
-        Piece.ColorType currColor = state.getWhoseMove() == 0 ? Piece.ColorType.RED : Piece.ColorType.BLACK;
-        Piece set = new Piece(type, currColor, savedX, savedY);
-        CheckerPromotionAction promo = new CheckerPromotionAction(this, set ,savedX,savedY);
-        game.sendAction(promo);
-        CheckerMoveAction move = new CheckerMoveAction(this, savedX, savedY);
-        game.sendAction(move);
-        isPromotion = false;
-
-    }
-    **/
-
-    public void checkBoardPromotion(CheckerState state) {
-        for (int i = 0; i < 8; i++) {
-            if (state.getPiece(i,0).getColorType() == Piece.ColorType.RED) {
-                  sendPromotionAction(i,0, Piece.ColorType.RED);
-                  surfaceViewCheckerBoard.invalidate();
-            }
-        }
-    }
-
     public boolean validPawnMove(int row, int col, Piece currPiece) {
         if(currPiece.getY() > col + 1){
             return false;

@@ -17,8 +17,6 @@ public class RedCaptureSurfaceView extends FlashSurfaceView {
 
     protected Bitmap blackPawnImage;
 
-    protected Bitmap blackKingImage;
-
     private int width;
     private int height;
 
@@ -39,12 +37,7 @@ public class RedCaptureSurfaceView extends FlashSurfaceView {
         init();
 
         blackPawnImage = BitmapFactory.decodeResource(getResources(), R.drawable.bp);
-
-        blackKingImage = BitmapFactory.decodeResource(getResources(), R.drawable.bk);
-
         blackPawnImage = Bitmap.createScaledBitmap(blackPawnImage, width, height, false);
-
-        blackKingImage = Bitmap.createScaledBitmap(blackKingImage, width, height, false);
 
     }
 
@@ -62,11 +55,6 @@ public class RedCaptureSurfaceView extends FlashSurfaceView {
 //            Log.d("Testing", p.getPieceType().toString());
             if (p.getPieceType() == Piece.PieceType.PAWN) {
                 canvas.drawBitmap(blackPawnImage, xLoc, yLoc, paint);
-                increment();
-
-            } else if (p.getPieceType() == Piece.PieceType.KING) {
-                canvas.drawBitmap(blackKingImage, xLoc, yLoc, paint);
-                increment();
             }
         }
 
@@ -80,14 +68,6 @@ public class RedCaptureSurfaceView extends FlashSurfaceView {
 
     public void setState(CheckerState state) {
         checkerState = state;
-    }
-
-    public void increment(){
-        xLoc += width;
-        if(xLoc > width*11){
-            xLoc = 5;
-            yLoc = 5 + height;
-        }
     }
 
 }

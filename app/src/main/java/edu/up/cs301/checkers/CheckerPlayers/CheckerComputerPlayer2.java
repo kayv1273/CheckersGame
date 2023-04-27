@@ -16,7 +16,8 @@ import edu.up.cs301.game.GameFramework.infoMessage.GameInfo;
 public class CheckerComputerPlayer2 extends GameComputerPlayer {
     private Piece selection;
     private ArrayList<Piece> availablePieces;
-    ArrayList<Piece> capturePieces;
+    private ArrayList<Piece> capturePieces;
+    private boolean isCapturePieces = false;
     private ArrayList<Integer> ints;
 
     /**
@@ -50,7 +51,7 @@ public class CheckerComputerPlayer2 extends GameComputerPlayer {
 
         // all of the pieces that can move on the computers side
         availablePieces = new ArrayList<>();
-        capturePieces = new ArrayList<Piece>();
+        capturePieces = new ArrayList<>();
         for (int i = 0; i < 8; i++) {
             for (int k = 0; k < 8; k++) {
                 if (checkerState.getDrawing(i, k) == 1) {
@@ -64,20 +65,27 @@ public class CheckerComputerPlayer2 extends GameComputerPlayer {
                     availablePieces.add(p);
                     if (canTake(checkerState,i,k)) {
                         capturePieces.add(p);
+                        isCapturePieces = true;
                     }
                 } else if (playerNum == 1 && p.getPieceColor() == Piece.ColorType.BLACK) {
                     availablePieces.add(p);
                     if (canTake(checkerState,i,k)) {
                         capturePieces.add(p);
+                        isCapturePieces = true;
                     }
                 }
             }
         }
-        //if (!capturePieces.isEmpty()) {
-            //selection = capturePieces.get(0);
-        //} else {
+
+        Collections.shuffle(capturePieces);
+        Collections.shuffle(availablePieces);
+
+        if (!capturePieces.isEmpty()) {
+            selection = capturePieces.get(0);
+        } else {
             selection = availablePieces.get(0);
-        //}
+        }
+
         // create variables to hold the x and y of the position selected
         int xVal = selection.getX();
         int yVal = selection.getY();
@@ -85,14 +93,27 @@ public class CheckerComputerPlayer2 extends GameComputerPlayer {
         game.sendAction(new CheckerSelectAction(this, xVal, yVal));
         // check if the piece is one that can move
         CheckerState checkerState2 = (CheckerState) game.getGameState();
-        for (int i = 1; i < availablePieces.size(); i++) {
-            if (!checkerState2.getCanMove()) {
-                selection = availablePieces.get(i);
-                xVal = selection.getX();
-                yVal = selection.getY();
-                game.sendAction(new CheckerSelectAction(this, xVal, yVal));
-            } else {
-                break;
+        if (isCapturePieces) {
+            for (int i = 1; i < capturePieces.size(); i++) {
+                if (!checkerState2.getCanMove()) {
+                    selection = availablePieces.get(i);
+                    xVal = selection.getX();
+                    yVal = selection.getY();
+                    game.sendAction(new CheckerSelectAction(this, xVal, yVal));
+                } else {
+                    break;
+                }
+            }
+        } else {
+            for (int i = 1; i < availablePieces.size(); i++) {
+                if (!checkerState2.getCanMove()) {
+                    selection = availablePieces.get(i);
+                    xVal = selection.getX();
+                    yVal = selection.getY();
+                    game.sendAction(new CheckerSelectAction(this, xVal, yVal));
+                } else {
+                    break;
+                }
             }
         }
         sleep(1);
@@ -115,10 +136,19 @@ public class CheckerComputerPlayer2 extends GameComputerPlayer {
                 break;
             }
         }
-        for (Piece piece : availablePieces) {
-            if (canTake(checkerState2,piece.getX(),piece.getY())) {
-                takePiece(checkerState2,xVal,yVal,index);
-                break;
+        if (isCapturePieces) {
+            for (Piece piece : capturePieces) {
+                if (canTake(checkerState2,piece.getX(),piece.getY())) {
+                    takePiece(checkerState2,xVal,yVal,index);
+                    break;
+                }
+            }
+        } else {
+            for (Piece piece : availablePieces) {
+                if (canTake(checkerState2, piece.getX(), piece.getY())) {
+                    takePiece(checkerState2, xVal, yVal, index);
+                    break;
+                }
             }
         }
         //takePiece(checkerState2,xVal,yVal,index);
@@ -163,6 +193,22 @@ public class CheckerComputerPlayer2 extends GameComputerPlayer {
                 take = true;
                 break;
             }
+        }
+        return take;
+    }
+
+    public boolean takeable(CheckerState checkerState2, int x, int y) {
+        boolean take = false;
+        Piece p = checkerState2.getPiece(x,y);
+        if ((checkerState2.getPiece(p.getX() - 2,p.getY() - 2).getPieceColor() == Piece.ColorType.RED &&
+                checkerState2.getPiece(p.getX() - 1,p.getY() - 1).getPieceColor() == Piece.ColorType.EMPTY) ||
+        (checkerState2.getPiece(p.getX() - 2,p.getY() + 2).getPieceColor() == Piece.ColorType.RED &&
+                checkerState2.getPiece(p.getX() - 1,p.getY() + 1).getPieceColor() == Piece.ColorType.EMPTY) ||
+        (checkerState2.getPiece(p.getX() + 2,p.getY() - 2).getPieceColor() == Piece.ColorType.RED &&
+                checkerState2.getPiece(p.getX() + 1,p.getY() - 1).getPieceColor() == Piece.ColorType.EMPTY) ||
+        (checkerState2.getPiece(p.getX() + 2,p.getY() + 2).getPieceColor() == Piece.ColorType.RED &&
+                        checkerState2.getPiece(p.getX() + 1,p.getY() + 1).getPieceColor() == Piece.ColorType.EMPTY)) {
+            take = true;
         }
         return take;
     }

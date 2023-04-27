@@ -23,15 +23,11 @@ import edu.up.cs301.game.R;
 
 public class BlackCaptureSurfaceView extends FlashSurfaceView {
     protected Bitmap redPawnImage;
-
     private int width;
     private int height;
-
     private int xLoc;
     private int yLoc;
-
     private Paint paint;
-
     protected CheckerState checkerState;
 
     public BlackCaptureSurfaceView(Context context) {
@@ -61,7 +57,6 @@ public class BlackCaptureSurfaceView extends FlashSurfaceView {
 //            Log.d("Testing", p.getPieceType().toString());
             if (p.getPieceType() == Piece.PieceType.PAWN) {
                 canvas.drawBitmap(redPawnImage, xLoc, yLoc, paint);
-                increment();
             }
 
         }
@@ -75,13 +70,5 @@ public class BlackCaptureSurfaceView extends FlashSurfaceView {
 
     public void setState(CheckerState state) {
         checkerState = state;
-    }
-
-    public void increment(){
-        xLoc += width;
-        if(xLoc > width*11){
-            xLoc = 5;
-            yLoc = 5 + height;
-        }
     }
 }
