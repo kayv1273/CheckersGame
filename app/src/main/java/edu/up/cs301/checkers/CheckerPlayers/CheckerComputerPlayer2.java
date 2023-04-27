@@ -157,7 +157,7 @@ public class CheckerComputerPlayer2 extends GameComputerPlayer {
                 }
             }
         }
-        //takePiece(checkerState2,xVal,yVal,index);
+
         // if the piece is a pawn look for promotion
         if (selection.getPieceType() == Piece.PieceType.PAWN) {
             if (selection.getPieceColor() == Piece.ColorType.BLACK) {

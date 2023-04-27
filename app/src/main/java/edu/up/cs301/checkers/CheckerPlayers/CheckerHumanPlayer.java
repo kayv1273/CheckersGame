@@ -5,24 +5,18 @@ import android.os.CountDownTimer;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
-
-import java.util.ArrayList;
 
 import edu.up.cs301.checkers.CheckerActionMessage.CheckerMoveAction;
 import edu.up.cs301.checkers.CheckerActionMessage.CheckerPromotionAction;
 import edu.up.cs301.checkers.CheckerActionMessage.CheckerSelectAction;
 import edu.up.cs301.checkers.InfoMessage.CheckerState;
-//import edu.up.cs301.checkers.Views.BlackCaptureSurfaceView;
 import edu.up.cs301.checkers.Views.CheckerBoardSurfaceView;
 import edu.up.cs301.checkers.InfoMessage.Piece;
-//import edu.up.cs301.checkers.Views.RedCaptureSurfaceView;
 import edu.up.cs301.game.GameFramework.GameMainActivity;
 import edu.up.cs301.game.GameFramework.infoMessage.GameInfo;
 import edu.up.cs301.game.GameFramework.infoMessage.IllegalMoveInfo;
 import edu.up.cs301.game.GameFramework.infoMessage.NotYourTurnInfo;
 import edu.up.cs301.game.GameFramework.players.GameHumanPlayer;
-import edu.up.cs301.game.GameFramework.utilities.MessageBox;
 import edu.up.cs301.game.R;
 
 /**
@@ -44,14 +38,6 @@ public class CheckerHumanPlayer extends GameHumanPlayer implements View.OnTouchL
     //public TextView movesLog;
     private CheckerBoardSurfaceView surfaceViewCheckerBoard;
     private Button resignButton;
-
-    //captures surfaceview
-    //private BlackCaptureSurfaceView surfaceViewBlackCapture;
-    //private RedCaptureSurfaceView surfaceViewWhiteCapture;
-
-    //names
-    //private TextView player1name;
-    //private TextView player2name;
 
     public boolean isPromotion;
     public Piece currPiece = new Piece(Piece.PieceType.KING, Piece.ColorType.RED, 0, 0);
@@ -108,11 +94,6 @@ public class CheckerHumanPlayer extends GameHumanPlayer implements View.OnTouchL
         } else {
             surfaceViewCheckerBoard.setState((CheckerState) info);
             surfaceViewCheckerBoard.invalidate();
-
-            //surfaceViewWhiteCapture.setState(state);
-            //surfaceViewBlackCapture.setState(state);
-
-            //surfaceViewBlackCapture.invalidate();
         }
 
     }
@@ -131,31 +112,10 @@ public class CheckerHumanPlayer extends GameHumanPlayer implements View.OnTouchL
         surfaceView = (CheckerBoardSurfaceView) myActivity.findViewById(R.id.checkerBoard);
         surfaceView.setOnTouchListener(this);
 
-
-
-        //moves log
-        //movesLog = myActivity.findViewById(R.id.movesLog);
         surfaceViewCheckerBoard = (CheckerBoardSurfaceView) myActivity.findViewById(R.id.checkerBoard);
-        /*moves log
-        movesLog = myActivity.findViewById(R.id.movesLog);
-        surfaceViewCheckerBoard = (CheckerBoardSurfaceView) myActivity.findViewById(R.id.checkerBoard);*/
-
-
-        /*
-        //player names
-        player1name = myActivity.findViewById(R.id.nameBlack);
-        player2name = myActivity.findViewById(R.id.nameWhite);
-*/
-
-
 
         //resignation
         resignButton = myActivity.findViewById(R.id.homeButton);
-
-        //captures
-        //surfaceViewWhiteCapture = (RedCaptureSurfaceView) myActivity.findViewById(R.id.whiteCaptures);
-        //surfaceViewBlackCapture = (BlackCaptureSurfaceView) myActivity.findViewById(R.id.blackCaptures);
-
 
         surfaceViewCheckerBoard.setOnTouchListener(this);
         resignButton.setOnTouchListener(this);
@@ -173,20 +133,6 @@ public class CheckerHumanPlayer extends GameHumanPlayer implements View.OnTouchL
     }
 
     /**
-     * perform any initialization that needs to be done after the player
-     * knows what their game-position and opponents' names are.
-     */
-    /*
-    protected void initAfterReady() {
-        myActivity.setTitle("Checker: " + allPlayerNames[0] + " vs. " + allPlayerNames[1]);
-        if (allPlayerNames.length == 2) {
-            player1name.setText(allPlayerNames[0]);
-            player2name.setText(allPlayerNames[1]);
-        }
-    }
-*/
-
-    /**
      * callback method when the screen it touched. We're
      * looking for a screen touch (which we'll detect on
      * the "up" movement" onto a tic-tac-tie square
@@ -196,7 +142,6 @@ public class CheckerHumanPlayer extends GameHumanPlayer implements View.OnTouchL
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
         if (view.getId() == resignButton.getId()) {
-            //MessageBox.popUpMessage("You are exiting the game:\n Returning to Home Screen", myActivity);
             CountDownTimer cdt = new CountDownTimer(10, 10) {
                 @Override
                 public void onTick(long millisUntilFinished) {
@@ -257,8 +202,6 @@ public class CheckerHumanPlayer extends GameHumanPlayer implements View.OnTouchL
                                 game.sendAction(move);
                             }
                             surfaceViewCheckerBoard.invalidate();
-                            // surfaceViewWhiteCapture.invalidate();
-                            // surfaceViewBlackCapture.invalidate();
                         }
                     }
                     if (isPromotion) {
