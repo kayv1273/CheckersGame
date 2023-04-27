@@ -60,49 +60,32 @@
 
                 android:text="Home" />
 
-            <LinearLayout
+            <!--
+            <TextView
 
-                android:layout_width="match_parent"
+                android:id="@+id/nameBlack"
+
+                android:layout_width="72dp"
 
                 android:layout_height="match_parent"
 
-                android:layout_weight="3.5"
+                android:gravity="start|center_vertical"
 
-                android:orientation="horizontal">
+                android:textSize="20sp" />
 
+            <TextView
 
+                android:id="@+id/nameWhite"
 
-<!--                THIS IS WHERE ONE OF THE BUGS-->
+                android:layout_width="wrap_content"
 
-                <TextView
+                android:layout_height="match_parent"
 
-                    android:id="@+id/nameBlack"
+                android:gravity="start|center_vertical"
 
-                    android:layout_width="72dp"
-
-                    android:layout_height="match_parent"
-
-                    android:gravity="left|center_vertical"
-
-                    android:textSize="20sp" />
-
-<!--
-                <edu.up.cs301.checkers.Views.BlackCaptureSurfaceView
-
-                    android:id="@+id/blackCaptures"
-
-                    android:layout_width="match_parent"
-
-                    android:layout_height="match_parent"
-
-                    android:layout_weight="5"
-
-                    android:background="#D3D3D3" />
+                android:textSize="20sp" />
 
 -->
-            </LinearLayout>
-
-
             <!--
             <EditText
 
@@ -126,44 +109,6 @@
 
                 android:longClickable="false"/>
 -->
-
-            <LinearLayout
-
-                android:layout_width="match_parent"
-
-                android:layout_height="match_parent"
-
-                android:layout_weight="3.5"
-
-                android:orientation="horizontal">
-
-
-                <TextView
-
-                    android:id="@+id/nameWhite"
-
-                    android:layout_width="wrap_content"
-
-                    android:layout_height="match_parent"
-
-                    android:gravity="left|center_vertical"
-
-                    android:textSize="20sp" />
-
-<!--
-                <edu.up.cs301.checkers.Views.RedCaptureSurfaceView
-
-                    android:id="@+id/whiteCaptures"
-
-                    android:layout_width="match_parent"
-
-                    android:layout_height="match_parent"
-
-                    android:layout_weight="5"
-
-                    android:background="#D3D3D3" />
--->
-            </LinearLayout>
 
 
         </LinearLayout>

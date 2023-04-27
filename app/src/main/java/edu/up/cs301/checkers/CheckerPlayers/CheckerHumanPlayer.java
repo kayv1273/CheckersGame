@@ -50,8 +50,8 @@ public class CheckerHumanPlayer extends GameHumanPlayer implements View.OnTouchL
     //private RedCaptureSurfaceView surfaceViewWhiteCapture;
 
     //names
-    private TextView player1name;
-    private TextView player2name;
+    //private TextView player1name;
+    //private TextView player2name;
 
     public boolean isPromotion;
     public Piece currPiece = new Piece(Piece.PieceType.KING, Piece.ColorType.RED, 0, 0);
@@ -140,9 +140,14 @@ public class CheckerHumanPlayer extends GameHumanPlayer implements View.OnTouchL
         movesLog = myActivity.findViewById(R.id.movesLog);
         surfaceViewCheckerBoard = (CheckerBoardSurfaceView) myActivity.findViewById(R.id.checkerBoard);*/
 
+
+        /*
         //player names
         player1name = myActivity.findViewById(R.id.nameBlack);
         player2name = myActivity.findViewById(R.id.nameWhite);
+*/
+
+
 
         //resignation
         resignButton = myActivity.findViewById(R.id.homeButton);
@@ -171,6 +176,7 @@ public class CheckerHumanPlayer extends GameHumanPlayer implements View.OnTouchL
      * perform any initialization that needs to be done after the player
      * knows what their game-position and opponents' names are.
      */
+    /*
     protected void initAfterReady() {
         myActivity.setTitle("Checker: " + allPlayerNames[0] + " vs. " + allPlayerNames[1]);
         if (allPlayerNames.length == 2) {
@@ -178,7 +184,7 @@ public class CheckerHumanPlayer extends GameHumanPlayer implements View.OnTouchL
             player2name.setText(allPlayerNames[1]);
         }
     }
-
+*/
 
     /**
      * callback method when the screen it touched. We're
