@@ -20,7 +20,7 @@ import edu.up.cs301.game.R;
  * @author Ethan
  * @version 4.13.2023
  */
-
+/*
 public class BlackCaptureSurfaceView extends FlashSurfaceView {
     protected Bitmap redPawnImage;
     private int width;
@@ -72,3 +72,4 @@ public class BlackCaptureSurfaceView extends FlashSurfaceView {
         checkerState = state;
     }
 }
+*/

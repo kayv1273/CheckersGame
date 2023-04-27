@@ -13,10 +13,10 @@ import edu.up.cs301.checkers.CheckerActionMessage.CheckerMoveAction;
 import edu.up.cs301.checkers.CheckerActionMessage.CheckerPromotionAction;
 import edu.up.cs301.checkers.CheckerActionMessage.CheckerSelectAction;
 import edu.up.cs301.checkers.InfoMessage.CheckerState;
-import edu.up.cs301.checkers.Views.BlackCaptureSurfaceView;
+//import edu.up.cs301.checkers.Views.BlackCaptureSurfaceView;
 import edu.up.cs301.checkers.Views.CheckerBoardSurfaceView;
 import edu.up.cs301.checkers.InfoMessage.Piece;
-import edu.up.cs301.checkers.Views.RedCaptureSurfaceView;
+//import edu.up.cs301.checkers.Views.RedCaptureSurfaceView;
 import edu.up.cs301.game.GameFramework.GameMainActivity;
 import edu.up.cs301.game.GameFramework.infoMessage.GameInfo;
 import edu.up.cs301.game.GameFramework.infoMessage.IllegalMoveInfo;
@@ -41,13 +41,13 @@ public class CheckerHumanPlayer extends GameHumanPlayer implements View.OnTouchL
 
     // the surface view
     private CheckerBoardSurfaceView surfaceView;
-    public TextView movesLog;
+    //public TextView movesLog;
     private CheckerBoardSurfaceView surfaceViewCheckerBoard;
     private Button resignButton;
 
     //captures surfaceview
-    private BlackCaptureSurfaceView surfaceViewBlackCapture;
-    private RedCaptureSurfaceView surfaceViewWhiteCapture;
+    //private BlackCaptureSurfaceView surfaceViewBlackCapture;
+    //private RedCaptureSurfaceView surfaceViewWhiteCapture;
 
     //names
     private TextView player1name;
@@ -101,10 +101,10 @@ public class CheckerHumanPlayer extends GameHumanPlayer implements View.OnTouchL
             surfaceViewCheckerBoard.setState((CheckerState) info);
             surfaceViewCheckerBoard.invalidate();
 
-            surfaceViewWhiteCapture.setState(state);
-            surfaceViewBlackCapture.setState(state);
+            //surfaceViewWhiteCapture.setState(state);
+            //surfaceViewBlackCapture.setState(state);
 
-            surfaceViewBlackCapture.invalidate();
+            //surfaceViewBlackCapture.invalidate();
         }
 
     }
@@ -121,8 +121,10 @@ public class CheckerHumanPlayer extends GameHumanPlayer implements View.OnTouchL
         surfaceView = (CheckerBoardSurfaceView) myActivity.findViewById(R.id.checkerBoard);
         surfaceView.setOnTouchListener(this);
 
+
+
         //moves log
-        movesLog = myActivity.findViewById(R.id.movesLog);
+        //movesLog = myActivity.findViewById(R.id.movesLog);
         surfaceViewCheckerBoard = (CheckerBoardSurfaceView) myActivity.findViewById(R.id.checkerBoard);
 
         //player names
@@ -133,8 +135,8 @@ public class CheckerHumanPlayer extends GameHumanPlayer implements View.OnTouchL
         resignButton = myActivity.findViewById(R.id.homeButton);
 
         //captures
-        surfaceViewWhiteCapture = (RedCaptureSurfaceView) myActivity.findViewById(R.id.whiteCaptures);
-        surfaceViewBlackCapture = (BlackCaptureSurfaceView) myActivity.findViewById(R.id.blackCaptures);
+        //surfaceViewWhiteCapture = (RedCaptureSurfaceView) myActivity.findViewById(R.id.whiteCaptures);
+        //surfaceViewBlackCapture = (BlackCaptureSurfaceView) myActivity.findViewById(R.id.blackCaptures);
 
 
         surfaceViewCheckerBoard.setOnTouchListener(this);
@@ -175,8 +177,8 @@ public class CheckerHumanPlayer extends GameHumanPlayer implements View.OnTouchL
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
         if (view.getId() == resignButton.getId()) {
-            MessageBox.popUpMessage("You are exiting the game:\n Returning to Home Screen", myActivity);
-            CountDownTimer cdt = new CountDownTimer(3000, 10) {
+            //MessageBox.popUpMessage("You are exiting the game:\n Returning to Home Screen", myActivity);
+            CountDownTimer cdt = new CountDownTimer(10, 10) {
                 @Override
                 public void onTick(long millisUntilFinished) {
 
