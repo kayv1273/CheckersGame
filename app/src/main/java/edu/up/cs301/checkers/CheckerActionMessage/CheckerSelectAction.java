@@ -10,7 +10,7 @@ public class CheckerSelectAction extends GameAction {
     /**
      * Constructor for CheckerMoveAction
      *
-     //@param source the player making the move
+     * @param player the player making the move
      * @param col the row of the square selected
      * @param row the column of the square selected
      */

@@ -48,124 +48,17 @@
             android:orientation="vertical">
 
 
-            <LinearLayout
-
-                android:layout_width="match_parent"
-
-                android:layout_height="match_parent"
-
-                android:layout_weight="3.5"
-
-                android:orientation="horizontal">
-
-
-                <TextView
-
-                    android:id="@+id/nameBlack"
-
-                    android:layout_width="72dp"
-
-                    android:layout_height="match_parent"
-
-                    android:gravity="left|center_vertical"
-
-                    android:text="Computer"
-
-                    android:textSize="20sp" />
-
-
-                <edu.up.cs301.checkers.Views.BlackCaptureSurfaceView
-
-                    android:id="@+id/blackCaptures"
-
-                    android:layout_width="match_parent"
-
-                    android:layout_height="match_parent"
-
-                    android:layout_weight="5"
-
-                    android:background="#D3D3D3" />
-
-
-            </LinearLayout>
-
-
             <Button
 
                 android:id="@+id/homeButton"
 
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
 
                 android:layout_height="wrap_content"
 
                 android:layout_gravity="right"
 
                 android:text="Home" />
-
-
-            <EditText
-
-                android:id="@+id/movesLog"
-
-                android:layout_width="match_parent"
-
-                android:layout_height="match_parent"
-
-                android:layout_weight="1.5"
-
-                android:ems="10"
-
-                android:gravity="start|top"
-
-                android:inputType="textMultiLine"
-
-                android:text="Starting Position"
-
-                android:focusable="false"
-
-                android:longClickable="false"/>
-
-
-            <LinearLayout
-
-                android:layout_width="match_parent"
-
-                android:layout_height="match_parent"
-
-                android:layout_weight="3.5"
-
-                android:orientation="horizontal">
-
-
-                <TextView
-
-                    android:id="@+id/nameWhite"
-
-                    android:layout_width="wrap_content"
-
-                    android:layout_height="match_parent"
-
-                    android:gravity="left|center_vertical"
-
-                    android:text="Human"
-
-                    android:textSize="20sp" />
-
-
-                <edu.up.cs301.checkers.Views.RedCaptureSurfaceView
-
-                    android:id="@+id/whiteCaptures"
-
-                    android:layout_width="match_parent"
-
-                    android:layout_height="match_parent"
-
-                    android:layout_weight="5"
-
-                    android:background="#D3D3D3" />
-
-            </LinearLayout>
-
 
         </LinearLayout>
 

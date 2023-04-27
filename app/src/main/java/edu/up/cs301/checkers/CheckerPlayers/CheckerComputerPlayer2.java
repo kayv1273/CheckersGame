@@ -16,10 +16,13 @@ import edu.up.cs301.game.GameFramework.infoMessage.GameInfo;
 public class CheckerComputerPlayer2 extends GameComputerPlayer {
     private Piece selection;
     private ArrayList<Piece> availablePieces;
+    private ArrayList<Piece> capturePieces;
+    private boolean isCapturePieces = false;
     private ArrayList<Integer> ints;
 
     /**
-     * Constructor for the CheckerComputerPlayer1 class
+     * Constructor for the CheckerComputerPlayer2 class
+     * @param name name of smart ai
      */
     public CheckerComputerPlayer2(String name) {
         // invoke superclass constructor
@@ -39,7 +42,8 @@ public class CheckerComputerPlayer2 extends GameComputerPlayer {
         //Ignore illegal move info too
         if (info instanceof IllegalMoveInfo) return;
         CheckerState checkerState = new CheckerState((CheckerState) info);
-        //if(checkerState.isPromoting){return;}
+
+        //check if turn
         if (checkerState.getWhoseMove() == 1 && playerNum == 0) {
             return;
         }
@@ -47,8 +51,9 @@ public class CheckerComputerPlayer2 extends GameComputerPlayer {
             return;
         }
 
-        // all of the pieces that can move on the computers side
+        //check all of the pieces that can move on the computers side
         availablePieces = new ArrayList<>();
+        capturePieces = new ArrayList<>();
         for (int i = 0; i < 8; i++) {
             for (int k = 0; k < 8; k++) {
                 if (checkerState.getDrawing(i, k) == 1) {
@@ -60,42 +65,75 @@ public class CheckerComputerPlayer2 extends GameComputerPlayer {
                 Piece p = checkerState.getPiece(i, k);
                 if (playerNum == 0 && p.getPieceColor() == Piece.ColorType.RED) {
                     availablePieces.add(p);
+                    if (canTake(checkerState,i,k)) {
+                        capturePieces.add(p);
+                        isCapturePieces = true;
+                    }
                 } else if (playerNum == 1 && p.getPieceColor() == Piece.ColorType.BLACK) {
                     availablePieces.add(p);
+                    if (canTake(checkerState,i,k)) {
+                        capturePieces.add(p);
+                        isCapturePieces = true;
+                    }
                 }
             }
         }
 
-        selection = availablePieces.get(0);
+        Collections.shuffle(capturePieces);
+        Collections.shuffle(availablePieces);
+
+        if (!capturePieces.isEmpty()) {
+            selection = capturePieces.get(0);
+        } else {
+            selection = availablePieces.get(0);
+        }
+
         // create variables to hold the x and y of the position selected
         int xVal = selection.getX();
         int yVal = selection.getY();
-        // call the selection game action
+
+        //call the selection game action
         game.sendAction(new CheckerSelectAction(this, xVal, yVal));
-        // check if the piece is one that can move
+
+        //check if the selected piece can move
         CheckerState checkerState2 = (CheckerState) game.getGameState();
-        for (int i = 1; i < availablePieces.size(); i++) {
-            if (!checkerState2.getCanMove()) {
-                selection = availablePieces.get(i);
-                xVal = selection.getX();
-                yVal = selection.getY();
-                game.sendAction(new CheckerSelectAction(this, xVal, yVal));
-            } else {
-                break;
+        if (isCapturePieces) {
+            for (int i = 1; i < capturePieces.size(); i++) {
+                if (!checkerState2.getCanMove()) {
+                    selection = availablePieces.get(i);
+                    xVal = selection.getX();
+                    yVal = selection.getY();
+                    game.sendAction(new CheckerSelectAction(this, xVal, yVal));
+                } else {
+                    break;
+                }
+            }
+        } else {
+            for (int i = 1; i < availablePieces.size(); i++) {
+                if (!checkerState2.getCanMove()) {
+                    selection = availablePieces.get(i);
+                    xVal = selection.getX();
+                    yVal = selection.getY();
+                    game.sendAction(new CheckerSelectAction(this, xVal, yVal));
+                } else {
+                    break;
+                }
             }
         }
         sleep(1);
 
+        //check if the game is over and return
         if(checkerState2.getGameOver()) {
             return;
         }
-        // an arraylist that holds the index values of the two movement arraylists (x and y)
+        // an arrayList that holds the index values of the two movement arraylists (x and y)
         ArrayList<Integer> index = new ArrayList<>();
+
         // add all of the indexes into the ints value
         for (int i = 0; i < checkerState2.getNewMovementsX().size(); i++) {
             index.add(i);
         }
-        // shuffle the indexes so a random x and y value can be taken
+
         // set the x and y values to the new movements array at the index
         for(int i = 0; i < index.size(); i++) {
             xVal = checkerState2.getNewMovementsX().get(index.get(i));
@@ -104,14 +142,19 @@ public class CheckerComputerPlayer2 extends GameComputerPlayer {
                 break;
             }
         }
-
-
-        for (int i = 0; i < checkerState2.getNewMovementsX().size(); i++) {
-            if ((xVal - checkerState2.getNewMovementsX().get(i) == 2 || xVal - checkerState2.getNewMovementsX().get(i) == -2) &&
-            (yVal - checkerState2.getNewMovementsY().get(i) == 2 || yVal - checkerState2.getNewMovementsY().get(i) == -2)) {
-                xVal = checkerState2.getNewMovementsX().get(index.get(i));
-                yVal = checkerState2.getNewMovementsY().get(index.get(i));
-                break;
+        if (isCapturePieces) {
+            for (Piece piece : capturePieces) {
+                if (canTake(checkerState2,piece.getX(),piece.getY())) {
+                    takePiece(checkerState2,xVal,yVal,index);
+                    break;
+                }
+            }
+        } else {
+            for (Piece piece : availablePieces) {
+                if (canTake(checkerState2, piece.getX(), piece.getY())) {
+                    takePiece(checkerState2, xVal, yVal, index);
+                    break;
+                }
             }
         }
 
@@ -136,4 +179,44 @@ public class CheckerComputerPlayer2 extends GameComputerPlayer {
         // send the new move action
         game.sendAction(new CheckerMoveAction(this, xVal, yVal));
     }
+
+    public void takePiece(CheckerState checkerState2, int x, int y, ArrayList<Integer> index) {
+        for (int i = 0; i < checkerState2.getNewMovementsX().size(); i++) {
+            if ((x - checkerState2.getNewMovementsX().get(i) == 2 || x - checkerState2.getNewMovementsX().get(i) == -2) &&
+                    (y - checkerState2.getNewMovementsY().get(i) == 2 || y - checkerState2.getNewMovementsY().get(i) == -2)) {
+                x = checkerState2.getNewMovementsX().get(index.get(i));
+                y = checkerState2.getNewMovementsY().get(index.get(i));
+                break;
+            }
+        }
+    }
+
+    public boolean canTake(CheckerState checkerState2, int x, int y) {
+        boolean take = false;
+        for (int i = 0; i < checkerState2.getNewMovementsX().size(); i++) {
+            if ((x - checkerState2.getNewMovementsX().get(i) == 2 || x - checkerState2.getNewMovementsX().get(i) == -2) &&
+                    (y - checkerState2.getNewMovementsY().get(i) == 2 || y - checkerState2.getNewMovementsY().get(i) == -2)) {
+                take = true;
+                break;
+            }
+        }
+        return take;
+    }
+
+    public boolean takeable(CheckerState checkerState2, int x, int y) {
+        boolean take = false;
+        Piece p = checkerState2.getPiece(x,y);
+        if ((checkerState2.getPiece(p.getX() - 2,p.getY() - 2).getPieceColor() == Piece.ColorType.RED &&
+                checkerState2.getPiece(p.getX() - 1,p.getY() - 1).getPieceColor() == Piece.ColorType.EMPTY) ||
+        (checkerState2.getPiece(p.getX() - 2,p.getY() + 2).getPieceColor() == Piece.ColorType.RED &&
+                checkerState2.getPiece(p.getX() - 1,p.getY() + 1).getPieceColor() == Piece.ColorType.EMPTY) ||
+        (checkerState2.getPiece(p.getX() + 2,p.getY() - 2).getPieceColor() == Piece.ColorType.RED &&
+                checkerState2.getPiece(p.getX() + 1,p.getY() - 1).getPieceColor() == Piece.ColorType.EMPTY) ||
+        (checkerState2.getPiece(p.getX() + 2,p.getY() + 2).getPieceColor() == Piece.ColorType.RED &&
+                        checkerState2.getPiece(p.getX() + 1,p.getY() + 1).getPieceColor() == Piece.ColorType.EMPTY)) {
+            take = true;
+        }
+        return take;
+    }
+
 }
