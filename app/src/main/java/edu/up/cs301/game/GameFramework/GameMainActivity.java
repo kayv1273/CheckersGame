@@ -193,7 +193,7 @@ public abstract class GameMainActivity extends Activity implements
                 MessageBox.popUpMessage(msg, this);
             }
         }
-
+/*
         if (((CheckBox) findViewById(R.id.onScreenLogging)).isChecked()) {
             Logger.setToastValue(true);
         } else {
@@ -204,6 +204,8 @@ public abstract class GameMainActivity extends Activity implements
         }else {
             Logger.setDebugValue(false);
         }
+
+ */
     }// onCreate
 
     /**
@@ -500,10 +502,12 @@ public abstract class GameMainActivity extends Activity implements
         v.setOnClickListener(this);
         v = findViewById(R.id.playGameButton);
         v.setOnClickListener(this);
-        v = findViewById(R.id.onScreenLogging);
+       /* v = findViewById(R.id.onScreenLogging);
         v.setOnClickListener(this);
         v = findViewById(R.id.debugLogging);
         v.setOnClickListener(this);
+
+        */
 
 
         String ipCode = IPCoder.encodeLocalIP();
@@ -605,7 +609,7 @@ public abstract class GameMainActivity extends Activity implements
             }
 
         }
-
+/*
         //On-screen debugging checkbox
         else if(button.getId() == R.id.onScreenLogging){
             if(((CheckBox)button).isChecked()){
@@ -623,7 +627,7 @@ public abstract class GameMainActivity extends Activity implements
                 Logger.setDebugValue(false);
             }
         }
-
+*/
         else if(button.getId() == R.id.homeButton){
             recreate();
         }

@@ -6,6 +6,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 
+
+import edu.up.cs301.game.GameFramework.utilities.MessageBox;
 import edu.up.cs301.checkers.CheckerActionMessage.CheckerMoveAction;
 import edu.up.cs301.checkers.CheckerActionMessage.CheckerPromotionAction;
 import edu.up.cs301.checkers.CheckerActionMessage.CheckerSelectAction;
@@ -38,6 +40,7 @@ public class CheckerHumanPlayer extends GameHumanPlayer implements View.OnTouchL
     //public TextView movesLog;
     private CheckerBoardSurfaceView surfaceViewCheckerBoard;
     private Button resignButton;
+    private Button rulesPopUp;
 
     public boolean isPromotion;
     public Piece currPiece = new Piece(Piece.PieceType.KING, Piece.ColorType.RED, 0, 0);
@@ -105,7 +108,7 @@ public class CheckerHumanPlayer extends GameHumanPlayer implements View.OnTouchL
      */
     @Override
     public void setAsGui(GameMainActivity activity) {
-        // Load the layout resource for the new configuration
+        // load the layout resource for the new configuration
         activity.setContentView(layoutId);
 
         // set the surfaceView instance variable
@@ -114,11 +117,15 @@ public class CheckerHumanPlayer extends GameHumanPlayer implements View.OnTouchL
 
         surfaceViewCheckerBoard = (CheckerBoardSurfaceView) myActivity.findViewById(R.id.checkerBoard);
 
-        //resignation
+        // resignation
         resignButton = myActivity.findViewById(R.id.homeButton);
+
+        // rules button pop-up
+        rulesPopUp = myActivity.findViewById(R.id.rulesButton);
 
         surfaceViewCheckerBoard.setOnTouchListener(this);
         resignButton.setOnTouchListener(this);
+        rulesPopUp.setOnTouchListener(this);
     }
 
 
@@ -141,6 +148,16 @@ public class CheckerHumanPlayer extends GameHumanPlayer implements View.OnTouchL
      */
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
+        //Rules Button Pop up
+        if(view.getId() == rulesPopUp.getId()){
+            MessageBox.popUpMessage("Rules of the Game:\n" +
+                    "Checkers is played by two people. Each player will alternate turns.\n\n" +
+                    "Moves: Each piece moves diagonally, one square forward. Non-capturing moves may move one square forward.\n\n" +
+                    "Capture: Jump the opponent's piece adn land in open space diagonally from current position. The open space must be empty\n\n" +
+                    "Kinging: To king a piece, you must move across the board to the farthest row. Once kinged you may move in any direction diagonally.\n\n" +
+                    "End Game: You win when the opponent is unable to make further moves. All pieces must be captured or trapped. ", myActivity);
+        }
+
         if (view.getId() == resignButton.getId()) {
             CountDownTimer cdt = new CountDownTimer(10, 10) {
                 @Override
