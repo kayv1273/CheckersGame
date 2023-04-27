@@ -211,6 +211,26 @@ public class CheckerHumanPlayer extends GameHumanPlayer implements View.OnTouchL
                 }
             }
         }
+
+        // logic for if the human wins
+        // assume true
+        boolean gameOver = true;
+        for(int i = 0; i < 8; i++) {
+            for(int j = 0; j < 8; j++) {
+                if (state.getPiece(i,j).getPieceColor() == Piece.ColorType.BLACK) {
+                    // if any black pieces remain, the game is not over
+                    gameOver = false;
+                }
+            }
+        }
+
+        if(gameOver) {
+            // pop up message for human wins
+
+            //line used to debug and ensure proper functionality
+            System.out.println("test");
+        }
+
         // register that we have handled the event
         return true;
     }
