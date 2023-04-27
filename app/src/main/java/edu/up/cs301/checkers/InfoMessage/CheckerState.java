@@ -10,7 +10,7 @@ import edu.up.cs301.game.GameFramework.infoMessage.GameState;
  * @author Ruth
  * @author Nick
  * @author Ethan
- * @version 4.13.2023
+ * @version 4.26.2023
  */
 
 
@@ -36,6 +36,9 @@ public class CheckerState extends GameState implements Serializable {
     private ArrayList<Integer> newMovementsX;
     private ArrayList<Integer> newMovementsY;
 
+    /**
+     * Constructor for CheckerState
+     */
     public CheckerState() {
         pieces = new Piece[8][8];
         board = new int[8][8];
@@ -97,18 +100,26 @@ public class CheckerState extends GameState implements Serializable {
             }
         }
 
+        //create new empty piece
         emptyPiece = new Piece(Piece.PieceType.EMPTY, Piece.ColorType.EMPTY, 0, 0);
 
+        //set all spaces in board array to 0
         for (int row = 0; row < board.length; row++) {
             for (int col = 0; col < board[row].length; col++) {
                 board[row][col] = 0;
             }
         }
+
+        //set player to move to human player
         playerToMove = 0;
 
     }
 
-    // Copy Constructor
+    /**
+     * Deep Copy Constructor
+     *
+     * @param other the CheckerState being copied
+     */
     public CheckerState(CheckerState other) {
         pieces = new Piece[8][8];
         board = new int[8][8];
@@ -164,44 +175,90 @@ public class CheckerState extends GameState implements Serializable {
         }
     }
 
+    /**
+     * Getter method to get piece at a certain coordinate
+     *
+     * @param row the row index
+     * @param col the col index
+     * @return piece at the row, col index
+     */
     public Piece getPiece(int row, int col) {
         return pieces[row][col];
     }
 
+    /**
+     * Setter method to set piece at a certain coordinate
+     *
+     * @param row the row index
+     * @param col the col index
+     * @param piece the new piece to be set
+     */
     public void setPiece(int row, int col, Piece piece) {
         piece.setY(col);
         piece.setX(row);
         pieces[row][col] = piece;
     }
 
+    /**
+     * Setter to set if a move can be made
+     * @param b true/false to change canMove
+     */
     public void setCanMove(boolean b) {
         canMove = b;
     }
 
+    /**
+     * Getter method to check if move can be made
+     * @return true/false depending on canMove
+     */
     public boolean getCanMove() {
         return canMove;
     }
 
+    /**
+     * Set the current game status
+     * @param b true/false depending on if game is over or not
+     */
     public void setGameOver(boolean b) {
         isGameOver = b;
     }
 
+    /**
+     * Get current game status
+     * @return true/false depending on state of the game (win/loss)
+     */
     public boolean getGameOver() {
         return isGameOver;
     }
 
+    /**
+     * Set the arraylist for newMovementsX
+     * @param newMovementsX new ArrayList to be set
+     */
     public void setNewMovementsX(ArrayList<Integer> newMovementsX) {
         this.newMovementsX = newMovementsX;
     }
 
+    /**
+     * Get the newMovementsX arraylist
+     * @return newMovementsX arrayList
+     */
     public ArrayList<Integer> getNewMovementsX() {
         return newMovementsX;
     }
 
+    /**
+     * Set the arraylist for newMovementsY
+     * @param newMovementsY new ArrayList to be set
+     */
     public void setNewMovementsY(ArrayList<Integer> newMovementsY) {
         this.newMovementsY = newMovementsY;
     }
 
+    /**
+     * Get the newMovementsY arraylist
+     * @return newMovementsY arrayList
+     */
     public ArrayList<Integer> getNewMovementsY() {
         return newMovementsY;
     }
@@ -211,11 +268,23 @@ public class CheckerState extends GameState implements Serializable {
         board[row][col] = 3;
     }
 
+    /**
+     * Mark a highlight in the board array for reference
+     *
+     * @param row current row
+     * @param col current col
+     */
     public void setHighlight(int row, int col) {
         board[row][col] = 1;
     }
 
-    //iterate through x and y value arrays to find where to put circles on the board
+
+    /**
+     * Iterate through arrays to mark where circles should be placed on board array
+     *
+     * @param row arraylist row
+     * @param col arraylist col
+     */
     public void setCircles(ArrayList<Integer> row, ArrayList<Integer> col) {
         for (int i = 0; i < row.size(); i++) {
             if (getPiece(row.get(i), col.get(i)).getPieceColor() != Piece.ColorType.EMPTY) {
@@ -226,7 +295,9 @@ public class CheckerState extends GameState implements Serializable {
         }
     }
 
-    //removes all highlights from the board
+    /**
+     * Removes all highlights from the board
+     */
     public void removeHighlight() {
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
@@ -237,7 +308,9 @@ public class CheckerState extends GameState implements Serializable {
         }
     }
 
-    //removes all circles from the board
+    /**
+     * Removes all circles from the board
+     */
     public void removeCircle() {
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
@@ -259,35 +332,62 @@ public class CheckerState extends GameState implements Serializable {
         }
     }
 
-    //returns what is on a square on the board
+    /**
+     * Get integer indicator from board array
+     *
+     * @param row current row
+     * @param col current col
+     * @return 0,1,2,3 depending on if there is a piece, highligh, circle
+     */
     public int getDrawing(int row, int col) {
         return board[row][col];
     }
 
+    /**
+     * Get whose move it is
+     * @return 0 or 1 depending on human or ai
+     */
     public int getWhoseMove() {
         return playerToMove;
     }
 
+    /**
+     * Set move
+     * @param id either player or ai
+     */
     public void setWhoseMove(int id) {
         playerToMove = id;
     }
 
+    /**
+     * Get arraylist of all pieces captured by red
+     * @return arraylist of captured pieces
+     */
     public ArrayList<Piece> getRedCapturedPieces() {
         return this.redCapturedPieces;
     }
 
+    /**
+     * Get arraylist of all pieces captured by black
+     * @return arraylist of captured pieces
+     */
     public ArrayList<Piece> getBlackCapturedPieces() {
         return this.blackCapturedPieces;
     }
 
+    /**
+     * Adds a piece that was captured to redCapturedPieces
+     * @param p the piece being added to the arraylist
+     */
     public void addRedCapturedPiece(Piece p) {
         redCapturedPieces.add(p);
     }
 
+    /**
+     * Adds a piece that was captured to blackCapturedPieces
+     * @param p the piece being added to the arraylist
+     */
     public void addBlackCapturedPiece(Piece p) {
         blackCapturedPieces.add(p);
     }
-
-
-    //getters for the hasMoved variables
 }

@@ -20,7 +20,8 @@ public class CheckerComputerPlayer2 extends GameComputerPlayer {
     private ArrayList<Integer> ints;
 
     /**
-     * Constructor for the CheckerComputerPlayer1 class
+     * Constructor for the CheckerComputerPlayer2 class
+     * @param name name of smart ai
      */
     public CheckerComputerPlayer2(String name) {
         // invoke superclass constructor
@@ -40,7 +41,8 @@ public class CheckerComputerPlayer2 extends GameComputerPlayer {
         //Ignore illegal move info too
         if (info instanceof IllegalMoveInfo) return;
         CheckerState checkerState = new CheckerState((CheckerState) info);
-        //if(checkerState.isPromoting){return;}
+
+        //check if turn
         if (checkerState.getWhoseMove() == 1 && playerNum == 0) {
             return;
         }
@@ -48,7 +50,7 @@ public class CheckerComputerPlayer2 extends GameComputerPlayer {
             return;
         }
 
-        // all of the pieces that can move on the computers side
+        //check all of the pieces that can move on the computers side
         availablePieces = new ArrayList<>();
         capturePieces = new ArrayList<Piece>();
         for (int i = 0; i < 8; i++) {
@@ -73,17 +75,17 @@ public class CheckerComputerPlayer2 extends GameComputerPlayer {
                 }
             }
         }
-        //if (!capturePieces.isEmpty()) {
-            //selection = capturePieces.get(0);
-        //} else {
-            selection = availablePieces.get(0);
-        //}
+
+        selection = availablePieces.get(0);
+
         // create variables to hold the x and y of the position selected
         int xVal = selection.getX();
         int yVal = selection.getY();
-        // call the selection game action
+
+        //call the selection game action
         game.sendAction(new CheckerSelectAction(this, xVal, yVal));
-        // check if the piece is one that can move
+
+        //check if the selected piece can move
         CheckerState checkerState2 = (CheckerState) game.getGameState();
         for (int i = 1; i < availablePieces.size(); i++) {
             if (!checkerState2.getCanMove()) {
@@ -97,16 +99,18 @@ public class CheckerComputerPlayer2 extends GameComputerPlayer {
         }
         sleep(1);
 
+        //check if the game is over and return
         if(checkerState2.getGameOver()) {
             return;
         }
-        // an arraylist that holds the index values of the two movement arraylists (x and y)
+        // an arrayList that holds the index values of the two movement arraylists (x and y)
         ArrayList<Integer> index = new ArrayList<>();
+
         // add all of the indexes into the ints value
         for (int i = 0; i < checkerState2.getNewMovementsX().size(); i++) {
             index.add(i);
         }
-        // shuffle the indexes so a random x and y value can be taken
+
         // set the x and y values to the new movements array at the index
         for(int i = 0; i < index.size(); i++) {
             xVal = checkerState2.getNewMovementsX().get(index.get(i));

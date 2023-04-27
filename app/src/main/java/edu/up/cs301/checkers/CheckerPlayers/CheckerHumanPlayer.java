@@ -55,36 +55,44 @@ public class CheckerHumanPlayer extends GameHumanPlayer implements View.OnTouchL
 
     public boolean isPromotion;
     public Piece currPiece = new Piece(Piece.PieceType.KING, Piece.ColorType.RED, 0, 0);
-    private int savedX = 0;
-    private int savedY = 0;
+
 
     // the ID for the layout to use
     private int layoutId;
 
     private CheckerState state;
-    private int numTurns;
-    private boolean justStarted;
+
     private int x = 8;
     private int y = 8;
 
     /**
-     * constructor
+     * constructor for CheckerHumanPlayer
      *
      * @param name the name of the player
+     * @param layoutId the ID for the layout to use
+     * @param state the CheckerState
      */
     public CheckerHumanPlayer(String name, int layoutId, CheckerState state) {
         super(name);
         this.layoutId = layoutId;
-        numTurns = 1;
-        justStarted = true;
         isPromotion = false;
         this.state = state;
     }
 
+    /** setter for CheckerState
+     *
+     * @param state new CheckerState
+     */
     public void setState(CheckerState state) {
         this.state = state;
     }
 
+    /**
+     * Called when the player receives a game-state (or other info) from the
+     * game.
+     *
+     * @param info the message from the game
+     */
     @Override
     public void receiveInfo(GameInfo info) {
         if (surfaceViewCheckerBoard == null) {
@@ -111,6 +119,8 @@ public class CheckerHumanPlayer extends GameHumanPlayer implements View.OnTouchL
 
     /**
      * sets the current player as the activity's GUI
+     *
+     * @param activity the GameMainActivity
      */
     @Override
     public void setAsGui(GameMainActivity activity) {
@@ -121,9 +131,9 @@ public class CheckerHumanPlayer extends GameHumanPlayer implements View.OnTouchL
         surfaceView = (CheckerBoardSurfaceView) myActivity.findViewById(R.id.checkerBoard);
         surfaceView.setOnTouchListener(this);
 
-        //moves log
+        /*moves log
         movesLog = myActivity.findViewById(R.id.movesLog);
-        surfaceViewCheckerBoard = (CheckerBoardSurfaceView) myActivity.findViewById(R.id.checkerBoard);
+        surfaceViewCheckerBoard = (CheckerBoardSurfaceView) myActivity.findViewById(R.id.checkerBoard);*/
 
         //player names
         player1name = myActivity.findViewById(R.id.nameBlack);
@@ -171,6 +181,7 @@ public class CheckerHumanPlayer extends GameHumanPlayer implements View.OnTouchL
      * the "up" movement" onto a tic-tac-tie square
      *
      * @param motionEvent the motion event that was detected
+     * @return boolean to indicate success/failure
      */
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -309,6 +320,13 @@ public class CheckerHumanPlayer extends GameHumanPlayer implements View.OnTouchL
 
 **/
 
+    /**
+     * Helper method that calls promotion when a piece reaches the end of the board
+     *
+     * @param xVal current x value
+     * @param yVal current y value
+     * @param type the current type of the piece
+     */
     public void sendPromotionAction(int xVal, int yVal, Piece.ColorType type) {
         game.sendAction(new CheckerPromotionAction(this,
                 new Piece(Piece.PieceType.KING, type, xVal, yVal), xVal, yVal));
@@ -335,6 +353,14 @@ public class CheckerHumanPlayer extends GameHumanPlayer implements View.OnTouchL
         }
     }
 
+    /**
+     * Helper method to determine is a space is a valid pawn move
+     *
+     * @param row current row
+     * @param col current col
+     * @param currPiece current piece
+     * @return boolean for success/failure
+     */
     public boolean validPawnMove(int row, int col, Piece currPiece) {
         if(currPiece.getY() > col + 1){
             return false;

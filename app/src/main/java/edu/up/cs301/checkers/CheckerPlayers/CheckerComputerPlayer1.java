@@ -20,7 +20,7 @@ import edu.up.cs301.game.GameFramework.utilities.Logger;
  * @author Ruth
  * @author Nick
  * @author Ethan
- * @version 4.13.2023
+ * @version 4.26.2023
  */
 
 
@@ -32,6 +32,7 @@ public class CheckerComputerPlayer1 extends GameComputerPlayer {
 
     /**
      * Constructor for the CheckerComputerPlayer1 class
+     * @param name name of dumb ai
      */
     public CheckerComputerPlayer1(String name) {
         // invoke superclass constructor
@@ -46,17 +47,19 @@ public class CheckerComputerPlayer1 extends GameComputerPlayer {
      */
     @Override
     protected void receiveInfo(GameInfo info) {
-        // if it was a "not your turn" message, just ignore it
+        //if it was a "not your turn" message, just ignore it
         if (info instanceof NotYourTurnInfo) return;
-        //Ignore illegal move info too
+        //ignore illegal move info too
         if (info instanceof IllegalMoveInfo) return;
         //just in case there is any other types of info, ignore it
         if(!(info instanceof CheckerState)){
             return;
         }
 
+        //change info to type CheckerState
         CheckerState checkerState = new CheckerState((CheckerState) info);
-        //if(checkerState.isPromoting){return;}
+
+        //if not turn, return
         if (checkerState.getWhoseMove() == 1 && playerNum == 0) {
             return;
         }
@@ -64,7 +67,7 @@ public class CheckerComputerPlayer1 extends GameComputerPlayer {
             return;
         }
 
-        // all of the pieces that can move on the computers side
+        //get all of the pieces that can move on the computers side
         availablePieces = new ArrayList<>();
         for (int i = 0; i < 8; i++) {
             for (int k = 0; k < 8; k++) {
@@ -74,6 +77,8 @@ public class CheckerComputerPlayer1 extends GameComputerPlayer {
                 if (checkerState.getDrawing(i, k) == 3) {
                     sleep(1);
                 }
+
+                //get the piece
                 Piece p = checkerState.getPiece(i, k);
                 if (playerNum == 0 && p.getPieceColor() == Piece.ColorType.RED) {
                     availablePieces.add(p);
@@ -83,17 +88,22 @@ public class CheckerComputerPlayer1 extends GameComputerPlayer {
             }
         }
         if (availablePieces.isEmpty()) {
-            //win statement and pop up screen someone fix this please
+            /**win statement and pop up screen someone fix this please
+             * */
+
         }
         // randomly shuffle the pieces in the array
         Collections.shuffle(availablePieces);
         selection = availablePieces.get(0);
-        // create variables to hold the x and y of the position selected
+
+        //create variables to hold the x and y of the position selected
         int xVal = selection.getX();
         int yVal = selection.getY();
-        // call the selection game action
+
+        //call the selection game action
         game.sendAction(new CheckerSelectAction(this, xVal, yVal));
-        // check if the piece is one that can move
+
+        //check if the piece is one that can move
         CheckerState checkerState2 = (CheckerState) game.getGameState();
         for (int i = 1; i < availablePieces.size(); i++) {
             if (!checkerState2.getCanMove()) {
@@ -107,20 +117,24 @@ public class CheckerComputerPlayer1 extends GameComputerPlayer {
         }
         sleep(1);
 
+        //check if game is over and return
         if(checkerState2.getGameOver()) {
             return;
         }
         // an arraylist that holds the index values of the two movement arraylists (x and y)
         ArrayList<Integer> index = new ArrayList<>();
+
         // add all of the indexes into the ints value
         for (int i = 0; i < checkerState2.getNewMovementsX().size(); i++) {
             index.add(i);
         }
         // shuffle the indexes so a random x and y value can be taken
         Collections.shuffle(index);
+
         // set the x and y values to the new movements array at the index
         xVal = checkerState2.getNewMovementsX().get(index.get(0));
         yVal = checkerState2.getNewMovementsY().get(index.get(0));
+
         // if the piece is a pawn look for promotion
         if (selection.getPieceType() == Piece.PieceType.PAWN) {
             if (selection.getPieceColor() == Piece.ColorType.BLACK) {
@@ -139,6 +153,13 @@ public class CheckerComputerPlayer1 extends GameComputerPlayer {
         game.sendAction(new CheckerMoveAction(this, xVal, yVal));
     }
 
+    /**
+     * Helper method that calls promotion when a piece reaches the end of the board
+     *
+     * @param xVal current x value
+     * @param yVal current y value
+     * @param type the current type of the piece
+     */
     public void sendPromotionAction(int xVal, int yVal, Piece.ColorType type) {
         game.sendAction(new CheckerPromotionAction(this,
                 new Piece(Piece.PieceType.KING, type, xVal, yVal), xVal, yVal));
