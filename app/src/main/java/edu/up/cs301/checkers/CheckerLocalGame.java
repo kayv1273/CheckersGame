@@ -35,7 +35,6 @@ public class CheckerLocalGame extends LocalGame {
     // all of the initial movements of the piece selected
     private ArrayList<Integer> initialMovementsX = new ArrayList<>();
     private ArrayList<Integer> initialMovementsY = new ArrayList<>();
-
     private ArrayList<Integer> newMovementsX = new ArrayList<>();
     private ArrayList<Integer> newMovementsY = new ArrayList<>();
     private ArrayList<Integer> XcaptCoords = new ArrayList<Integer>();
@@ -49,7 +48,6 @@ public class CheckerLocalGame extends LocalGame {
      * Constructor for the CheckerLocalGame.
      */
     public CheckerLocalGame() {
-
         // perform superclass initialization
         super();
 
@@ -88,8 +86,6 @@ public class CheckerLocalGame extends LocalGame {
      */
     @Override
     protected String checkIfGameOver() {
-
-        //char resultChar = ' ';
         if (winCondition == null) {
             return null;
         } else if (winCondition.equals("B")) {
@@ -171,11 +167,8 @@ public class CheckerLocalGame extends LocalGame {
             // make fake movements
             moveToNotBeInDanger(state, p.getPieceColor(), p.getPieceType());
 
-            if(newMovementsX.size() > 0) {
-                state.setCanMove(true);
-            } else {
-                state.setCanMove(false);
-            }
+            if(newMovementsX.size() > 0) state.setCanMove(true);
+            else state.setCanMove(false);
 
             // display all positions in arraylist as dots on the board
             state.setCircles(newMovementsX, newMovementsY);
@@ -259,7 +252,7 @@ public class CheckerLocalGame extends LocalGame {
                 initialMovementsX.add(king.getX().get(i));
                 initialMovementsY.add(king.getY().get(i));
             }
-            // Get al possible captures for king
+            // Get all possible captures for king
             for (int j = 0; j < king.getXAttack().size(); j++) {
                 initialMovementsX.add(king.getXAttack().get(j));
                 initialMovementsY.add(king.getYAttack().get(j));
@@ -280,13 +273,9 @@ public class CheckerLocalGame extends LocalGame {
 
     /**
      * Determines if the current players piece is in danger
-     *
-     * @param state      the copied state displaying a movement
-     * @param teamColor  the color the player that is making a movement
-     * @param enemyColor the color of the other player
      * @return
      */
-    public boolean checkForDanger(CheckerState state, Piece.ColorType teamColor, Piece.ColorType enemyColor) {
+    public boolean checkForDanger() {
         return false;
     }
 
@@ -313,14 +302,14 @@ public class CheckerLocalGame extends LocalGame {
             // in as a parameter
             if (color == Piece.ColorType.RED) {
                 // determine if the movement causes the players piece to be in danger
-                if (!checkForDanger(copyState, color, Piece.ColorType.BLACK)) {
+                if (!checkForDanger()) {
                     // if the player is not in check add that movement to the new
                     // arraylist so it can be saved
                     newMovementsX.add(initialMovementsX.get(i));
                     newMovementsY.add(initialMovementsY.get(i));
                 }
             } else if (color == Piece.ColorType.BLACK) {
-                if (!checkForDanger(copyState, color, Piece.ColorType.RED)) {
+                if (!checkForDanger()) {
                     newMovementsX.add(initialMovementsX.get(i));
                     newMovementsY.add(initialMovementsY.get(i));
                 }
@@ -415,14 +404,14 @@ public class CheckerLocalGame extends LocalGame {
             winCondition = checkForWin(state);
             if (winCondition != null) checkIfGameOver();
             if (color == Piece.ColorType.BLACK) {
-                if (checkForDanger(state, Piece.ColorType.RED, color)) {
+                if (checkForDanger()) {
                     checkIfGameOver();
                 } else {
                     winCondition = checkForStalemate(state);
                     checkIfGameOver();
                 }
             } else if (color == Piece.ColorType.RED) {
-                if (checkForDanger(state, Piece.ColorType.BLACK, color)) {
+                if (checkForDanger()) {
                     checkIfGameOver();
                 } else {
                     winCondition = checkForStalemate(state);
