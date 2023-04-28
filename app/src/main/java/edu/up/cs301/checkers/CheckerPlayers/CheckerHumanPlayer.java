@@ -149,14 +149,6 @@ public class CheckerHumanPlayer extends GameHumanPlayer implements View.OnTouchL
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
         //Rules Button Pop up
-        if(view.getId() == rulesPopUp.getId()){
-            MessageBox.popUpMessage("Rules of the Game:\n" +
-                    "Checkers is played by two people. Each player will alternate turns.\n\n" +
-                    "Moves: Each piece moves diagonally, one square forward. Non-capturing moves may move one square forward.\n\n" +
-                    "Capture: Jump the opponent's piece adn land in open space diagonally from current position. The open space must be empty\n\n" +
-                    "Kinging: To king a piece, you must move across the board to the farthest row. Once kinged you may move in any direction diagonally.\n\n" +
-                    "End Game: You win when the opponent is unable to make further moves. All pieces must be captured or trapped. ", myActivity);
-        }
 
         if (view.getId() == resignButton.getId()) {
             CountDownTimer cdt = new CountDownTimer(10, 10) {
@@ -176,6 +168,15 @@ public class CheckerHumanPlayer extends GameHumanPlayer implements View.OnTouchL
         // ignore if not an "down" event
         if (motionEvent.getAction() != MotionEvent.ACTION_DOWN) {
             return true;
+        }
+
+        if(view.getId() == rulesPopUp.getId()){
+            MessageBox.popUpMessage("Rules of the Game:\n" +
+                    "Checkers is played by two people. Each player will alternate turns.\n\n" +
+                    "Moves: Each piece moves diagonally, one square forward. Non-capturing moves may move one square forward.\n\n" +
+                    "Capture: Jump the opponent's piece adn land in open space diagonally from current position. The open space must be empty\n\n" +
+                    "Kinging: To king a piece, you must move across the board to the farthest row. Once kinged you may move in any direction diagonally.\n\n" +
+                    "End Game: You win when the opponent is unable to make further moves. All pieces must be captured or trapped. ", myActivity);
         }
 
         // loop through all of the locations on the board and compare
