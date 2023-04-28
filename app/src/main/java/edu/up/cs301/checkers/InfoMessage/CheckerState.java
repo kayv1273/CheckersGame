@@ -3,6 +3,7 @@ package edu.up.cs301.checkers.InfoMessage;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import edu.up.cs301.game.GameFramework.actionMessage.GameAction;
 import edu.up.cs301.game.GameFramework.infoMessage.GameState;
 /**
  * @author Griselda
@@ -390,4 +391,22 @@ public class CheckerState extends GameState implements Serializable {
     public void addBlackCapturedPiece(Piece p) {
         blackCapturedPieces.add(p);
     }
+
+    private boolean hasCaptured;
+
+    // method to set hasCaptured to true
+    public void setCaptured() {
+        hasCaptured = true;
+    }
+
+    // method to reset hasCaptured to false
+    public void resetCaptured() {
+        hasCaptured = false;
+    }
+
+    // method to check if a capture has been made
+    public boolean justCaptured() {
+        return hasCaptured;
+    }
 }
+

@@ -2,6 +2,7 @@ package edu.up.cs301.checkers;
 
 
 import java.util.ArrayList;
+import java.util.List;
 
 import edu.up.cs301.checkers.AllPieces.King;
 import edu.up.cs301.checkers.CheckerActionMessage.CheckerMoveAction;
@@ -43,6 +44,7 @@ public class CheckerLocalGame extends LocalGame {
     private String winCondition = null;
     private boolean isPromotion;
     private CheckerPromotionAction promo;
+    private boolean hasCaptured = false;
 
     /**
      * Constructor for the CheckerLocalGame.
@@ -130,7 +132,7 @@ public class CheckerLocalGame extends LocalGame {
      * @param action The move that the player has sent to the game
      * @return Tells whether the move was a legal one.
      */
-    @Override
+
     protected boolean makeMove(GameAction action) {
         CheckerState state = (CheckerState) super.state;
 
@@ -199,15 +201,21 @@ public class CheckerLocalGame extends LocalGame {
                     return false;
                 }
             }
-            // make sure all highlights and dots are already removed
-            state.removeCircle();
+            // check if the move resulted in a capture
+            if (hasCaptured) {
+                // more jumps are available for the same player
+                moreJumps();
+            } else {
+                // switch turns to the other player
+                state.setWhoseMove(1 - whoseMove);
+            }
 
-
-            // make it the other player's turn
-            state.setWhoseMove(1 - whoseMove);
+            // reset hasCaptured boolean variable
+            hasCaptured = false;
 
             // return true, indicating the it was a legal move
             return true;
+
         } else if (action instanceof CheckerPromotionAction){
             promo = (CheckerPromotionAction) action;
             CheckerPromotionAction.isPromotion = true;
@@ -215,6 +223,48 @@ public class CheckerLocalGame extends LocalGame {
         }
         // return true, indicating the it was a legal move
         return false;
+    }
+
+    private void moreJumps() {
+        CheckerState state = (CheckerState) super.state;
+        Piece p = state.getPiece(tempRow, tempCol);
+
+        // find all movements of the selected piece
+        findMovement(state, p);
+
+        // check if there are more jumps available
+        boolean moreJumps = false;
+        for (int i = 0; i < XcaptCoords.size(); i++) {
+            if (p.getPieceType() == Piece.PieceType.PAWN && p.getPieceColor() == Piece.ColorType.RED) {
+                if (Math.abs(tempRow - XcaptCoords.get(i)) == -2 &&
+                        (Math.abs(tempCol - YcaptCoords.get(i)) == -2 || Math.abs(tempCol - YcaptCoords.get(i)) == 2)) {
+                    moreJumps = true;
+                    break;
+                }
+            } else if (p.getPieceType() == Piece.PieceType.PAWN && p.getPieceColor() == Piece.ColorType.BLACK) {
+                if ((Math.abs(tempRow - XcaptCoords.get(i)) == 2 || Math.abs(tempRow - XcaptCoords.get(i)) == -2)
+                        && Math.abs(tempCol - YcaptCoords.get(i)) == 2) {
+                    moreJumps = true;
+                    break;
+                }
+            } else if (p.getPieceType() == Piece.PieceType.KING) {
+                if ((Math.abs(tempRow - XcaptCoords.get(i)) == -2 || Math.abs(tempRow - XcaptCoords.get(i)) == 2) &&
+                        (Math.abs(tempCol - YcaptCoords.get(i)) == -2 || Math.abs(tempCol - YcaptCoords.get(i)) == 2)) {
+                    moreJumps = true;
+                    break;
+                }
+            }
+        }
+
+        // if there are more jumps available for the same player
+        if (moreJumps) {
+            // highlight the piece they tapped
+            state.setHighlight(tempRow, tempCol);
+
+            // display all positions in arraylist as dots on the board
+            state.setCircles(XcaptCoords, YcaptCoords);
+        }
+        state.setPiece(tempRow, tempCol, p);
     }
 
     /**
@@ -337,7 +387,6 @@ public class CheckerLocalGame extends LocalGame {
         // make the selected piece become empty since the piece has moved
         state.setPiece(tempRow, tempCol, state.emptyPiece);
     }
-
     /**
      * Move the piece that was selected to the new position
      * that the player wants to move to
@@ -349,6 +398,7 @@ public class CheckerLocalGame extends LocalGame {
      * @return tells weather the move was valid and happened
      */
     public boolean setMovement(CheckerState state, int row, int col, Piece.ColorType color) {
+
         // If they selected a dot/ring then move
         if (state.getDrawing(row, col) == 2 || state.getDrawing(row, col) == 4) {
 
@@ -366,6 +416,7 @@ public class CheckerLocalGame extends LocalGame {
                 if ((tempRow - state.getNewMovementsX().get(i) == 2 || tempRow - state.getNewMovementsX().get(i) == -2) &&
                         (tempCol - state.getNewMovementsY().get(i) == 2 || tempCol - state.getNewMovementsY().get(i) == -2)) {
                         take = true;
+                        hasCaptured = true;
                         break;
                 }
             }

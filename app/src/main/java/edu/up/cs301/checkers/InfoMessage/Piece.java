@@ -124,4 +124,13 @@ public class Piece {
      * @return color
      */
     public ColorType getColorType(){return this.pieceColor;}
+
+    private boolean isJustCaptured;
+
+    public Piece(ColorType color, PieceType type) {
+        this.pieceColor = color;
+        this.pieceType = type;
+        this.isJustCaptured = false;
+    }
+
 }
