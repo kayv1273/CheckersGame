@@ -175,7 +175,7 @@ public class CheckerHumanPlayer extends GameHumanPlayer implements View.OnTouchL
                     "Checkers is played by two people. Each player will alternate turns.\n\n" +
                     "Moves: Each piece moves diagonally, one square forward. Non-capturing moves may move one square forward.\n\n" +
                     "Capture: Jump the opponent's piece adn land in open space diagonally from current position. The open space must be empty\n\n" +
-                    "Kinging: To king a piece, you must move across the board to the farthest row. Once kinged you may move in any direction diagonally.\n\n" +
+                    "Promotion: To king a piece, you must move across the board to the farthest row. Once kinged you may move in any direction diagonally.\n\n" +
                     "End Game: You win when the opponent is unable to make further moves. All pieces must be captured or trapped. ", myActivity);
         }
 
@@ -253,10 +253,24 @@ public class CheckerHumanPlayer extends GameHumanPlayer implements View.OnTouchL
         return true;
     }
 
+    /**
+     * Send action for new Promotion
+     * @param xVal x value of piece being promoted
+     * @param yVal y value of piece being promoted
+     * @param type type to promote from pawn to king
+     */
     public void sendPromotionAction(int xVal, int yVal, Piece.ColorType type) {
         game.sendAction(new CheckerPromotionAction(this,
                 new Piece(Piece.PieceType.KING, type, xVal, yVal), xVal, yVal));
     }
+
+    /**
+     * Check if there is a valid move for the pawn
+     * @param row row looking to be moved to
+     * @param col col looking to be moved
+     * @param currPiece the current piece
+     * @return false if invalid, true if valid
+     */
     public boolean validPawnMove(int row, int col, Piece currPiece) {
         if(currPiece.getY() > col + 1){
             return false;
