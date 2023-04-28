@@ -18,7 +18,6 @@ import edu.up.cs301.game.GameFramework.infoMessage.GameState;
 public class CheckerState extends GameState implements Serializable {
     private Piece[][] pieces; // An array that holds all of the pieces and their position
     private int[][] board; // An array that determines what kind of drawing should be made
-    private int turnCount; //holds num of turns
 
     private boolean isGameOver; //boolean that holds if the game is over (checkmate)
 
@@ -53,6 +52,8 @@ public class CheckerState extends GameState implements Serializable {
         // Setting the initial position of all of the pieces
         for (int row = 0; row < pieces.length; row++) {
             for (int col = 0; col < pieces[row].length; col++) {
+
+                //fill first and third rows with black pieces alternating
                 if (col == 0 || col == 2) {
                     if (row % 2 == 0) {
                         pieces[row][col] = new Piece(Piece.PieceType.PAWN, Piece.ColorType.BLACK, row, col);
@@ -63,11 +64,13 @@ public class CheckerState extends GameState implements Serializable {
                         pieces[row][col] = new Piece(Piece.PieceType.PAWN, Piece.ColorType.EMPTY, row, col);
                     }
                 }
+
                 //fill second row with black pieces
                 else if (col == 1) {
                     if (row % 2 != 0) {
                         pieces[row][col] = new Piece(Piece.PieceType.PAWN, Piece.ColorType.BLACK, row, col);
                     }
+
                     //fill rest of second row with empty pieces
                     else {
                         pieces[row][col] = new Piece(Piece.PieceType.PAWN, Piece.ColorType.EMPTY, row, col);
@@ -78,21 +81,25 @@ public class CheckerState extends GameState implements Serializable {
                     if (row % 2 != 0) {
                         pieces[row][col] = new Piece(Piece.PieceType.PAWN, Piece.ColorType.RED, row, col);
                     }
+
                     //fill rest of sixth and eighth row with empty pieces
                     else {
                         pieces[row][col] = new Piece(Piece.PieceType.PAWN, Piece.ColorType.EMPTY, row, col);
                     }
                 }
+
                 //fill seventh row with red pieces
                 else if (col == 6) {
                     if (row % 2 == 0) {
                         pieces[row][col] = new Piece(Piece.PieceType.PAWN, Piece.ColorType.RED, row, col);
                     }
+
                     //fill rest of seventh row with empty pieces
                     else {
                         pieces[row][col] = new Piece(Piece.PieceType.PAWN, Piece.ColorType.EMPTY, row, col);
                     }
                 }
+
                 //fill rest of board with empty pieces
                 else {
                     pieces[row][col] = new Piece(Piece.PieceType.PAWN, Piece.ColorType.EMPTY, row, col);
@@ -154,7 +161,7 @@ public class CheckerState extends GameState implements Serializable {
             }
         }
 
-
+        //copy empties and X, Y
         Piece.PieceType emptyTempPieceType = other.emptyPiece.getPieceType();
         Piece.ColorType emptyTempColorType = other.emptyPiece.getPieceColor();
         int emptyTempX = other.emptyPiece.getX();

@@ -7,7 +7,6 @@ import edu.up.cs301.checkers.AllPieces.King;
 import edu.up.cs301.checkers.CheckerActionMessage.CheckerMoveAction;
 import edu.up.cs301.checkers.CheckerActionMessage.CheckerPromotionAction;
 import edu.up.cs301.checkers.CheckerActionMessage.CheckerSelectAction;
-import edu.up.cs301.checkers.CheckerPlayers.CheckerHumanPlayer;
 import edu.up.cs301.checkers.InfoMessage.CheckerState;
 import edu.up.cs301.checkers.AllPieces.Pawn;
 import edu.up.cs301.checkers.InfoMessage.Piece;
@@ -175,7 +174,9 @@ public class CheckerLocalGame extends LocalGame {
 
             // return true to skip changing turns
             return true;
-        } else if (action instanceof CheckerMoveAction) {
+
+        }
+        else if (action instanceof CheckerMoveAction) {
             CheckerMoveAction move = (CheckerMoveAction) action;
             int row = move.getRow();
             int col = move.getCol();
@@ -185,6 +186,7 @@ public class CheckerLocalGame extends LocalGame {
                 return false;
             }
             Piece tempP = state.getPiece(tempRow, tempCol);
+
             // determine what team is moving (red/black) and move the piece
             if (tempP.getPieceColor() == Piece.ColorType.RED) {
                 if (!setMovement(state, row, col, Piece.ColorType.RED)) {
@@ -208,6 +210,7 @@ public class CheckerLocalGame extends LocalGame {
 
             // return true, indicating the it was a legal move
             return true;
+
         } else if (action instanceof CheckerPromotionAction){
             promo = (CheckerPromotionAction) action;
             CheckerPromotionAction.isPromotion = true;
@@ -247,6 +250,7 @@ public class CheckerLocalGame extends LocalGame {
 
         } else if (p.getPieceType() == Piece.PieceType.KING) {
             King king = new King(p, state, p.getPieceColor());
+
             // Get all possible movements for king
             for (int i = 0; i < king.getX().size(); i++) {
                 initialMovementsX.add(king.getX().get(i));
@@ -283,9 +287,9 @@ public class CheckerLocalGame extends LocalGame {
      * Looks through all movements of the piece selected and determines
      * if that movement causes the players piece to be in danger
      *
-     * @param state the current state of the game
-     * @param color the color of the player that is making a move
-     * @param pieceType the PieceType of the selected piece
+     * @param state     the current state of the game
+     * @param color     the color of the player that is making a move
+     * @param pieceType
      */
     public void moveToNotBeInDanger(CheckerState state, Piece.ColorType color, Piece.PieceType pieceType) {
         // make sure the arraylists are empty
@@ -294,15 +298,20 @@ public class CheckerLocalGame extends LocalGame {
 
         // iterate through all of the initial movements of the selected piece
         for (int i = 0; i < initialMovementsX.size(); i++) {
+
             // create a copied state so the current state is not affected yet
             CheckerState copyState = new CheckerState(state);
+
             // make one of the initial movements on the copied state
             makeTempMovement(copyState, initialMovementsX.get(i), initialMovementsY.get(i));
+
             // determine if the player is red or black so that can be passed
             // in as a parameter
             if (color == Piece.ColorType.RED) {
+
                 // determine if the movement causes the players piece to be in danger
                 if (!checkForDanger()) {
+
                     // if the player is not in check add that movement to the new
                     // arraylist so it can be saved
                     newMovementsX.add(initialMovementsX.get(i));
@@ -346,7 +355,7 @@ public class CheckerLocalGame extends LocalGame {
      * @param row   the row of the position the player is moving to
      * @param col   the column of the position the player is moving to
      * @param color the color of the piece they selected previously
-     * @return tells weather the move was valid and happened
+     * @return tells whether the move was valid and happened
      */
     public boolean setMovement(CheckerState state, int row, int col, Piece.ColorType color) {
         // If they selected a dot/ring then move
@@ -371,9 +380,11 @@ public class CheckerLocalGame extends LocalGame {
             }
             // For simultaneously capturing and promoting
             if (take == true && CheckerPromotionAction.isPromotion) {
+
                 // First capture the piece
                 state.setPiece(row, col, state.getPiece(tempRow, tempCol));
                 capturePiece(state, row, col);
+
                 // Then promote to king
                 state.setPiece(promo.getRow(),promo.getCol(),promo.getPromotionPiece());
                 CheckerPromotionAction.isPromotion = false;
@@ -401,6 +412,7 @@ public class CheckerLocalGame extends LocalGame {
 
             // remove all the circles after moving
             state.removeCircle();
+
             winCondition = checkForWin(state);
             if (winCondition != null) checkIfGameOver();
             if (color == Piece.ColorType.BLACK) {
@@ -471,6 +483,12 @@ public class CheckerLocalGame extends LocalGame {
         return "S";
     }
 
+    /**
+     * Check for a win
+     *
+     * @param state the CheckerState
+     * @return B for black win, R for red win
+     */
     public String checkForWin(CheckerState state) {
         ArrayList<Piece> redPieces = new ArrayList<>();
         ArrayList<Piece> blackPieces = new ArrayList<>();
@@ -485,9 +503,13 @@ public class CheckerLocalGame extends LocalGame {
                 }
             }
         }
+
+        //check if any red pieces left
         if (redPieces.size() == 0) {
             state.setGameOver(true);
             return "B";
+
+        //check if any black pieces left
         } else if (blackPieces.size() == 0) {
             state.setGameOver(true);
             return "R";
@@ -495,10 +517,19 @@ public class CheckerLocalGame extends LocalGame {
         return null;
     }
 
+    /**
+     * Check if a piece can capture and update the CheckerState accordingly
+     *
+     * @param state the CheckerState
+     * @param row the row of the square after capture
+     * @param col the row of the square after capture
+     */
     public void capturePiece(CheckerState state, int row, int col) {
+
         // Get distance between selected piece and new place
         int xdistance = (tempRow - row);
         int ydistance = (tempCol - col);
+
         // Capturing top right diagonal
         if (xdistance == -2 && ydistance == 2) {
             Piece piece = state.getPiece((tempRow + 1), (tempCol - 1));

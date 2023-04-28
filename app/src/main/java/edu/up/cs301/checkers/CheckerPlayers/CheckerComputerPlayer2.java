@@ -199,6 +199,14 @@ public class CheckerComputerPlayer2 extends GameComputerPlayer {
         }
     }
 
+    /**
+     * Take a piece
+     *
+     * @param checkerState2 second CheckerState
+     * @param x x coord
+     * @param y y coord
+     * @param index arraylist storing index of moves
+     */
     public void takePiece(CheckerState checkerState2, int x, int y, ArrayList<Integer> index) {
         for (int i = 0; i < checkerState2.getNewMovementsX().size(); i++) {
             if ((x - checkerState2.getNewMovementsX().get(i) == 2 || x - checkerState2.getNewMovementsX().get(i) == -2) &&
@@ -210,6 +218,14 @@ public class CheckerComputerPlayer2 extends GameComputerPlayer {
         }
     }
 
+    /**
+     * Check if a piece can take another piece
+     *
+     * @param checkerState2 second CheckerState
+     * @param x x coord
+     * @param y y coord
+     * @return false if cannot take, true if can take
+     */
     public boolean canTake(CheckerState checkerState2, int x, int y) {
         boolean take = false;
         for (int i = 0; i < checkerState2.getNewMovementsX().size(); i++) {
