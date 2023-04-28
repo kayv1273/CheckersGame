@@ -31,7 +31,6 @@ public class CheckerLocalGame extends LocalGame {
     // piece that was selected by row and column
     private int tempRow;
     private int tempCol;
-    private int piecesRemain = 12;
 
     // all of the initial movements of the piece selected
     private ArrayList<Integer> initialMovementsX = new ArrayList<>();
@@ -361,10 +360,10 @@ public class CheckerLocalGame extends LocalGame {
      * @return tells weather the move was valid and happened
      */
     public boolean setMovement(CheckerState state, int row, int col, Piece.ColorType color) {
-        // if they selected a dot/ring then move
+        // If they selected a dot/ring then move
         if (state.getDrawing(row, col) == 2 || state.getDrawing(row, col) == 4) {
 
-            //adds captured piece to captured pieces array
+            // Adds captured piece to captured pieces array
             if (state.getPiece(row, col).getPieceType() != Piece.PieceType.EMPTY) {
                 if(state.getPiece(row, col).getPieceColor() == Piece.ColorType.BLACK) {
                     state.addRedCapturedPiece(state.getPiece(row, col));
@@ -372,63 +371,40 @@ public class CheckerLocalGame extends LocalGame {
                     state.addBlackCapturedPiece(state.getPiece(row, col));
                 }
             }
-            
-            Piece tempPiece = state.getPiece(tempRow, tempCol);
-            
-            // set the new position to be the piece they originally selected
-            boolean isCapture = state.getPiece(row,col).getPieceType() != Piece.PieceType.EMPTY;
-            CheckerHumanPlayer chp = players[0] instanceof CheckerHumanPlayer ?
-                    (CheckerHumanPlayer) players[0] : (CheckerHumanPlayer) players[1];
-            if (CheckerPromotionAction.isPromotion) {
-                state.setPiece(promo.getRow(),promo.getCol(),promo.getPromotionPiece());
-                CheckerPromotionAction.isPromotion = false;
-            } else {
-                state.setPiece(row, col, state.getPiece(tempRow, tempCol));
-
-                // Get distance between selected piece and new place
-                int xdistance = (tempRow - row);
-                int ydistance = (tempCol - col);
-                // Red capturing right diagonal
-                if (xdistance == -2 && ydistance == 2) {
-                    Piece piece = state.getPiece((tempRow + 1), (tempCol - 1));
-                    if (piece.getPieceColor() == Piece.ColorType.RED) piecesRemain--;
-                    piece.setPieceType(Piece.PieceType.EMPTY);
-                    piece.setColorType(Piece.ColorType.EMPTY);
-                }
-                // Red capturing left diagonal
-                if (xdistance == 2 && ydistance == 2) {
-                    Piece piece = state.getPiece((tempRow - 1), (tempCol - 1));
-                    if (piece.getPieceColor() == Piece.ColorType.RED) piecesRemain--;
-                    piece.setPieceType(Piece.PieceType.EMPTY);
-                    piece.setColorType(Piece.ColorType.EMPTY);
-                }
-                // Black capturing right diagonal
-                if (xdistance == -2 && ydistance == -2) {
-                    Piece piece = state.getPiece((tempRow + 1), (tempCol + 1));
-                    if (piece.getPieceColor() == Piece.ColorType.RED) piecesRemain--;
-                    piece.setPieceType(Piece.PieceType.EMPTY);
-                    piece.setColorType(Piece.ColorType.EMPTY);
-                }
-                // Black capturing left diagonal
-                if (xdistance == 2 && ydistance == -2) {
-                    Piece piece = state.getPiece((tempRow - 1), (tempCol + 1));
-                    if (piece.getPieceColor() == Piece.ColorType.RED) piecesRemain--;
-                    piece.setPieceType(Piece.PieceType.EMPTY);
-                    piece.setColorType(Piece.ColorType.EMPTY);
+            // Check current piece if there is a capture available
+            boolean take = false;
+            for (int i = 0; i < state.getNewMovementsX().size(); i++) {
+                if ((tempRow - state.getNewMovementsX().get(i) == 2 || tempRow - state.getNewMovementsX().get(i) == -2) &&
+                        (tempCol - state.getNewMovementsY().get(i) == 2 || tempCol - state.getNewMovementsY().get(i) == -2)) {
+                        take = true;
+                        break;
                 }
             }
+            // For simultaneously capturing and promoting
+            if (take == true && CheckerPromotionAction.isPromotion) {
+                // First capture the piece
+                state.setPiece(row, col, state.getPiece(tempRow, tempCol));
+                capturePiece(state, row, col);
+                // Then promote to king
+                state.setPiece(promo.getRow(),promo.getCol(),promo.getPromotionPiece());
+                CheckerPromotionAction.isPromotion = false;
+
+            // Regular promotion
+            } else if (CheckerPromotionAction.isPromotion) {
+                state.setPiece(promo.getRow(),promo.getCol(),promo.getPromotionPiece());
+                CheckerPromotionAction.isPromotion = false;
+
+            // Capture a piece
+            } else {
+                state.setPiece(row, col, state.getPiece(tempRow, tempCol));
+                capturePiece(state, row, col);
+            }
+
             // change the piece at the selection to be an empty piece
             state.setPiece(tempRow, tempCol, state.emptyPiece);
 
             // remove all highlights
             state.removeHighlight();
-
-            for (int i = 0; i < state.getNewMovementsX().size(); i++) {
-                if ((tempRow - state.getNewMovementsX().get(i) == 2 || tempRow - state.getNewMovementsX().get(i) == -2) &&
-                        (tempCol - state.getNewMovementsY().get(i) == 2 || tempCol - state.getNewMovementsY().get(i) == -2)) {
-                    setMovement(state,tempRow,tempCol,Piece.ColorType.RED);
-                }
-            }
 
             // reset temp values so only selections may occur
             tempRow = -1;
@@ -436,7 +412,8 @@ public class CheckerLocalGame extends LocalGame {
 
             // remove all the circles after moving
             state.removeCircle();
-
+            winCondition = checkForWin(state);
+            if (winCondition != null) checkIfGameOver();
             if (color == Piece.ColorType.BLACK) {
                 if (checkForDanger(state, Piece.ColorType.RED, color)) {
                     checkIfGameOver();
@@ -505,7 +482,59 @@ public class CheckerLocalGame extends LocalGame {
         return "S";
     }
 
+    public String checkForWin(CheckerState state) {
+        ArrayList<Piece> redPieces = new ArrayList<>();
+        ArrayList<Piece> blackPieces = new ArrayList<>();
 
+        // add all pieces to arraylist
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (state.getPiece(i, j).getPieceColor() == Piece.ColorType.BLACK) {
+                    blackPieces.add(state.getPiece(i, j));
+                } else if (state.getPiece(i, j).getPieceColor() == Piece.ColorType.RED) {
+                    redPieces.add(state.getPiece(i, j));
+                }
+            }
+        }
+        if (redPieces.size() == 0) {
+            state.setGameOver(true);
+            return "B";
+        } else if (blackPieces.size() == 0) {
+            state.setGameOver(true);
+            return "R";
+        }
+        return null;
+    }
+
+    public void capturePiece(CheckerState state, int row, int col) {
+        // Get distance between selected piece and new place
+        int xdistance = (tempRow - row);
+        int ydistance = (tempCol - col);
+        // Capturing top right diagonal
+        if (xdistance == -2 && ydistance == 2) {
+            Piece piece = state.getPiece((tempRow + 1), (tempCol - 1));
+            piece.setPieceType(Piece.PieceType.EMPTY);
+            piece.setColorType(Piece.ColorType.EMPTY);
+        }
+        // Capturing top left diagonal
+        if (xdistance == 2 && ydistance == 2) {
+            Piece piece = state.getPiece((tempRow - 1), (tempCol - 1));
+            piece.setPieceType(Piece.PieceType.EMPTY);
+            piece.setColorType(Piece.ColorType.EMPTY);
+        }
+        // Capturing bottom right diagonal
+        if (xdistance == -2 && ydistance == -2) {
+            Piece piece = state.getPiece((tempRow + 1), (tempCol + 1));
+            piece.setPieceType(Piece.PieceType.EMPTY);
+            piece.setColorType(Piece.ColorType.EMPTY);
+        }
+        // Capturing bottom left diagonal
+        if (xdistance == 2 && ydistance == -2) {
+            Piece piece = state.getPiece((tempRow - 1), (tempCol + 1));
+            piece.setPieceType(Piece.PieceType.EMPTY);
+            piece.setColorType(Piece.ColorType.EMPTY);
+        }
+    }
 
     /*// unit testing
     public int whoWon(){
