@@ -493,12 +493,12 @@ public class CheckerLocalGame extends LocalGame {
         }
 
         //check if any red pieces left
-        if (redPieces.size() == 0) {
+        if (redPieces.size() == 1) {
             state.setGameOver(true);
             return "B";
 
         //check if any black pieces left
-        } else if (blackPieces.size() == 0) {
+        } else if (blackPieces.size() == 1) {
             state.setGameOver(true);
             return "R";
         } else {
