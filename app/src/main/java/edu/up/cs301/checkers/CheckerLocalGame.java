@@ -92,8 +92,6 @@ public class CheckerLocalGame extends LocalGame {
             return "Black wins! ";
         } else if (winCondition.equals("R")) {
             return "Red Wins! ";
-        } else if (winCondition.equals("S")) {
-            return "Stalemate no one wins! ";
         }
         return null;
     }
@@ -404,71 +402,15 @@ public class CheckerLocalGame extends LocalGame {
             winCondition = checkForWin(state);
             if (winCondition != null) checkIfGameOver();
             if (color == Piece.ColorType.BLACK) {
-                if (checkForDanger()) {
                     checkIfGameOver();
-                } else {
-                    winCondition = checkForStalemate(state);
-                    checkIfGameOver();
-                }
             } else if (color == Piece.ColorType.RED) {
-                if (checkForDanger()) {
                     checkIfGameOver();
-                } else {
-                    winCondition = checkForStalemate(state);
-                    checkIfGameOver();
-                }
             }
             return true;
         } else {
             // if they didn't select a dot they don't move
             return false;
         }
-    }
-
-    /**
-     * Check if the game reaches a stalemate
-     * @param state
-     * @return S for stalemate, otherwise null
-     */
-    public String checkForStalemate(CheckerState state) {
-        Piece.ColorType color = null;
-
-        if(state.getWhoseMove() == 0) {
-            // if it is now red turn that means to look for if black is in stalemate
-            color = Piece.ColorType.BLACK;
-        } else {
-            // if it is now blacks turn that means to look for if red is in stalemate
-            color = Piece.ColorType.RED;
-        }
-
-        // arraylist that adds all enemy pieces
-        ArrayList<Piece> pieces = new ArrayList<>();
-        // add all pieces to arraylist
-        for(int i = 0; i < 8; i++) {
-            for(int j = 0; j < 8; j++) {
-                if(state.getPiece(i, j).getPieceColor() == color) {
-                    pieces.add(state.getPiece(i,j));
-                }
-            }
-        }
-
-        // create fake selections and check if there are any possible
-        // movement for that selection. If there is a movement then
-        // the player is not in stalemate
-        for(int i = 0; i < pieces.size(); i++) {
-            tempRow = pieces.get(i).getX();
-            tempCol = pieces.get(i).getY();
-            findMovement(state, pieces.get(i));
-            moveToNotBeInDanger(state, color, state.getPiece(tempRow, tempCol).getPieceType());
-            if(newMovementsX.size() > 0) {
-                //if we are in here then they have at least one move
-                //so it's not stalemate
-                return null;
-            }
-        }
-        //there are no possible moves
-        state.setGameOver(true);
-        return "S";
     }
 
     public String checkForWin(CheckerState state) {

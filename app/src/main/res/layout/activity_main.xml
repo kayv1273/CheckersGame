@@ -49,7 +49,7 @@
 
 
             <TextView
-                android:id="@+id/textView4"
+                android:id="@+id/welcomeText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-condensed-light"
@@ -106,7 +106,8 @@
 
                 android:layout_gravity="right"
 
-                android:text="Home" />
+                android:text="Home"
+                android:textSize="34sp" />
 
             <Button
 
@@ -118,7 +119,8 @@
 
                 android:layout_gravity="right"
 
-                android:text="Rules" />
+                android:text="Rules"
+                android:textSize="34sp" />
 
         </LinearLayout>
 
