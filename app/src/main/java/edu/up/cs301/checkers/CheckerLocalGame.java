@@ -404,10 +404,8 @@ public class CheckerLocalGame extends LocalGame {
      * @return tells whether the move was valid and happened
      */
     public boolean setMovement(CheckerState state, int row, int col, Piece.ColorType color) {
-
         // If they selected a dot/ring then move
         if (state.getDrawing(row, col) == 2 || state.getDrawing(row, col) == 4) {
-
             // Adds captured piece to captured pieces array
             if (state.getPiece(row, col).getPieceType() != Piece.PieceType.EMPTY) {
                 if(state.getPiece(row, col).getPieceColor() == Piece.ColorType.BLACK) {
@@ -421,52 +419,50 @@ public class CheckerLocalGame extends LocalGame {
             for (int i = 0; i < state.getNewMovementsX().size(); i++) {
                 if ((tempRow - state.getNewMovementsX().get(i) == 2 || tempRow - state.getNewMovementsX().get(i) == -2) &&
                         (tempCol - state.getNewMovementsY().get(i) == 2 || tempCol - state.getNewMovementsY().get(i) == -2)) {
-                        take = true;
-                        hasCaptured = true;
-                        break;
+                    take = true;
+                    break;
                 }
             }
             // For simultaneously capturing and promoting
             if (take == true && CheckerPromotionAction.isPromotion) {
-
                 // First capture the piece
                 state.setPiece(row, col, state.getPiece(tempRow, tempCol));
                 capturePiece(state, row, col);
-
                 // Then promote to king
                 state.setPiece(promo.getRow(),promo.getCol(),promo.getPromotionPiece());
                 CheckerPromotionAction.isPromotion = false;
-
-            // Regular promotion
+                // Regular promotion
             } else if (CheckerPromotionAction.isPromotion) {
                 state.setPiece(promo.getRow(),promo.getCol(),promo.getPromotionPiece());
                 CheckerPromotionAction.isPromotion = false;
-
-            // Capture a piece
+                // Capture a piece
             } else {
                 state.setPiece(row, col, state.getPiece(tempRow, tempCol));
                 capturePiece(state, row, col);
             }
-
             // change the piece at the selection to be an empty piece
             state.setPiece(tempRow, tempCol, state.emptyPiece);
-
             // remove all highlights
             state.removeHighlight();
-
             // reset temp values so only selections may occur
             tempRow = -1;
             tempCol = -1;
-
             // remove all the circles after moving
             state.removeCircle();
-
             winCondition = checkForWin(state);
             if (winCondition != null) checkIfGameOver();
             if (color == Piece.ColorType.BLACK) {
+                if (checkForDanger()) {
                     checkIfGameOver();
+                } else {
+                    checkIfGameOver();
+                }
             } else if (color == Piece.ColorType.RED) {
+                if (checkForDanger()) {
                     checkIfGameOver();
+                } else {
+                    checkIfGameOver();
+                }
             }
             return true;
         } else {
@@ -505,8 +501,9 @@ public class CheckerLocalGame extends LocalGame {
         } else if (blackPieces.size() == 0) {
             state.setGameOver(true);
             return "R";
+        } else {
+            return null;
         }
-        return null;
     }
 
     /**
