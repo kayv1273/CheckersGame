@@ -85,6 +85,10 @@ public class CheckerComputerPlayer2 extends GameComputerPlayer {
         // Returns if there are no more pieces
         if (availablePieces.isEmpty()) return;
 
+        // Shuffle which pieces to choose
+        Collections.shuffle(availablePieces);
+        Collections.shuffle(capturePieces);
+
         // Choosing between piece that can capture or not
         if (!capturePieces.isEmpty()) {
             selection = capturePieces.get(0);
