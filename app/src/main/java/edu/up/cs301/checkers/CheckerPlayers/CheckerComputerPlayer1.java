@@ -90,6 +90,7 @@ public class CheckerComputerPlayer1 extends GameComputerPlayer {
 
         // randomly shuffle the pieces in the array
         Collections.shuffle(availablePieces);
+        if (availablePieces.isEmpty()) return;
         selection = availablePieces.get(0);
 
         //create variables to hold the x and y of the position selected

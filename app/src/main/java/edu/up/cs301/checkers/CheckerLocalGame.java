@@ -449,6 +449,7 @@ public class CheckerLocalGame extends LocalGame {
             tempCol = -1;
             // remove all the circles after moving
             state.removeCircle();
+
             winCondition = checkForWin(state);
             if (winCondition != null) checkIfGameOver();
             if (color == Piece.ColorType.BLACK) {
@@ -480,7 +481,6 @@ public class CheckerLocalGame extends LocalGame {
     public String checkForWin(CheckerState state) {
         ArrayList<Piece> redPieces = new ArrayList<>();
         ArrayList<Piece> blackPieces = new ArrayList<>();
-
         // add all pieces to arraylist
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
@@ -493,12 +493,12 @@ public class CheckerLocalGame extends LocalGame {
         }
 
         //check if any red pieces left
-        if (redPieces.size() == 1) {
+        if (redPieces.size() == 0) {
             state.setGameOver(true);
             return "B";
 
         //check if any black pieces left
-        } else if (blackPieces.size() == 1) {
+        } else if (blackPieces.size() == 0) {
             state.setGameOver(true);
             return "R";
         } else {
@@ -545,7 +545,7 @@ public class CheckerLocalGame extends LocalGame {
         }
     }
 
-    /*// unit testing
+    /* unit testing
     public int whoWon(){
         String gameOver = checkIfGameOver();
         if(gameOver == null || gameOver.equals("It's a cat's game.")) return -1;
