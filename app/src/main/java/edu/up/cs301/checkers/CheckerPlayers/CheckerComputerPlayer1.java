@@ -12,7 +12,6 @@ import edu.up.cs301.game.GameFramework.infoMessage.GameInfo;
 import edu.up.cs301.game.GameFramework.infoMessage.IllegalMoveInfo;
 import edu.up.cs301.game.GameFramework.infoMessage.NotYourTurnInfo;
 import edu.up.cs301.game.GameFramework.players.GameComputerPlayer;
-import edu.up.cs301.game.GameFramework.utilities.Logger;
 
 /**
  * @author Griselda
@@ -28,7 +27,6 @@ public class CheckerComputerPlayer1 extends GameComputerPlayer {
 
     private Piece selection;
     private ArrayList<Piece> availablePieces;
-    private ArrayList<Integer> ints;
 
     /**
      * Constructor for the CheckerComputerPlayer1 class
@@ -36,7 +34,7 @@ public class CheckerComputerPlayer1 extends GameComputerPlayer {
      */
     public CheckerComputerPlayer1(String name) {
         // invoke superclass constructor
-        super(name); // invoke superclass constructor
+        super(name);
     }
 
     /**
@@ -60,12 +58,8 @@ public class CheckerComputerPlayer1 extends GameComputerPlayer {
         CheckerState checkerState = new CheckerState((CheckerState) info);
 
         //if not turn, return
-        if (checkerState.getWhoseMove() == 1 && playerNum == 0) {
-            return;
-        }
-        if (checkerState.getWhoseMove() == 0 && playerNum == 1) {
-            return;
-        }
+        if (checkerState.getWhoseMove() == 1 && playerNum == 0) return;
+        if (checkerState.getWhoseMove() == 0 && playerNum == 1) return;
 
         //get all of the pieces that can move on the computers side
         availablePieces = new ArrayList<>();
@@ -90,8 +84,10 @@ public class CheckerComputerPlayer1 extends GameComputerPlayer {
 
         // randomly shuffle the pieces in the array
         Collections.shuffle(availablePieces);
+
+        // Returns if there are no more pieces left
         if (availablePieces.isEmpty()) return;
-        selection = availablePieces.get(0);
+        selection = availablePieces.get(0); // select a random piece
 
         //create variables to hold the x and y of the position selected
         int xVal = selection.getX();
@@ -162,8 +158,6 @@ public class CheckerComputerPlayer1 extends GameComputerPlayer {
         }
 
         if(gameOver) {
-            // pop up message for human wins
-
             //line used to debug and ensure proper functionality
             System.out.println("test");
         }

@@ -11,7 +11,6 @@ public class CheckerStateTest {
         CheckerState state = new CheckerState();
         boolean b = state.getCanMove();
         assertEquals(false, b);
-
     }
 
     @Test
@@ -33,6 +32,6 @@ public class CheckerStateTest {
         CheckerState state = new CheckerState();
         state.setWhoseMove(1);
         int test = state.getWhoseMove();
-       // assertEquals(0, test);
+        assertEquals(1, test);
     }
 }

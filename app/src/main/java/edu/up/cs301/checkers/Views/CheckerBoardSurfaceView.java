@@ -33,17 +33,26 @@ public class CheckerBoardSurfaceView extends FlashSurfaceView {
 
     protected CheckerState state;
 
-    //images for chess pieces
+    // Images for checker pieces
     protected Bitmap redPawnImage;
     protected Bitmap redKingImage;
     protected Bitmap blackPawnImage;
     protected Bitmap blackKingImage;
 
+    /** Constructor for CheckerBoardSurfaceView
+     *
+     * @param context
+     */
     public CheckerBoardSurfaceView(Context context) {
         super(context);
         init();
     }
 
+    /** Second onstructor for CheckerBoardSurfaceView
+     *
+     * @param context
+     * @param attrs
+     */
     public CheckerBoardSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
         redPawnImage = BitmapFactory.decodeResource(getResources(), R.drawable.rp);
@@ -65,42 +74,57 @@ public class CheckerBoardSurfaceView extends FlashSurfaceView {
         init();
     }
 
+    /**
+     * Set the background color
+     */
     private void init() {
         setBackgroundColor(backgroundColor());
     }
 
+    /**
+     * Set the state
+     * @param state
+     */
     public void setState(CheckerState state) {
         this.state = state;
     }
 
+    /**
+     * return color black
+     * @return
+     */
     public int blackSquare() {
         return Color.BLACK;
     }
 
+    /**
+     * return white color
+     * @return
+     */
     public int whiteSquare() {
         return Color.WHITE;
     }
 
-    public int textPaint() {
-        return Color.WHITE;
-    }
-
-    public int highlightedSquare() {
-        return Color.YELLOW;
-    }
-
-    public int checkedSquare() {
-        return Color.RED;
-    }
-
+    /**
+     * returns color of dot highlight
+     * @return
+     */
     public int dot() {
         return Color.LTGRAY;
     }
 
+    /**
+     * returns background color of checkerboard
+     * @return
+     */
     public int backgroundColor() {
         return Color.LTGRAY;
     }
 
+    /**
+     * Draws the canvas
+     * @param canvas
+     */
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
@@ -128,7 +152,13 @@ public class CheckerBoardSurfaceView extends FlashSurfaceView {
         }
     }
 
-
+    /**
+     * Draws the highlights on the board
+     * @param canvas
+     * @param num
+     * @param col
+     * @param row
+     */
     protected void drawGraphics(Canvas canvas, int num, int col, int row) {
         float leftLoc = left + size * col;
         float topLoc = top + size * row;
@@ -140,11 +170,6 @@ public class CheckerBoardSurfaceView extends FlashSurfaceView {
         float radius = (right - left) / 5;
 
         Paint highlightPaint = new Paint();
-        if (num == 1) {
-            highlightPaint.setColor(highlightedSquare());
-        } else if (num == 3) {
-            highlightPaint.setColor(checkedSquare());
-        }
         Paint dotPaint = new Paint();
         dotPaint.setColor(dot());
         Paint backgroundPaint = new Paint();
@@ -168,6 +193,13 @@ public class CheckerBoardSurfaceView extends FlashSurfaceView {
         }
     }
 
+    /**
+     * Draws all the pieces on the board
+     * @param canvas
+     * @param piece
+     * @param col
+     * @param row
+     */
     protected void drawPiece(Canvas canvas, Piece piece, int col, int row) {
         float xLoc = left + (col * size);
         float yLoc = top + (row * size);

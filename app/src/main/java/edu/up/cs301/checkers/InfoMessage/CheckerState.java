@@ -272,10 +272,6 @@ public class CheckerState extends GameState implements Serializable {
     }
 
 
-    public void setHighlightCheck(int row, int col) {
-        board[row][col] = 3;
-    }
-
     /**
      * Mark a highlight in the board array for reference
      *
@@ -323,17 +319,6 @@ public class CheckerState extends GameState implements Serializable {
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
                 if (board[i][j] == 2 || board[i][j] == 4) {
-                    board[i][j] = 0;
-                }
-            }
-        }
-    }
-
-    //removes the check highlight from the board
-    public void removeHighlightCheck() {
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[i].length; j++) {
-                if (board[i][j] == 3) {
                     board[i][j] = 0;
                 }
             }
@@ -412,8 +397,6 @@ public class CheckerState extends GameState implements Serializable {
     }
 
     // method to check if a capture has been made
-    public boolean justCaptured() {
-        return hasCaptured;
-    }
+    public boolean justCaptured() { return hasCaptured; }
 }
 

@@ -1,13 +1,12 @@
 package edu.up.cs301.checkers.AllPieces;
 
 import java.util.ArrayList;
-
 import edu.up.cs301.checkers.InfoMessage.CheckerState;
 import edu.up.cs301.checkers.InfoMessage.Piece;
 
 public class Pawn {
 
-    // instance variables to store all possible moves and captures
+    // Instance variables to store all possible moves and captures
     private ArrayList<Integer> xMovement;
     private ArrayList<Integer> yMovement;
 

@@ -119,12 +119,6 @@ public class Piece {
      */
     public void setColorType(ColorType type){this.pieceColor = type;}
 
-    /**
-     * Get the color of the piece
-     * @return color
-     */
-    public ColorType getColorType(){return this.pieceColor;}
-
     private boolean isJustCaptured;
 
     public Piece(ColorType color, PieceType type) {

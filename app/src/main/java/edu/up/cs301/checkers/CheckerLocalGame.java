@@ -2,8 +2,6 @@ package edu.up.cs301.checkers;
 
 
 import java.util.ArrayList;
-import java.util.List;
-
 import edu.up.cs301.checkers.AllPieces.King;
 import edu.up.cs301.checkers.CheckerActionMessage.CheckerMoveAction;
 import edu.up.cs301.checkers.CheckerActionMessage.CheckerPromotionAction;
@@ -41,7 +39,6 @@ public class CheckerLocalGame extends LocalGame {
     private ArrayList<Integer> YcaptCoords = new ArrayList<Integer>();
 
     private String winCondition = null;
-    private boolean isPromotion;
     private CheckerPromotionAction promo;
     private boolean hasCaptured = false;
 
@@ -51,10 +48,8 @@ public class CheckerLocalGame extends LocalGame {
     public CheckerLocalGame() {
         // perform superclass initialization
         super();
-
         // create a new, standard CheckerState object
         super.state = new CheckerState();
-        isPromotion = false;
     }
 
 
@@ -225,6 +220,9 @@ public class CheckerLocalGame extends LocalGame {
         return false;
     }
 
+    /**
+     * Checks for a second jump after the first capture
+     */
     private void moreJumps() {
         CheckerState state = (CheckerState) super.state;
         Piece p = state.getPiece(tempRow, tempCol);
@@ -277,6 +275,8 @@ public class CheckerLocalGame extends LocalGame {
         // make sure the arraylists are empty before they are filled
         initialMovementsX.clear();
         initialMovementsY.clear();
+        XcaptCoords.clear();
+        YcaptCoords.clear();
 
         // search through each type of piece and generate all of the movements
         // of that piece and add them to the initialMovement arraylists.
@@ -323,14 +323,6 @@ public class CheckerLocalGame extends LocalGame {
     }
 
     /**
-     * Determines if the current players piece is in danger
-     * @return
-     */
-    public boolean checkForDanger() {
-        return false;
-    }
-
-    /**
      * Looks through all movements of the piece selected and determines
      * if that movement causes the players piece to be in danger
      *
@@ -351,25 +343,9 @@ public class CheckerLocalGame extends LocalGame {
 
             // make one of the initial movements on the copied state
             makeTempMovement(copyState, initialMovementsX.get(i), initialMovementsY.get(i));
+            newMovementsX.add(initialMovementsX.get(i));
+            newMovementsY.add(initialMovementsY.get(i));
 
-            // determine if the player is red or black so that can be passed
-            // in as a parameter
-            if (color == Piece.ColorType.RED) {
-
-                // determine if the movement causes the players piece to be in danger
-                if (!checkForDanger()) {
-
-                    // if the player is not in check add that movement to the new
-                    // arraylist so it can be saved
-                    newMovementsX.add(initialMovementsX.get(i));
-                    newMovementsY.add(initialMovementsY.get(i));
-                }
-            } else if (color == Piece.ColorType.BLACK) {
-                if (!checkForDanger()) {
-                    newMovementsX.add(initialMovementsX.get(i));
-                    newMovementsY.add(initialMovementsY.get(i));
-                }
-            }
             state.setNewMovementsX(newMovementsX);
             state.setNewMovementsY(newMovementsY);
         }
@@ -450,21 +426,11 @@ public class CheckerLocalGame extends LocalGame {
             // remove all the circles after moving
             state.removeCircle();
 
+            // Check if someone won the game
             winCondition = checkForWin(state);
             if (winCondition != null) checkIfGameOver();
-            if (color == Piece.ColorType.BLACK) {
-                if (checkForDanger()) {
-                    checkIfGameOver();
-                } else {
-                    checkIfGameOver();
-                }
-            } else if (color == Piece.ColorType.RED) {
-                if (checkForDanger()) {
-                    checkIfGameOver();
-                } else {
-                    checkIfGameOver();
-                }
-            }
+            checkIfGameOver();
+
             return true;
         } else {
             // if they didn't select a dot they don't move
@@ -544,19 +510,4 @@ public class CheckerLocalGame extends LocalGame {
             piece.setColorType(Piece.ColorType.EMPTY);
         }
     }
-
-    /* unit testing
-    public int whoWon(){
-        String gameOver = checkIfGameOver();
-        if(gameOver == null || gameOver.equals("It's a cat's game.")) return -1;
-        if(gameOver.equals(playerNames[0]+" is the winner.")) return 0;
-        return 1;
-    }
-
-    public boolean checkPromotion(Piece piece, int col,CheckerHumanPlayer chp){
-        if (piece.getPieceType() != Piece.PieceType.PAWN) return false;
-        if (piece.getPieceColor() == Piece.ColorType.RED && col == 0) return true;
-        else if(piece.getPieceColor() == Piece.ColorType.BLACK && col == 7) return true;
-        return false;
-    }*/
 }

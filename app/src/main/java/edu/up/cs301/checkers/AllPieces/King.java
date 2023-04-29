@@ -1,9 +1,9 @@
 package edu.up.cs301.checkers.AllPieces;
 
 import java.util.ArrayList;
-
 import edu.up.cs301.checkers.InfoMessage.CheckerState;
 import edu.up.cs301.checkers.InfoMessage.Piece;
+
 /**
  * @author Griselda
  * @author Katherine
@@ -16,7 +16,7 @@ import edu.up.cs301.checkers.InfoMessage.Piece;
 
 public class King {
 
-    // instance variables to store all possible moves and captures
+    // Instance variables to store all possible moves and captures
     private ArrayList<Integer> xMovement;
     private ArrayList<Integer> yMovement;
 
@@ -41,68 +41,66 @@ public class King {
         xMovementAttack = new ArrayList<>();
         yMovementAttack = new ArrayList<>();
         kingMovement(state);
-        if(color == Piece.ColorType.RED) {
-            kingCaptureRed(state);
-        } else if (color == Piece.ColorType.BLACK) {
-            kingCaptureBlack(state);
-        }
+        // Storing moves depending on color
+        if (color == Piece.ColorType.RED) kingCaptureRed(state);
+        else if (color == Piece.ColorType.BLACK) kingCaptureBlack(state);
     }
 
     /**
-     * checks for all possible moves for a king
+     * Checks for all possible moves for a king
      *
      * @param state the CheckerState
      */
     public void kingMovement(CheckerState state) {
-        //check left border
+        // Check left border
         if (row == 0) {
-            //up right of piece
+            // Top right of piece
             if (col > 0 && state.getPiece(row + 1, col - 1).getPieceColor() == Piece.ColorType.EMPTY) {
                 xMovement.add(row + 1);
                 yMovement.add(col - 1);
             }
-            //down right of piece
+            // Bottom right of piece
             if (col < 7 && state.getPiece(row + 1, col + 1).getPieceColor() == Piece.ColorType.EMPTY) {
                 xMovement.add(row + 1);
                 yMovement.add(col + 1);
             }
         }
 
-        //check right border
+        // Check right border
         if (row == 7) {
-            //up left of piece
+            // Top left of piece
             if (col > 0 && state.getPiece(row - 1, col - 1).getPieceColor() == Piece.ColorType.EMPTY) {
                 xMovement.add(row - 1);
                 yMovement.add(col - 1);
             }
-            //down left of piece
+            // Bottom left of piece
             if (col < 7 && state.getPiece(row - 1, col + 1).getPieceColor() == Piece.ColorType.EMPTY) {
                 xMovement.add(row - 1);
                 yMovement.add(col + 1);
             }
         }
 
-        //check rest of the board
+        // Check rest of the board
         if (row > 0 && row < 7) {
             if (col > 0) {
-                //up right of piece
+                // Top right of piece
                 if (state.getPiece(row + 1, col - 1).getPieceColor() == Piece.ColorType.EMPTY) {
                     xMovement.add(row + 1);
                     yMovement.add(col - 1);
                 }
-                //up left of piece
+                // Top left of piece
                 if (state.getPiece(row - 1, col - 1).getPieceColor() == Piece.ColorType.EMPTY) {
                     xMovement.add(row - 1);
                     yMovement.add(col - 1);
                 }
             }
             if (col < 7) {
-                //down left of piece
+                // Bottom left of piece
                 if (state.getPiece(row - 1, col + 1).getPieceColor() == Piece.ColorType.EMPTY) {
                     xMovement.add(row - 1);
                     yMovement.add(col + 1);
                 }
-                //down right of piece
+                // Bottom right of piece
                 if (state.getPiece(row + 1, col + 1).getPieceColor() == Piece.ColorType.EMPTY) {
                     xMovement.add(row + 1);
                     yMovement.add(col + 1);
@@ -112,20 +110,20 @@ public class King {
     }
 
     /**
-     * checks for all possible captures for a red king
+     * Checks for all possible captures for a red king
      *
      * @param state the CheckerState
      */
     public void kingCaptureRed(CheckerState state) {
-        //check left border
+        // Check left border
         if (row == 0 || row == 1) {
-            //up right of piece
+            // Top right of piece
             if (col > 1 && state.getPiece(row + 1, col - 1).getPieceColor() == Piece.ColorType.BLACK
                     && state.getPiece(row + 2, col - 2).getPieceColor() == Piece.ColorType.EMPTY) {
                 xMovementAttack.add(row + 2);
                 yMovementAttack.add(col - 2);
             }
-            //down right of piece
+            // Bottom right of piece
             if (col < 6 && state.getPiece(row + 1, col + 1).getPieceColor() == Piece.ColorType.BLACK
                     && state.getPiece(row + 2, col + 2).getPieceColor() == Piece.ColorType.EMPTY) {
                 xMovementAttack.add(row + 2);
@@ -133,15 +131,15 @@ public class King {
             }
         }
 
-        //check right border
+        // Check right border
         if (row == 7 || row == 6) {
-            //up left of piece
+            // Top left of piece
             if (col > 1 && state.getPiece(row - 1, col - 1).getPieceColor() == Piece.ColorType.BLACK
                     && state.getPiece(row - 2, col - 2).getPieceColor() == Piece.ColorType.EMPTY) {
                 xMovementAttack.add(row - 2);
                 yMovementAttack.add(col - 2);
             }
-            //down left of piece
+            // Bottom left of piece
             if (col < 6 && state.getPiece(row - 1, col + 1).getPieceColor() == Piece.ColorType.BLACK
                     && state.getPiece(row - 2, col + 2).getPieceColor() == Piece.ColorType.EMPTY) {
                 xMovementAttack.add(row - 2);
@@ -149,16 +147,16 @@ public class King {
             }
         }
 
-        //check rest of the board
+        // Check rest of the board
         if (row > 1 && row < 6) {
             if (col > 1) {
-                //up right of piece
+                // Top right of piece
                 if (state.getPiece(row + 1, col - 1).getPieceColor() == Piece.ColorType.BLACK
                         && (state.getPiece(row + 2, col - 2).getPieceColor() == Piece.ColorType.EMPTY)) {
                     xMovementAttack.add(row + 2);
                     yMovementAttack.add(col - 2);
                 }
-                //up left of piece
+                // Top left of piece
                 if (state.getPiece(row - 1, col - 1).getPieceColor() == Piece.ColorType.BLACK
                         && (state.getPiece(row - 2, col - 2).getPieceColor() == Piece.ColorType.EMPTY)) {
                     xMovementAttack.add(row - 2);
@@ -166,13 +164,13 @@ public class King {
                 }
             }
             if (col < 6) {
-                //down left of piece
+                // Bottom left of piece
                 if (state.getPiece(row + 1, col + 1).getPieceColor() == Piece.ColorType.BLACK
                         && (state.getPiece(row + 2, col + 2).getPieceColor() == Piece.ColorType.EMPTY)) {
                     xMovementAttack.add(row + 2);
                     yMovementAttack.add(col + 2);
                 }
-                //up left of piece
+                // Bottom left of piece
                 if (state.getPiece(row - 1, col + 1).getPieceColor() == Piece.ColorType.BLACK
                         && (state.getPiece(row - 2, col + 2).getPieceColor() == Piece.ColorType.EMPTY)) {
                     xMovementAttack.add(row - 2);
@@ -183,20 +181,20 @@ public class King {
     }
 
     /**
-     * checks for all possible captures for a black king
+     * Checks for all possible captures for a black king
      *
      * @param state the CheckerState
      */
     public void kingCaptureBlack(CheckerState state) {
-        //check left border
+        // Check left border
         if (row == 0 || row == 1) {
-            //up right of piece
+            // Top right of piece
             if (col > 1 && state.getPiece(row + 1, col - 1).getPieceColor() == Piece.ColorType.RED
                     && state.getPiece(row + 2, col - 2).getPieceColor() == Piece.ColorType.EMPTY) {
                 xMovementAttack.add(row + 2);
                 yMovementAttack.add(col - 2);
             }
-            //down right of piece
+            // Bottom right of piece
             if (col < 6 && state.getPiece(row + 1, col + 1).getPieceColor() == Piece.ColorType.RED
                     && state.getPiece(row + 2, col + 2).getPieceColor() == Piece.ColorType.EMPTY) {
                 xMovementAttack.add(row + 2);
@@ -204,15 +202,15 @@ public class King {
             }
         }
 
-        //check right border
+        // Check right border
         if (row == 7 || row == 6) {
-            //up left of piece
+            // Top left of piece
             if (col > 1 && state.getPiece(row - 1, col - 1).getPieceColor() == Piece.ColorType.RED
                     && state.getPiece(row - 2, col - 2).getPieceColor() == Piece.ColorType.EMPTY) {
                 xMovementAttack.add(row - 2);
                 yMovementAttack.add(col - 2);
             }
-            //down left of piece
+            // Bottom left of piece
             if (col < 6 && state.getPiece(row - 1, col + 1).getPieceColor() == Piece.ColorType.RED
                     && state.getPiece(row - 2, col + 2).getPieceColor() == Piece.ColorType.EMPTY) {
                 xMovementAttack.add(row - 2);
@@ -220,16 +218,16 @@ public class King {
             }
         }
 
-        //check rest of the board
+        // Check rest of the board
         if (row > 1 && row < 6) {
             if (col > 1) {
-                //up right of piece
+                // Top right of piece
                 if (state.getPiece(row + 1, col - 1).getPieceColor() == Piece.ColorType.RED
                         && (state.getPiece(row + 2, col - 2).getPieceColor() == Piece.ColorType.EMPTY)) {
                     xMovementAttack.add(row + 2);
                     yMovementAttack.add(col - 2);
                 }
-                //up left of piece
+                // Top left of piece
                 if (state.getPiece(row - 1, col - 1).getPieceColor() == Piece.ColorType.RED
                         && (state.getPiece(row - 2, col - 2).getPieceColor() == Piece.ColorType.EMPTY)) {
                     xMovementAttack.add(row - 2);
@@ -237,13 +235,13 @@ public class King {
                 }
             }
             if (col < 6) {
-                //bottom left of piece
+                // Bottom left of piece
                 if (state.getPiece(row + 1, col + 1).getPieceColor() == Piece.ColorType.RED
                         && (state.getPiece(row + 2, col + 2).getPieceColor() == Piece.ColorType.EMPTY)) {
                     xMovementAttack.add(row + 2);
                     yMovementAttack.add(col + 2);
                 }
-                //bottom left of piece
+                // Bottom left of piece
                 if (state.getPiece(row - 1, col + 1).getPieceColor() == Piece.ColorType.RED
                         && (state.getPiece(row - 2, col + 2).getPieceColor() == Piece.ColorType.EMPTY)) {
                     xMovementAttack.add(row - 2);
@@ -254,28 +252,28 @@ public class King {
     }
 
     /**
-     * get the x-coords of the kings' possible moves
+     * Get the x-coords of the kings' possible moves
      *
      * @return the x-coords of kings' possible moves
      */
     public ArrayList<Integer> getX() { return xMovement; }
 
     /**
-     * get the y-coords of the kings' possible moves
+     * Get the y-coords of the kings' possible moves
      *
      * @return the y-coords of kings' possible moves
      */
     public ArrayList<Integer> getY() { return yMovement; }
 
     /**
-     * get the x-coords of the kings' possible captures
+     * Get the x-coords of the kings' possible captures
      *
      * @return the x-coords of kings' possible captures
      */
     public ArrayList<Integer> getXAttack() { return xMovementAttack; }
 
     /**
-     * get the y-coords of the kings' possible captures
+     * Get the y-coords of the kings' possible captures
      *
      * @return the y-coords of kings' possible captures
      */
